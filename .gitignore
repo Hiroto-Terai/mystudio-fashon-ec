@@ -3,3 +3,6 @@ node_modules/
 *.log
 .shopify/
 .env
+/*.png
+/*.jpg
+.playwright-mcp/

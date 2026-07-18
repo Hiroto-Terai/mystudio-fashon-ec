@@ -19,7 +19,57 @@
     "product": {
       "add_to_cart": "Add to cart",
       "quick_add": "Quick add",
-      "sold_out": "Sold out"
+      "sold_out": "Sold out",
+      "back_to_collection": "Back to collection",
+      "badge_restock": "Notify me when back",
+      "badge_new": "New",
+      "badge_low_stock": "Low stock",
+      "badge_in_stock": "In stock",
+      "reviews": "reviews",
+      "size_chart": "Size chart",
+      "size_chart_heading": "Size chart",
+      "size_chart_close": "Close",
+      "member_title_guest": "Guest pricing",
+      "member_title_member": "You've unlocked member pricing",
+      "member_desc_guest": "Tap to preview member pricing (Gold members save 10%)",
+      "member_desc_member": "Gold member — 10% off applied. Coupons may also apply.",
+      "stock_available": "In stock — ready to ship",
+      "stock_unavailable": "Selected option is out of stock",
+      "stock_low": "Low stock — {qty} left",
+      "restock_notify_heading": "Get notified when back in stock",
+      "restock_email_placeholder": "Email address",
+      "restock_submit": "Submit",
+      "restock_done": "We'll email you as soon as it's back in stock.",
+      "details_fit": "Details & Fit",
+      "materials_care": "Materials & Care",
+      "materials_care_default": "Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme.",
+      "shipping_returns": "Shipping & Returns",
+      "shipping_returns_default": "Free express shipping on orders over ¥30,000. 30-day returns on unworn pieces with tags attached.",
+      "details_fit_default": "A considered piece built from archive-grade materials, cut for a relaxed, everyday fit.",
+      "fbt_heading": "Frequently bought together",
+      "related_heading": "You may also like",
+      "no_image": "No image available"
     }
+  },
+  "collection": {
+    "eyebrow": "Collection",
+    "items": "items",
+    "sort": {
+      "label": "Sort"
+    },
+    "filters": {
+      "price_from": "Price from",
+      "price_to": "Price to",
+      "apply": "Apply",
+      "clear_all": "Clear all",
+      "no_results": "No products match the selected filters."
+    },
+    "pagination": {
+      "label": "Pagination"
+    }
+  },
+  "list_collections": {
+    "eyebrow": "Collections",
+    "heading": "All Collections"
   }
 }

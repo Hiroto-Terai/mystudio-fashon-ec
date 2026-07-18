@@ -34,8 +34,8 @@ Theme Check は Shopify MCP `validate_theme` で全ファイル検証済み。
 ## 進捗
 
 - [x] S0 基盤（トークン / レイアウト / ヘッダー / フッター / カートドロワー / グローバルJS）
-- [ ] S1 ホーム
-- [ ] S2 コレクション / PLP
+- [x] S1 ホーム（全10セクション）
+- [x] S2 コレクション / PLP（チップ / フィルタ / ソート / product-card / list-collections）
 - [ ] S3 商品詳細 / PDP
 - [ ] S4 カート
 - [ ] S5 ウィッシュリスト

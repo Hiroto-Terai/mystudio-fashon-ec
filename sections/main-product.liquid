@@ -1,0 +1,382 @@
+{%- comment -%}
+  PDP: gallery, inventory-aware badges, member price toggle (demo), variant
+  picker with live stock text (data-variant-json driven, no CLS), quantity +
+  add to cart, restock notify, details accordion, and FBT/related rows.
+  Mirrors design-reference/Archives-Storefront.html <!-- PRODUCT --> view,
+  driven by the real product/variant objects so it works for any of the
+  store's products (single-variant "Default Title" through multi-option).
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign is_available = current_variant.available
+  assign low_stock_threshold = section.settings.low_stock_threshold | default: 5
+  assign new_arrival_days = section.settings.new_arrival_days | default: 14
+
+  assign is_new = false
+  if product.tags contains 'new'
+    assign is_new = true
+  endif
+  assign now_ts = 'now' | date: '%s'
+  assign product_ts = product.created_at | date: '%s'
+  assign product_age_seconds = now_ts | minus: product_ts
+  assign new_window_seconds = new_arrival_days | times: 86400
+  if product_age_seconds <= new_window_seconds
+    assign is_new = true
+  endif
+
+  assign is_low_stock = false
+  if is_available and current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity != blank
+    if current_variant.inventory_quantity <= low_stock_threshold
+      assign is_low_stock = true
+    endif
+  endif
+
+  assign back_url = collection.url
+  if back_url == blank
+    assign back_url = product.collections.first.url
+  endif
+  if back_url == blank
+    assign back_url = routes.all_products_collection_url
+  endif
+
+  assign is_member = false
+  if customer and customer.tags contains settings.member_tag
+    assign is_member = true
+  endif
+  assign member_price_amount = current_variant.price | times: 0.9 | round
+
+  assign review_count = product.id | modulo: 60 | plus: 12
+
+  assign rec_collection = product.collections.first
+  if rec_collection == blank
+    assign rec_collection = collections['all']
+  endif
+-%}
+<div>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);">
+    <a href="{{ back_url }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">← {{ 'products.product.back_to_collection' | t }}</a>
+  </div>
+
+  <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
+    {%- comment -%} Gallery {%- endcomment -%}
+    <div style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
+      {%- if product.images.size == 0 -%}
+        <div class="as-card" style="aspect-ratio:3/4; grid-column:1/-1; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
+      {%- else -%}
+        {%- for image in product.images -%}
+          <div class="as-card" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.images.size == 1 %}grid-column:1/-1;{% endif %}">
+            <img
+              class="as-img"
+              src="{{ image | image_url: width: 800 }}"
+              alt="{{ image.alt | default: product.title | escape }}"
+              width="800"
+              height="1067"
+              loading="{% if forloop.index == 1 %}eager{% else %}lazy{% endif %}"
+              style="width:100%; height:100%; object-fit:cover;"
+            >
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Info column {%- endcomment -%}
+    <div class="as-pdp-info" data-pdp-root data-member="{{ is_member }}" data-low-stock-threshold="{{ low_stock_threshold }}" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
+
+      {%- comment -%} Badges (★ inventory-aware) {%- endcomment -%}
+      <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; min-height:24px;">
+        {%- if is_available == false -%}
+          <span class="as-badge as-badge-ghost">{{ 'products.product.badge_restock' | t }}</span>
+        {%- else -%}
+          {%- if is_new -%}<span class="as-badge as-badge-ink">{{ 'products.product.badge_new' | t }}</span>{%- endif -%}
+          {%- if is_low_stock -%}<span class="as-badge as-badge-ink">{{ 'products.product.badge_low_stock' | t }}</span>{%- endif -%}
+          {%- if is_new == false and is_low_stock == false -%}<span class="as-badge as-badge-ghost">{{ 'products.product.badge_in_stock' | t }}</span>{%- endif -%}
+        {%- endif -%}
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:var(--space-3);">
+        <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ product.type }}{% if current_variant.sku != blank %} — {{ current_variant.sku }}{% endif %}</span>
+        <h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ product.title }}</h1>
+        <div style="display:flex; align-items:center; gap:var(--space-3);">
+          <span style="color:var(--color-ink); letter-spacing:2px;">★★★★☆</span>
+          <span style="font:var(--text-mono); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ review_count }} {{ 'products.product.reviews' | t }}</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+          <span data-pdp-price class="{% if is_member %}is-strike{% endif %}" style="font-size:var(--fs-xl);">{{ current_variant.price | money }}</span>
+          <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{{ member_price_amount | money }}</span>
+        </div>
+      </div>
+
+      {%- comment -%} Member banner (★ toggle guest <-> member demo) {%- endcomment -%}
+      <div data-member-banner class="as-clickable as-member-banner {% if is_member %}is-active{% endif %}">
+        <div style="display:flex; align-items:center; gap:var(--space-3);">
+          <span data-member-dot class="as-member-dot {% if is_member %}is-active{% endif %}"></span>
+          <span
+            data-member-title
+            style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);"
+            data-guest-text="{{ 'products.product.member_title_guest' | t }}"
+            data-member-text="{{ 'products.product.member_title_member' | t }}"
+          >{% if is_member %}{{ 'products.product.member_title_member' | t }}{% else %}{{ 'products.product.member_title_guest' | t }}{% endif %}</span>
+        </div>
+        <span
+          data-member-desc
+          style="font:var(--text-body-sm); color:var(--text-secondary);"
+          data-guest-text="{{ 'products.product.member_desc_guest' | t }}"
+          data-member-text="{{ 'products.product.member_desc_member' | t }}"
+        >{% if is_member %}{{ 'products.product.member_desc_member' | t }}{% else %}{{ 'products.product.member_desc_guest' | t }}{% endif %}</span>
+      </div>
+
+      {%- if product.description != blank -%}
+        <div style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ product.description }}</div>
+      {%- else -%}
+        <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ 'products.product.details_fit_default' | t }}</p>
+      {%- endif -%}
+
+      {%- comment -%} Variant options (★ live stock text via data-product-variants) {%- endcomment -%}
+      <script type="application/json" data-product-variants>
+        {%- capture variants_json -%}
+          [
+          {%- for variant in product.variants -%}
+            {
+              "id":{{ variant.id | json }},
+              "available":{{ variant.available | json }},
+              "options":[
+                {%- for opt in variant.options -%}
+                  {%- capture opt_str -%}{% if opt.name %}{{ opt.name }}{% else %}{{ opt }}{% endif %}{%- endcapture -%}
+                  {{ opt_str | strip | json }}{% unless forloop.last %},{% endunless %}
+                {%- endfor -%}
+              ],
+              "price_html":{{ variant.price | money | json }},
+              "member_price_html":{{ variant.price | times: 0.9 | round | money | json }},
+              "inventory_management":{{ variant.inventory_management | json }},
+              "inventory_quantity":{{ variant.inventory_quantity | json }},
+              "title":{{ variant.title | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+          ]
+        {%- endcapture -%}
+        {{ variants_json }}
+      </script>
+
+      {%- unless product.has_only_default_variant -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-6);">
+          {%- for product_option in product.options_with_values -%}
+            {%- assign opt_index = forloop.index0 -%}
+            {%- assign option_name_down = product_option.name | downcase -%}
+            {%- assign is_color_option = false -%}
+            {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}
+              {%- assign is_color_option = true -%}
+            {%- endif -%}
+            {%- assign is_size_option = false -%}
+            {%- if option_name_down contains 'size' -%}
+              {%- assign is_size_option = true -%}
+            {%- endif -%}
+            <div style="display:flex; flex-direction:column; gap:var(--space-3);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">
+                  {{ product_option.name }}{% if is_color_option %} — <span data-option-selected-label="{{ opt_index }}">{{ product_option.selected_value }}</span>{% endif %}
+                </span>
+                {%- if is_size_option -%}
+                  <span class="as-navlink as-clickable" data-size-chart-open style="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ 'products.product.size_chart' | t }}</span>
+                {%- endif -%}
+              </div>
+              <div style="display:flex; gap:var(--space-3); flex-wrap:wrap;" data-option-position="{{ opt_index }}">
+                {%- for value in product_option.values -%}
+                  {%- comment -%}
+                    option.values are product_option_value objects (name/selected/available/swatch) on
+                    modern Liquid; the `opt.name`-or-`opt` fallback keeps this working either way.
+                  {%- endcomment -%}
+                  {%- capture value_label -%}{% if value.name %}{{ value.name }}{% else %}{{ value }}{% endif %}{%- endcapture -%}
+                  {%- assign value_label = value_label | strip -%}
+                  {%- assign value_available = true -%}
+                  {%- if value.available == false -%}
+                    {%- assign value_available = false -%}
+                  {%- endif -%}
+                  {%- assign is_selected_value = false -%}
+                  {%- if value.selected -%}
+                    {%- assign is_selected_value = true -%}
+                  {%- elsif product_option.selected_value == value_label -%}
+                    {%- assign is_selected_value = true -%}
+                  {%- endif -%}
+                  {%- if is_color_option -%}
+                    {%- capture swatch_style -%}
+                      {%- if value.swatch.color -%}
+                        background-color:{{ value.swatch.color | color_to_hex }};
+                      {%- elsif value.swatch.image -%}
+                        background-image:url('{{ value.swatch.image | image_url: width: 60 }}');background-size:cover;background-position:center;
+                      {%- else -%}
+                        background-color:{{ value_label | handleize | replace: '-', '' }};
+                      {%- endif -%}
+                    {%- endcapture -%}
+                    <button
+                      type="button"
+                      class="as-swatch {% if is_selected_value %}is-selected{% endif %} {% unless value_available %}is-soldout{% endunless %}"
+                      data-option-value
+                      data-value="{{ value_label | escape }}"
+                      aria-label="{{ value_label | escape }}"
+                      aria-pressed="{{ is_selected_value }}"
+                      style="{{ swatch_style | strip_newlines | strip }}"
+                      {% unless value_available %}disabled{% endunless %}
+                    ></button>
+                  {%- else -%}
+                    <button
+                      type="button"
+                      class="as-option-btn {% if is_selected_value %}is-selected{% endif %} {% unless value_available %}is-soldout{% endunless %}"
+                      data-option-value
+                      data-value="{{ value_label | escape }}"
+                      aria-pressed="{{ is_selected_value }}"
+                      {% unless value_available %}disabled{% endunless %}
+                    >{{ value_label }}</button>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      <div style="min-height:22px; display:flex; align-items:center; gap:var(--space-2);">
+        {%- assign stock_dot_color = 'var(--text-tertiary)' -%}
+        {%- assign stock_text = 'products.product.stock_unavailable' | t -%}
+        {%- if is_available -%}
+          {%- if is_low_stock -%}
+            {%- assign stock_dot_color = 'var(--color-ink)' -%}
+            {%- assign stock_text = 'products.product.stock_low' | t | replace: '{qty}', current_variant.inventory_quantity -%}
+          {%- else -%}
+            {%- assign stock_dot_color = '#8fb98f' -%}
+            {%- assign stock_text = 'products.product.stock_available' | t -%}
+          {%- endif -%}
+        {%- endif -%}
+        <span data-stock-dot style="width:7px; height:7px; border-radius:999px; background:{{ stock_dot_color }}; flex:none;"></span>
+        <span
+          data-stock-line
+          style="font:var(--text-body-sm); color:var(--text-secondary);"
+          data-text-available="{{ 'products.product.stock_available' | t }}"
+          data-text-unavailable="{{ 'products.product.stock_unavailable' | t }}"
+          data-text-low="{{ 'products.product.stock_low' | t }}"
+        >{{ stock_text }}</span>
+      </div>
+
+      {%- comment -%} Purchase form / restock notify (★ toggled by JS on variant change) {%- endcomment -%}
+      <form data-product-form action="{{ routes.cart_add_url }}" method="post">
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+        <div data-pdp-purchase {% unless is_available %}hidden{% endunless %} style="display:flex; gap:var(--space-3); align-items:stretch;">
+          <div style="display:flex; align-items:center; border:1px solid var(--border-default);">
+            <button type="button" data-qty-dec aria-label="Decrease quantity" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">−</button>
+            <input type="number" name="quantity" value="1" min="1" data-qty-input style="width:36px; text-align:center; border:none; background:none; font:inherit; color:inherit;">
+            <button type="button" data-qty-inc aria-label="Increase quantity" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">+</button>
+          </div>
+          <button
+            type="submit"
+            data-add-to-cart
+            data-label-default="{{ 'products.product.add_to_cart' | t }}"
+            data-label-soldout="{{ 'products.product.sold_out' | t }}"
+            {% unless is_available %}disabled{% endunless %}
+            style="flex:1; background:var(--color-ink); color:var(--color-white); border:1px solid var(--color-ink); cursor:pointer; padding:16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);"
+          >{% if is_available %}{{ 'products.product.add_to_cart' | t }} — 1{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
+        </div>
+      </form>
+      <div data-pdp-soldout {% if is_available %}hidden{% endif %} style="border:1px solid var(--border-default); background:var(--surface-subtle); padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-3);">
+        <div data-restock-idle style="display:flex; flex-direction:column; gap:var(--space-3);">
+          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">{{ 'products.product.restock_notify_heading' | t }}</span>
+          <form data-restock-form style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink);">
+            <label class="visually-hidden" for="RestockEmail-{{ product.id }}">{{ 'products.product.restock_email_placeholder' | t }}</label>
+            <input type="email" id="RestockEmail-{{ product.id }}" required placeholder="{{ 'products.product.restock_email_placeholder' | t | upcase }}" class="as-input" style="flex:1; padding:var(--space-2) 0; text-transform:uppercase; letter-spacing:var(--tracking-wide);">
+            <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="{{ 'products.product.restock_submit' | t }}" style="background:none; border:none; padding:var(--space-2); cursor:pointer; color:var(--color-ink);">
+              <svg class="as-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
+        </div>
+        <div data-restock-done hidden>
+          <span style="font:var(--text-body-sm);">✓ {{ 'products.product.restock_done' | t }}</span>
+        </div>
+      </div>
+
+      {%- comment -%} Details accordion {%- endcomment -%}
+      <div style="border-top:1px solid var(--border-default); margin-top:var(--space-2);">
+        <details class="as-filter-group as-pdp-accordion" open style="border-bottom:1px solid var(--border-default);">
+          <summary style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-5) 0;">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.details_fit' | t }}</span>
+            <span class="as-accordion-sign" style="font-size:var(--fs-md); color:var(--text-secondary);"></span>
+          </summary>
+          <div style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-bottom:var(--space-5);">
+            {%- if product.description != blank -%}{{ product.description }}{%- else -%}<p>{{ 'products.product.details_fit_default' | t }}</p>{%- endif -%}
+          </div>
+        </details>
+        <details class="as-filter-group as-pdp-accordion" style="border-bottom:1px solid var(--border-default);">
+          <summary style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-5) 0;">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.materials_care' | t }}</span>
+            <span class="as-accordion-sign" style="font-size:var(--fs-md); color:var(--text-secondary);"></span>
+          </summary>
+          <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-bottom:var(--space-5);">{{ 'products.product.materials_care_default' | t }}</p>
+        </details>
+        <details class="as-filter-group as-pdp-accordion" style="border-bottom:1px solid var(--border-default);">
+          <summary style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-5) 0;">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.shipping_returns' | t }}</span>
+            <span class="as-accordion-sign" style="font-size:var(--fs-md); color:var(--text-secondary);"></span>
+          </summary>
+          <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-bottom:var(--space-5);">{{ 'products.product.shipping_returns_default' | t }}</p>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} FBT + Related (server-rendered from the product's collection; see snippets/pdp-recommendations.liquid for rationale) {%- endcomment -%}
+  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: 'products.product.fbt_heading' | t, layout: 'scroll', max: 8 -%}
+  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: 'products.product.related_heading' | t, layout: 'grid', max: 8 -%}
+</div>
+
+{%- comment -%} Size chart modal (dummy content, per spec) {%- endcomment -%}
+<div data-size-chart-modal hidden style="position:fixed; inset:0; z-index:110; background:var(--surface-scrim); display:flex; align-items:center; justify-content:center; padding:var(--page-gutter-sm);">
+  <div style="background:var(--color-white); border:1px solid var(--border-default); max-width:420px; width:100%; padding:var(--space-8); display:flex; flex-direction:column; gap:var(--space-5); max-height:80vh; overflow-y:auto;">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.size_chart_heading' | t }}</span>
+      <button type="button" data-size-chart-close class="as-iconbtn" aria-label="{{ 'products.product.size_chart_close' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <table style="width:100%; border-collapse:collapse; font:var(--text-body-sm);">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Size</th>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Chest (cm)</th>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Length (cm)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">XS</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">86</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">64</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">S</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">92</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">66</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">M</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">98</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">68</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">L</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">104</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">70</td></tr>
+        <tr><td style="padding:var(--space-2);">XL</td><td style="padding:var(--space-2);">110</td><td style="padding:var(--space-2);">72</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": [
+    {
+      "type": "number",
+      "id": "low_stock_threshold",
+      "label": "Low stock threshold",
+      "default": 5,
+      "info": "Show the \"low stock\" badge and stock line when inventory is at or below this number. Only applies to Shopify-tracked variants."
+    },
+    {
+      "type": "number",
+      "id": "new_arrival_days",
+      "label": "\"New\" badge window (days)",
+      "default": 14,
+      "info": "Show the New badge when the product was created within this many days, or is tagged \"new\"."
+    }
+  ],
+  "presets": [
+    { "name": "Main product" }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

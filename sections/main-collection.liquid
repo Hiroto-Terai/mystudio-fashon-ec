@@ -1,0 +1,252 @@
+{%- comment -%}
+  Collection / PLP: eyebrow + title + description, category chips, faceted
+  filters + sort (Shopify standard collection.filters / sort_options), and
+  the paginated product grid via snippets/product-card. Falls back to an
+  onboarding demo grid when the collection is missing or has no products,
+  following the same pattern as sections/featured-collection.liquid.
+{%- endcomment -%}
+{%- assign has_real_collection = false -%}
+{%- if collection and collection.all_products_count > 0 -%}
+  {%- assign has_real_collection = true -%}
+{%- endif -%}
+
+{%- assign show_filter_bar = false -%}
+{%- if collection.filters.size > 0 -%}
+  {%- assign show_filter_bar = true -%}
+{%- endif -%}
+{%- if collection.sort_options.size > 0 -%}
+  {%- assign show_filter_bar = true -%}
+{%- endif -%}
+
+{%- assign active_filter_count = 0 -%}
+{%- for filter in collection.filters -%}
+  {%- for value in filter.values -%}
+    {%- if value.active -%}
+      {%- assign active_filter_count = active_filter_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+    {%- assign active_filter_count = active_filter_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ 'collection.eyebrow' | t }}</span>
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ collection.title | default: section.settings.fallback_title }}</h1>
+      {%- if collection.description != blank -%}
+        <p style="max-width:520px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4);">{{ collection.description }}</p>
+      {%- elsif section.settings.fallback_description != blank -%}
+        <p style="max-width:520px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4);">{{ section.settings.fallback_description }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Category chips {%- endcomment -%}
+    <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-6); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-4);">
+      <div style="display:flex; gap:var(--space-2); flex-wrap:wrap;">
+        {%- assign chips_menu = linklists[section.settings.chips_menu] -%}
+        {%- if chips_menu and chips_menu.links.size > 0 -%}
+          {%- for link in chips_menu.links -%}
+            {%- assign is_active = false -%}
+            {%- if link.url == request.path -%}
+              {%- assign is_active = true -%}
+            {%- endif -%}
+            <a
+              href="{{ link.url }}"
+              class="as-clickable"
+              style="display:inline-flex; padding:var(--space-2) var(--space-4); border:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs);
+                {% if is_active %}background:var(--color-ink); color:var(--color-white); border-color:var(--color-ink);{% else %}background:var(--color-white); color:var(--text-primary);{% endif %}"
+            >{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- comment -%} Default demo chips shown until a "Category chips menu" is assigned. {%- endcomment -%}
+          {%- assign default_chip_labels = 'All,Apparel,Outerwear,Hardware' | split: ',' -%}
+          {%- assign default_chip_handles = 'all,apparel,outerwear,hardware' | split: ',' -%}
+          {%- for chip_label in default_chip_labels -%}
+            {%- assign chip_handle = default_chip_handles[forloop.index0] -%}
+            {%- assign is_active = false -%}
+            {%- if collection and collection.handle == chip_handle -%}
+              {%- assign is_active = true -%}
+            {%- elsif collection == blank and chip_handle == 'all' -%}
+              {%- assign is_active = true -%}
+            {%- endif -%}
+            {%- if chip_handle == 'all' -%}
+              {%- assign chip_url = routes.all_products_collection_url -%}
+            {%- else -%}
+              {%- assign chip_url = '/collections/' | append: chip_handle -%}
+            {%- endif -%}
+            <a
+              href="{{ chip_url }}"
+              class="as-clickable"
+              style="display:inline-flex; padding:var(--space-2) var(--space-4); border:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs);
+                {% if is_active %}background:var(--color-ink); color:var(--color-white); border-color:var(--color-ink);{% else %}background:var(--color-white); color:var(--text-primary);{% endif %}"
+            >{{ chip_label }}</a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">
+        {%- if has_real_collection -%}{{ collection.products_count }}{%- else -%}8{%- endif %} {{ 'collection.items' | t }}
+      </span>
+    </div>
+
+    {%- comment -%} Filter + sort bar (Shopify standard faceted filters) {%- endcomment -%}
+    {%- if collection and show_filter_bar -%}
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-4) var(--page-gutter); border-top:1px solid var(--border-default);">
+        <form method="get" data-collection-filter-form style="display:flex; align-items:flex-start; gap:var(--space-3); flex-wrap:wrap;">
+          {%- for filter in collection.filters -%}
+            <details class="as-filter-group" style="position:relative; border:1px solid var(--border-default);">
+              <summary class="as-clickable" style="padding:var(--space-2) var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); cursor:pointer;">{{ filter.label }}</summary>
+              <div style="position:absolute; top:100%; left:0; margin-top:var(--space-1); background:var(--color-white); border:1px solid var(--border-default); padding:var(--space-4); min-width:220px; z-index:10; display:flex; flex-direction:column; gap:var(--space-3);">
+                {%- case filter.type -%}
+                  {%- when 'price_range' -%}
+                    <label style="display:flex; flex-direction:column; gap:var(--space-1); font:var(--text-body-sm);">
+                      {{ 'collection.filters.price_from' | t }}
+                      <input type="number" min="0" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-2);" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="0">
+                    </label>
+                    <label style="display:flex; flex-direction:column; gap:var(--space-1); font:var(--text-body-sm);">
+                      {{ 'collection.filters.price_to' | t }}
+                      <input type="number" min="0" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-2);" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max }}">
+                    </label>
+                    <button type="submit" class="as-fillbtn" style="border:1px solid var(--border-default); background:var(--color-white); color:var(--text-primary); padding:var(--space-2); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs);">{{ 'collection.filters.apply' | t }}</button>
+                  {%- else -%}
+                    {%- for value in filter.values -%}
+                      <label style="display:flex; align-items:center; gap:var(--space-2); font:var(--text-body-sm); {% if value.count == 0 and value.active == false %}opacity:0.4;{% endif %}">
+                        <input type="checkbox" data-filter-input name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                        {{ value.label }} ({{ value.count }})
+                      </label>
+                    {%- endfor -%}
+                {%- endcase -%}
+              </div>
+            </details>
+          {%- endfor -%}
+
+          {%- if active_filter_count > 0 -%}
+            <a href="{{ collection.url }}" class="as-navlink" style="align-self:center; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs); color:var(--text-tertiary);">{{ 'collection.filters.clear_all' | t }}</a>
+          {%- endif -%}
+
+          {%- if collection.sort_options.size > 0 -%}
+            <label style="display:flex; align-items:center; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs); color:var(--text-tertiary); margin-left:auto;">
+              {{ 'collection.sort.label' | t }}
+              <select name="sort_by" data-sort-select class="as-input" style="border:1px solid var(--border-default); padding:var(--space-2) var(--space-3); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs); color:var(--text-primary); background:var(--color-white); cursor:pointer;">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+                {%- endfor -%}
+              </select>
+            </label>
+          {%- endif -%}
+        </form>
+      </div>
+    {%- endif -%}
+  </section>
+
+  <section>
+    {%- if has_real_collection -%}
+      {%- paginate collection.products by 24 -%}
+        {%- if collection.products.size > 0 -%}
+          <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+            {%- for product in collection.products -%}
+              {%- render 'product-card', product: product -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <nav class="as-pagination" role="navigation" aria-label="{{ 'collection.pagination.label' | t }}" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-10) var(--page-gutter); display:flex; justify-content:center;">
+              {{ paginate | default_pagination }}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-16) var(--page-gutter); display:flex; flex-direction:column; align-items:center; gap:var(--space-4); text-align:center;">
+            <p style="font:var(--text-body); color:var(--text-secondary);">{{ 'collection.filters.no_results' | t }}</p>
+            <a href="{{ collection.url }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'collection.filters.clear_all' | t }}</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      {%- comment -%} Onboarding demo grid: shown until the collection has products. {%- endcomment -%}
+      <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+        {%- for i in (1..8) -%}
+          {%- case i -%}
+            {%- when 1 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Outerwear' -%}
+              {%- assign demo_name = 'Overdyed Field Jacket' -%}
+              {%- assign demo_price = '¥68,000' -%}
+            {%- when 2 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Bottoms' -%}
+              {%- assign demo_name = 'Raw Denim Trouser' -%}
+              {%- assign demo_price = '¥42,000' -%}
+            {%- when 3 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Tops' -%}
+              {%- assign demo_name = 'Heavy Cotton Tee' -%}
+              {%- assign demo_price = '¥14,000' -%}
+            {%- when 4 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Outerwear' -%}
+              {%- assign demo_name = 'Wool Melton Coat' -%}
+              {%- assign demo_price = '¥98,000' -%}
+            {%- when 5 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Hardware' -%}
+              {%- assign demo_name = 'Brushed Steel Buckle Belt' -%}
+              {%- assign demo_price = '¥18,000' -%}
+            {%- when 6 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Apparel' -%}
+              {%- assign demo_name = 'Selvedge Denim Jacket' -%}
+              {%- assign demo_price = '¥54,000' -%}
+            {%- when 7 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Apparel' -%}
+              {%- assign demo_name = 'Ribbed Merino Knit' -%}
+              {%- assign demo_price = '¥32,000' -%}
+            {%- when 8 -%}
+              {%- assign demo_image = 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800&auto=format&fit=crop' -%}
+              {%- assign demo_cat = 'Hardware' -%}
+              {%- assign demo_name = 'Canvas Utility Tote' -%}
+              {%- assign demo_price = '¥26,000' -%}
+          {%- endcase -%}
+          <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+            <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+              <img class="as-img" src="{{ demo_image }}" alt="{{ demo_name }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              <button type="button" data-wishlist-toggle="demo-collection-{{ i }}" class="as-wish as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+              </button>
+              <div class="as-quickadd">
+                <button type="button" disabled title="Connect a collection to enable quick add" style="width:100%; background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add' | t }}</button>
+              </div>
+            </div>
+            <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+              <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ demo_cat }}</span>
+              <h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ demo_name }}</h3>
+              <span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ demo_price }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main collection",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "chips_menu",
+      "label": "Category chips menu",
+      "info": "Optional. When set, replaces the default All / Apparel / Outerwear / Hardware demo chips with this menu's links."
+    },
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Collection" },
+    { "type": "textarea", "id": "fallback_description", "label": "Fallback description", "default": "A curated edit of outerwear, apparel and hardware for the current season." }
+  ],
+  "presets": [
+    { "name": "Main collection" }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  }
+}
+{% endschema %}

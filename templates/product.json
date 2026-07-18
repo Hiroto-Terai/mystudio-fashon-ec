@@ -1,12 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
-      "settings": {
-        "eyebrow": "Product",
-        "heading": "Product",
-        "body": "PDP lands in Sprint 3."
-      }
+      "type": "main-product",
+      "settings": {}
     }
   },
   "order": [
