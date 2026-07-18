@@ -86,5 +86,15 @@
   "list_collections": {
     "eyebrow": "コレクション",
     "heading": "すべてのコレクション"
+  },
+  "wishlist": {
+    "heading": "ウィッシュリスト",
+    "tab_products": "商品",
+    "tab_stylings": "スタイリング",
+    "add": "追加",
+    "remove": "削除",
+    "empty_products": "ウィッシュリストは空です。",
+    "empty_stylings": "保存されたスタイリングはまだありません。",
+    "explore_styling": "スタッフスタイリングを見る"
   }
 }

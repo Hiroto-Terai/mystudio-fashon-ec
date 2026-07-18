@@ -5,11 +5,17 @@
    Sprint 4: Ajax cart — add/change re-renders the cart drawer (and the
    cart page, when open) via the Section Rendering API, plus a
    client-side coupon demo.
+   Sprint 5: Wishlist page (Products/Stylings tabs) — Products are fetched
+   from /products/{handle}.js and rendered client-side; Stylings are
+   defensive (Sprint 6 hasn't shipped real styling data yet).
    ============================================================ */
 (function () {
   'use strict';
 
-  var WISHLIST_KEY = 'archives:wishlist';
+  var WISHLIST_NAMESPACES = {
+    products: 'archives:wishlist:products',
+    stylings: 'archives:wishlist:stylings'
+  };
   var COUPON_KEY = 'archives:coupon';
   /* Client-side discount demo only: Shopify has no public API to apply a
      real discount code from the storefront without redirecting through
@@ -24,37 +30,52 @@
   function qsa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   function on(el, evt, fn) { if (el) el.addEventListener(evt, fn); }
 
-  /* ---------- Wishlist store (localStorage) ---------- */
+  /* ---------- Wishlist store (localStorage, two namespaces) ----------
+     "products" holds product handles (so the wishlist page can look each
+     one up via /products/{handle}.js); "stylings" holds styling ids
+     (Sprint 6 supplies the actual styling records). Every reader/writer
+     takes the namespace explicitly so the two lists never collide. */
   var Wishlist = {
-    read: function () {
-      try { return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []; }
+    key: function (ns) { return WISHLIST_NAMESPACES[ns] || WISHLIST_NAMESPACES.products; },
+    read: function (ns) {
+      try { return JSON.parse(localStorage.getItem(this.key(ns))) || []; }
       catch (e) { return []; }
     },
-    write: function (list) {
-      localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
-      document.dispatchEvent(new CustomEvent('archives:wishlist:change', { detail: list }));
+    write: function (ns, list) {
+      localStorage.setItem(this.key(ns), JSON.stringify(list));
+      document.dispatchEvent(new CustomEvent('archives:wishlist:change', { detail: { ns: ns, list: list } }));
     },
-    has: function (id) { return this.read().indexOf(String(id)) !== -1; },
-    toggle: function (id) {
+    has: function (ns, id) { return this.read(ns).indexOf(String(id)) !== -1; },
+    toggle: function (ns, id) {
       id = String(id);
-      var list = this.read();
+      var list = this.read(ns);
       var i = list.indexOf(id);
       if (i === -1) { list.push(id); } else { list.splice(i, 1); }
-      this.write(list);
+      this.write(ns, list);
       return i === -1;
     },
-    count: function () { return this.read().length; }
+    remove: function (ns, id) {
+      id = String(id);
+      var list = this.read(ns);
+      var i = list.indexOf(id);
+      if (i === -1) return;
+      list.splice(i, 1);
+      this.write(ns, list);
+    },
+    count: function (ns) { return this.read(ns).length; },
+    countAll: function () { return this.count('products') + this.count('stylings'); }
   };
   window.ArchivesWishlist = Wishlist;
 
   function syncWishlistBadges() {
-    var count = Wishlist.count();
+    var count = Wishlist.countAll();
     qsa('[data-wishlist-badge]').forEach(function (badge) {
       badge.textContent = count;
       badge.hidden = count === 0;
     });
     qsa('[data-wishlist-toggle]').forEach(function (btn) {
-      var active = Wishlist.has(btn.getAttribute('data-wishlist-toggle'));
+      var ns = btn.getAttribute('data-wishlist-ns') || 'products';
+      var active = Wishlist.has(ns, btn.getAttribute('data-wishlist-toggle'));
       btn.classList.toggle('is-active', active);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
@@ -67,7 +88,8 @@
       on(btn, 'click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        Wishlist.toggle(btn.getAttribute('data-wishlist-toggle'));
+        var ns = btn.getAttribute('data-wishlist-ns') || 'products';
+        Wishlist.toggle(ns, btn.getAttribute('data-wishlist-toggle'));
       });
     });
   }
@@ -630,6 +652,176 @@
     });
   }
 
+  /* ---------- Wishlist page (Products/Stylings tabs) ---------- */
+  function imageUrlWithWidth(url, width) {
+    if (!url) return url;
+    var sep = url.indexOf('?') === -1 ? '?' : '&';
+    return url + sep + 'width=' + width;
+  }
+
+  function fetchProductJSON(handle) {
+    return fetch('/products/' + encodeURIComponent(handle) + '.js', { headers: { 'Accept': 'application/json' } })
+      .then(function (res) { if (!res.ok) throw new Error('not found'); return res.json(); })
+      /* A wishlisted handle can 404 (demo placeholder ids, or a product removed
+         since it was wishlisted) - skip it instead of breaking the whole grid. */
+      .catch(function () { return null; });
+  }
+
+  function buildWishlistProductCard(handle, product, template) {
+    var node = template.content.firstElementChild.cloneNode(true);
+    var variant = null;
+    for (var i = 0; i < product.variants.length; i++) {
+      if (product.variants[i].available) { variant = product.variants[i]; break; }
+    }
+    if (!variant) variant = product.variants[0];
+    var available = !!(variant && variant.available);
+
+    var link = qs('[data-field="url"]', node);
+    var img = qs('[data-field="image"]', node);
+    var title = qs('[data-field="title"]', node);
+    var price = qs('[data-field="price"]', node);
+    var addBtn = qs('[data-wish-add]', node);
+    var removeBtn = qs('[data-wish-remove]', node);
+
+    if (link) link.href = '/products/' + product.handle;
+    if (img) {
+      var src = product.featured_image || (product.images && product.images[0]) || '';
+      img.src = imageUrlWithWidth(src, 800);
+      img.alt = product.title;
+    }
+    if (title) title.textContent = product.title;
+    if (price) price.textContent = formatMoney(product.price);
+    if (addBtn) {
+      addBtn.setAttribute('data-variant-id', variant ? variant.id : '');
+      if (!available) {
+        addBtn.disabled = true;
+        addBtn.textContent = addBtn.getAttribute('data-label-soldout');
+        addBtn.style.background = 'var(--color-n-300)';
+        addBtn.style.cursor = 'not-allowed';
+      }
+    }
+    if (removeBtn) removeBtn.setAttribute('data-handle', handle);
+    return node;
+  }
+
+  function buildWishlistStylingCard(id, styling, template) {
+    var node = template.content.firstElementChild.cloneNode(true);
+    var links = qsa('[data-field="url"]', node);
+    var img = qs('[data-field="image"]', node);
+    var staff = qs('[data-field="staff"]', node);
+    var measurements = qs('[data-field="measurements"]', node);
+    var itemcount = qs('[data-field="itemcount"]', node);
+    var removeBtn = qs('[data-wish-remove]', node);
+
+    links.forEach(function (link) { link.href = styling.url || '#'; });
+    if (img) { img.src = imageUrlWithWidth(styling.img, 800); img.alt = ''; }
+    if (staff) staff.textContent = (styling.staffName || '') + ' — ' + (styling.staffRole || '');
+    if (measurements) measurements.textContent = (styling.height || '') + ' / ' + (styling.weight || '');
+    if (itemcount) itemcount.textContent = (styling.itemCount || 0) + ' ' + (itemcount.getAttribute('data-suffix') || '');
+    if (removeBtn) removeBtn.setAttribute('data-handle', id);
+    return node;
+  }
+
+  function bindWishlistPage() {
+    var page = qs('[data-wishlist-page]');
+    if (!page) return;
+
+    var tabs = qsa('[data-wish-tab]', page);
+    var panels = qsa('[data-wish-panel]', page);
+    var productTemplate = qs('[data-wish-product-template]', page);
+    var stylingTemplate = qs('[data-wish-styling-template]', page);
+
+    function setActiveTab(name) {
+      tabs.forEach(function (tab) {
+        var active = tab.getAttribute('data-wish-tab') === name;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-wish-panel') !== name;
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      on(tab, 'click', function () { setActiveTab(tab.getAttribute('data-wish-tab')); });
+    });
+
+    function updateCounts() {
+      qsa('[data-wish-count="products"]', page).forEach(function (el) { el.textContent = Wishlist.count('products'); });
+      qsa('[data-wish-count="stylings"]', page).forEach(function (el) { el.textContent = Wishlist.count('stylings'); });
+    }
+
+    function renderProducts() {
+      var handles = Wishlist.read('products');
+      var grid = qs('[data-wish-grid="products"]', page);
+      var empty = qs('[data-wish-empty="products"]', page);
+      if (!handles.length) {
+        grid.hidden = true;
+        grid.innerHTML = '';
+        empty.hidden = false;
+        return;
+      }
+      Promise.all(handles.map(fetchProductJSON)).then(function (products) {
+        grid.innerHTML = '';
+        var rendered = 0;
+        products.forEach(function (product, i) {
+          if (!product) return;
+          grid.appendChild(buildWishlistProductCard(handles[i], product, productTemplate));
+          rendered++;
+        });
+        grid.hidden = rendered === 0;
+        empty.hidden = rendered !== 0;
+      });
+    }
+
+    function renderStylings() {
+      var ids = Wishlist.read('stylings');
+      var grid = qs('[data-wish-grid="stylings"]', page);
+      var empty = qs('[data-wish-empty="stylings"]', page);
+      /* window.ArchivesStylingDataset is an optional hook a future sprint
+         (styling detail/metaobjects, Sprint 6) can populate with
+         { [id]: { img, url, staffName, staffRole, height, weight, itemCount } }.
+         Until then there's no data source, so this always falls through to
+         the empty state - which is the correct behaviour today. */
+      var dataset = window.ArchivesStylingDataset || {};
+      grid.innerHTML = '';
+      var rendered = 0;
+      ids.forEach(function (id) {
+        var styling = dataset[id];
+        if (!styling) return;
+        grid.appendChild(buildWishlistStylingCard(id, styling, stylingTemplate));
+        rendered++;
+      });
+      grid.hidden = rendered === 0;
+      empty.hidden = rendered !== 0;
+    }
+
+    function renderAll() {
+      updateCounts();
+      renderProducts();
+      renderStylings();
+    }
+
+    on(page, 'click', function (e) {
+      var removeBtn = e.target.closest('[data-wish-remove]');
+      var addBtn = e.target.closest('[data-wish-add]');
+      if (removeBtn) {
+        e.preventDefault();
+        var ns = removeBtn.getAttribute('data-wishlist-ns') || 'products';
+        Wishlist.remove(ns, removeBtn.getAttribute('data-handle'));
+      } else if (addBtn) {
+        e.preventDefault();
+        if (addBtn.disabled) return;
+        var variantId = addBtn.getAttribute('data-variant-id');
+        if (variantId) addToCart(variantId, 1, addBtn);
+      }
+    });
+
+    document.addEventListener('archives:wishlist:change', renderAll);
+    setActiveTab('products');
+    renderAll();
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -640,6 +832,7 @@
     bindCoupon();
     syncCouponUI();
     bindCollectionFilters();
+    bindWishlistPage();
     bindMemberToggle();
     bindProductVariantPicker();
     bindSizeChart();

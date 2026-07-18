@@ -1,0 +1,97 @@
+{%- comment -%}
+  Wishlist page: heading + Products/Stylings tabs. Wishlist state lives entirely
+  in localStorage (assets/archives.js, ArchivesWishlist store — two namespaces:
+  "products" holds product handles, "stylings" holds styling ids). This
+  section only renders the static shell, the empty states, and the <template>
+  markup used to build cards; assets/archives.js's bindWishlistPage() fetches
+  each product's /products/{handle}.js, fills the templates, and swaps the
+  panels/counts whenever the wishlist changes.
+
+  Stylings have no real data source yet (that lands in Sprint 6), so the
+  Stylings tab always falls back to its empty state until a future sprint
+  populates window.ArchivesStylingDataset.
+{%- endcomment -%}
+<div data-wishlist-page>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-6);">
+    <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ 'wishlist.heading' | t }}</h1>
+  </div>
+
+  <div role="tablist" aria-label="{{ 'wishlist.heading' | t }}" style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter); display:flex; gap:var(--space-8); border-bottom:1px solid var(--border-default);">
+    <button type="button" role="tab" data-wish-tab="products" aria-selected="true" class="as-navlink as-clickable is-active" style="background:none; border:none; padding:0 0 var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm); color:var(--color-ink);">{{ 'wishlist.tab_products' | t }} (<span data-wish-count="products">0</span>)</button>
+    <button type="button" role="tab" data-wish-tab="stylings" aria-selected="false" class="as-navlink as-clickable" style="background:none; border:none; padding:0 0 var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm); color:var(--color-ink);">{{ 'wishlist.tab_stylings' | t }} (<span data-wish-count="stylings">0</span>)</button>
+  </div>
+
+  {%- comment -%} Products panel {%- endcomment -%}
+  <div data-wish-panel="products" role="tabpanel">
+    <div data-wish-grid="products" class="as-grid-4" hidden style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);"></div>
+    <div data-wish-empty="products" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-24) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-5); align-items:flex-start;">
+      <span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">{{ 'wishlist.empty_products' | t }}</span>
+      <a href="{{ routes.all_products_collection_url }}" class="as-fillbtn" style="border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink); display:inline-block;">{{ 'general.cart.browse_collection' | t }}</a>
+    </div>
+  </div>
+
+  {%- comment -%} Stylings panel {%- endcomment -%}
+  <div data-wish-panel="stylings" role="tabpanel" hidden>
+    <div data-wish-grid="stylings" class="as-grid-4" hidden style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);"></div>
+    <div data-wish-empty="stylings" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-24) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-5); align-items:flex-start;">
+      <span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">{{ 'wishlist.empty_stylings' | t }}</span>
+      <a href="{{ routes.root_url }}pages/{{ section.settings.styling_handle }}" class="as-fillbtn" style="border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink); display:inline-block;">{{ 'wishlist.explore_styling' | t }}</a>
+    </div>
+  </div>
+
+  {%- comment -%} Card templates cloned by assets/archives.js — see bindWishlistPage() {%- endcomment -%}
+  <template data-wish-product-template>
+    <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+      <a data-field="url" class="as-clickable" style="display:block; aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);">
+        <img data-field="image" class="as-img" alt="" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+      </a>
+      <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-3);">
+        <h3 data-field="title" style="font-weight:var(--fw-medium); font-size:var(--fs-base);"></h3>
+        <span data-field="price" style="font-size:var(--fs-sm); color:var(--text-secondary);"></span>
+        <div style="display:flex; gap:var(--space-2);">
+          <button type="button" data-wish-add data-variant-id="" data-label-soldout="{{ 'products.product.sold_out' | t }}" style="flex:1; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:11px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">{{ 'wishlist.add' | t }}</button>
+          <button type="button" data-wish-remove data-wishlist-ns="products" data-handle="" class="as-iconbtn" style="background:none; border:1px solid var(--border-default); cursor:pointer; padding:11px 14px; font:var(--text-mono); font-size:10px; text-transform:uppercase;">{{ 'wishlist.remove' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template data-wish-styling-template>
+    <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+      <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+        <a data-field="url" style="position:absolute; inset:0; display:block;">
+          <img data-field="image" class="as-img" alt="" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+        </a>
+        <button type="button" data-wish-remove data-wishlist-ns="stylings" data-handle="" class="as-wish is-active as-iconbtn" aria-label="{{ 'wishlist.remove' | t }}" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+        </button>
+      </div>
+      <a data-field="url" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+        <span data-field="staff" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;"></span>
+        <span data-field="measurements" style="font:var(--text-body-sm); color:var(--text-secondary);"></span>
+        <span data-field="itemcount" data-suffix="{{ 'collection.items' | t }}" style="font:var(--text-mono); font-size:10px; color:var(--text-tertiary); text-transform:uppercase;"></span>
+      </a>
+    </div>
+  </template>
+</div>
+
+{% schema %}
+{
+  "name": "Main wishlist",
+  "settings": [
+    {
+      "type": "text",
+      "id": "styling_handle",
+      "label": "Styling page handle",
+      "default": "styling",
+      "info": "Used by the Stylings tab's empty-state link. The styling list page ships in a later sprint."
+    }
+  ],
+  "presets": [
+    { "name": "Main wishlist" }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}
