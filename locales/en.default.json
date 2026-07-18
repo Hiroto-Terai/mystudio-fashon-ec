@@ -104,5 +104,19 @@
     "weight": "Weight",
     "items_in_look": "{{ count }} items in this look",
     "empty_list": "No stylings published yet."
+  },
+  "blog": {
+    "empty": "No articles published yet.",
+    "back_to_journal": "← Back to journal",
+    "by_author": "By {{ name }}",
+    "related_heading": "More from the Journal",
+    "comments_heading": "Comments ({{ count }})",
+    "no_comments": "No comments yet.",
+    "comment_name": "Name",
+    "comment_email": "Email",
+    "comment_body": "Comment",
+    "comment_submit": "Post comment",
+    "comment_pending": "Your comment has been submitted and is awaiting approval.",
+    "comment_posted": "Your comment has been posted."
   }
 }

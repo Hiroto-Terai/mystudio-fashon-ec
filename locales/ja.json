@@ -104,5 +104,19 @@
     "weight": "体重",
     "items_in_look": "使用アイテム{{ count }}点",
     "empty_list": "公開中のスタイリングはまだありません。"
+  },
+  "blog": {
+    "empty": "公開中の記事はまだありません。",
+    "back_to_journal": "← ジャーナルに戻る",
+    "by_author": "文 — {{ name }}",
+    "related_heading": "ジャーナルの他の記事",
+    "comments_heading": "コメント（{{ count }}件）",
+    "no_comments": "コメントはまだありません。",
+    "comment_name": "お名前",
+    "comment_email": "メールアドレス",
+    "comment_body": "コメント",
+    "comment_submit": "コメントを投稿",
+    "comment_pending": "コメントを受け付けました。承認後に公開されます。",
+    "comment_posted": "コメントを投稿しました。"
   }
 }
