@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-about",
+      "settings": {
+        "eyebrow": "Est. 2019 — Tokyo",
+        "heading": "Made to\nbe kept",
+        "lead": "A Tokyo studio designing against the season — honest materials, restrained construction, numbered releases.",
+        "fallback_image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1900&auto=format&fit=crop",
+        "timeline_heading": "History",
+        "materials_heading": "Materials",
+        "cta_heading": "Start your\narchive",
+        "cta_button_label": "Shop the collection"
+      },
+      "blocks": {
+        "chapter-1": { "type": "chapter", "settings": { "index": "Chapter 01", "title": "A studio, not a brand", "body": "ARCHIVES began in a converted printworks in Shibuya in 2019 — three people, two sewing machines, and a refusal to work to a seasonal calendar.", "fallback_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1900&auto=format&fit=crop" } },
+        "chapter-2": { "type": "chapter", "settings": { "index": "Chapter 02", "title": "Sourced, not sold to us", "body": "We visit every mill and tannery in person. Fabric is chosen for how it ages, not how it photographs on a lookbook day.", "fallback_image": "https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=1900&auto=format&fit=crop" } },
+        "chapter-3": { "type": "chapter", "settings": { "index": "Chapter 03", "title": "Built to be repaired", "body": "Every piece ships with a repair guide and a lifetime mending service. We would rather patch a garment than sell you a new one.", "fallback_image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1900&auto=format&fit=crop" } },
+        "chapter-4": { "type": "chapter", "settings": { "index": "Chapter 04", "title": "Numbered, then archived", "body": "Each release carries a run number. Once it sells out, it is retired — recorded in the archive, never reprinted.", "fallback_image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1900&auto=format&fit=crop" } },
+        "stat-1": { "type": "stat", "settings": { "value": "2019", "label": "Founded in Tokyo" } },
+        "stat-2": { "type": "stat", "settings": { "value": "04", "label": "Releases per year" } },
+        "stat-3": { "type": "stat", "settings": { "value": "1,400+", "label": "Repairs completed" } },
+        "stat-4": { "type": "stat", "settings": { "value": "100%", "label": "Deadstock & organic fabric" } },
+        "time-1": { "type": "timeline_item", "settings": { "year": "2019", "title": "The first stitch", "body": "ARCHIVES opens as a two-person studio in a converted Shibuya printworks." } },
+        "time-2": { "type": "timeline_item", "settings": { "year": "2020", "title": "First numbered run", "body": "Run No. 001 — twelve field jackets, hand-numbered and sold directly to twelve people." } },
+        "time-3": { "type": "timeline_item", "settings": { "year": "2021", "title": "Repair program launches", "body": "Every garment sold from this point ships with a lifetime repair guarantee." } },
+        "time-4": { "type": "timeline_item", "settings": { "year": "2023", "title": "The Tokyo flagship", "body": "A single-room store opens beside the original workshop — no stockroom, just the current archive." } },
+        "time-5": { "type": "timeline_item", "settings": { "year": "2026", "title": "Forty releases in", "body": "The archive passes its fortieth numbered release, each one still traceable back to its maker." } },
+        "mat-1": { "type": "material", "settings": { "name": "Japanese selvedge denim", "body": "Woven on vintage shuttle looms in Okayama, finished with natural indigo that fades unevenly, honestly, over years of wear.", "fallback_image": "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=800&auto=format&fit=crop" } },
+        "mat-2": { "type": "material", "settings": { "name": "Heavyweight organic cotton", "body": "Grown without pesticides and loop-knitted at a mid-weight mill we have worked with since our first collection.", "fallback_image": "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?q=80&w=800&auto=format&fit=crop" } },
+        "mat-3": { "type": "material", "settings": { "name": "Recycled technical shell", "body": "A weatherproof shell rebuilt from post-industrial nylon waste — quiet hardware, taped seams, no branding.", "fallback_image": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=800&auto=format&fit=crop" } },
+        "value-1": { "type": "value", "settings": { "no": "01", "title": "Materials first", "body": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." } },
+        "value-2": { "type": "value", "settings": { "no": "02", "title": "Made to repair", "body": "Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement." } },
+        "value-3": { "type": "value", "settings": { "no": "03", "title": "Small, numbered runs", "body": "Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely." } }
+      },
+      "block_order": [
+        "chapter-1", "chapter-2", "chapter-3", "chapter-4",
+        "stat-1", "stat-2", "stat-3", "stat-4",
+        "time-1", "time-2", "time-3", "time-4", "time-5",
+        "mat-1", "mat-2", "mat-3",
+        "value-1", "value-2", "value-3"
+      ]
+    }
+  },
+  "order": ["main"]
+}
