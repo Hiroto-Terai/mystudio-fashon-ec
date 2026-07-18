@@ -39,13 +39,26 @@
     </div>
   </div>
 
-  {%- comment -%} Search panel {%- endcomment -%}
+  {%- comment -%} Search panel: input + predictive-search suggest dropdown (assets/archives.js bindPredictiveSearch) {%- endcomment -%}
   <div data-search-panel hidden style="border-top:1px solid var(--border-default); background:var(--surface-page);">
-    <form action="{{ routes.search_url }}" method="get" role="search" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-5) var(--page-gutter); display:flex; align-items:center; gap:var(--space-4);">
+    <form action="{{ routes.search_url }}" method="get" role="search" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-5) var(--page-gutter) 0; display:flex; align-items:center; gap:var(--space-4);">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-n-400)" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="search" name="q" placeholder="SEARCH THE ARCHIVE" style="flex:1; border:none; outline:none; background:none; font:var(--text-body); letter-spacing:var(--tracking-wide); text-transform:uppercase; font-size:var(--fs-sm);">
-      <button type="button" data-search-toggle class="as-iconbtn" style="background:none; border:none; cursor:pointer; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary);">Close</button>
+      <input type="search" name="q" data-search-input autocomplete="off" aria-label="{{ 'general.search.placeholder' | t }}" placeholder="{{ 'general.search.placeholder' | t | upcase }}" style="flex:1; border:none; outline:none; background:none; font:var(--text-body); letter-spacing:var(--tracking-wide); text-transform:uppercase; font-size:var(--fs-sm);">
+      <input type="hidden" name="options[prefix]" value="last">
+      <input type="hidden" name="type" value="product,article,page">
+      <button type="button" data-search-toggle class="as-iconbtn" style="background:none; border:none; cursor:pointer; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary);">{{ 'general.search.close' | t }}</button>
     </form>
+    <div
+      data-search-suggest
+      hidden
+      class="as-search-suggest"
+      data-loading-text="{{ 'general.search.loading' | t }}"
+      data-empty-text="{{ 'general.search.no_suggestions' | t }}"
+      data-collections-label="{{ 'general.search.collections' | t }}"
+      data-articles-label="{{ 'general.search.articles' | t }}"
+      data-pages-label="{{ 'general.search.pages' | t }}"
+      style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter);"
+    ></div>
   </div>
 
   {%- comment -%} Mobile menu {%- endcomment -%}

@@ -250,6 +250,29 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 
 .as-size-chart-modal.is-open { display: flex !important; }
 
+/* --- Predictive search suggestions (Sprint 9) --- */
+.as-search-suggest { border-top: 1px solid var(--border-default); max-height: 70vh; overflow-y: auto; }
+.as-suggest-panel { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5) 0 var(--space-8); }
+.as-suggest-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.as-suggest-group + .as-suggest-group { padding-top: var(--space-5); border-top: 1px solid var(--border-subtle); }
+.as-suggest-eyebrow { font: var(--text-mono); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-tertiary); font-size: 10px; }
+.as-suggest-query { display: inline-flex; align-self: flex-start; border: none; background: none; padding: var(--space-1) 0; font: var(--text-body-sm); color: var(--text-secondary); cursor: pointer; text-align: left; }
+.as-suggest-query:hover { color: var(--color-ink); }
+.as-suggest-query b, .as-suggest-query strong { font-weight: var(--fw-semibold); color: var(--color-ink); }
+.as-suggest-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.as-suggest-product { display: flex; align-items: center; gap: var(--space-3); border: 1px solid var(--border-default); padding: var(--space-3); min-width: 0; }
+.as-suggest-thumb { width: 48px; height: 48px; flex: none; background: var(--surface-subtle); overflow: hidden; }
+.as-suggest-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.as-suggest-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.as-suggest-title { font: var(--text-body-sm); color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.as-suggest-price { font: var(--text-mono); font-size: var(--fs-2xs); color: var(--text-secondary); }
+.as-suggest-link { display: block; font: var(--text-body-sm); color: var(--text-secondary); padding: var(--space-1) 0; }
+.as-suggest-link:hover { color: var(--color-ink); }
+.as-suggest-status { padding: var(--space-6) 0; font: var(--text-body-sm); color: var(--text-secondary); }
+@media (max-width: 760px) {
+  .as-suggest-products { grid-template-columns: 1fr; }
+}
+
 /* --- Journal / article rich text body (Sprint 7) --- */
 .as-article-body { font: var(--text-body); color: var(--text-primary); line-height: var(--lh-loose); font-size: var(--fs-md); }
 .as-article-body > * + * { margin-top: var(--space-6); }

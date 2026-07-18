@@ -1,0 +1,107 @@
+{%- comment -%}
+  Search results: eyebrow + query + result count, a refine-search form (same
+  routes.search_url / q / options[prefix]=last / type=product,article,page
+  used by the header's predictive search), and a mixed grid of results —
+  item.object_type drives whether snippets/product-card, snippets/article-card,
+  or a simple page card renders. Empty state (0 results, or no query yet on
+  first visit) shows a prompt plus a popular-products fallback grid so search
+  is never a dead end, matching sections/main-collection.liquid's fallback.
+{%- endcomment -%}
+{%- assign has_results = false -%}
+{%- if search.performed and search.results_count > 0 -%}
+  {%- assign has_results = true -%}
+{%- endif -%}
+
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);">
+      <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ 'search.eyebrow' | t }}</span>
+      {%- if search.performed -%}
+        <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">&ldquo;{{ search.terms }}&rdquo;</h1>
+        <p style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:var(--fs-2xs); margin-top:var(--space-4);">{{ 'search.results_count' | t: count: search.results_count }}</p>
+      {%- else -%}
+        <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'search.heading' | t }}</h1>
+      {%- endif -%}
+    </div>
+
+    <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-10);">
+      <form action="{{ routes.search_url }}" method="get" role="search" style="display:flex; align-items:center; gap:var(--space-4); border:1px solid var(--border-default); padding:var(--space-4) var(--space-5);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-n-400)" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="search" name="q" value="{{ search.terms | escape }}" required placeholder="{{ 'general.search.placeholder' | t | upcase }}" style="flex:1; border:none; outline:none; background:none; font:var(--text-body); letter-spacing:var(--tracking-wide); text-transform:uppercase; font-size:var(--fs-sm);">
+        <input type="hidden" name="options[prefix]" value="last">
+        <input type="hidden" name="type" value="product,article,page">
+        <button type="submit" class="as-fillbtn" style="border:1px solid var(--color-ink); background:var(--color-white); color:var(--color-ink); padding:var(--space-3) var(--space-6); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'general.search.search' | t }}</button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    {%- if has_results -%}
+      {%- paginate search.results by 24 -%}
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          {%- for item in search.results -%}
+            {%- case item.object_type -%}
+              {%- when 'product' -%}
+                {%- render 'product-card', product: item -%}
+              {%- when 'article' -%}
+                {%- render 'article-card', article: item -%}
+              {%- else -%}
+                <a href="{{ item.url }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); display:flex; flex-direction:column; justify-content:center; gap:var(--space-3); padding:var(--space-6); min-height:280px;">
+                  <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ 'search.page_label' | t }}</span>
+                  <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg);">{{ item.title }}</h3>
+                  <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ item.content | strip_html | truncatewords: 20 }}</p>
+                </a>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="as-pagination" role="navigation" aria-label="{{ 'collection.pagination.label' | t }}" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-10) var(--page-gutter); display:flex; justify-content:center;">
+            {{ paginate | default_pagination }}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-16) var(--page-gutter) var(--space-12); display:flex; flex-direction:column; align-items:center; gap:var(--space-4); text-align:center;">
+        {%- if search.performed -%}
+          <p style="font:var(--text-body); color:var(--text-secondary);">{{ 'search.no_results' | t: terms: search.terms }}</p>
+        {%- else -%}
+          <p style="font:var(--text-body); color:var(--text-secondary);">{{ 'search.prompt' | t }}</p>
+        {%- endif -%}
+        <a href="{{ routes.all_products_collection_url }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'search.browse_all' | t }}</a>
+      </div>
+
+      {%- comment -%} Popular products fallback: keeps a 0-result search from being a dead end. {%- endcomment -%}
+      {%- assign popular_products = section.settings.popular_collection.products | default: collections.all.products -%}
+      {%- if popular_products.size > 0 -%}
+        <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-6); border-top:1px solid var(--border-default); padding-top:var(--space-10);">
+          <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ 'search.popular_heading' | t }}</span>
+        </div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          {%- for product in popular_products limit: 8 -%}
+            {%- render 'product-card', product: product -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main search",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "popular_collection",
+      "label": "Popular products collection",
+      "info": "Shown as a fallback when a search returns no results. Defaults to all products when left blank."
+    }
+  ],
+  "presets": [
+    { "name": "Main search" }
+  ],
+  "enabled_on": {
+    "templates": ["search"]
+  }
+}
+{% endschema %}
