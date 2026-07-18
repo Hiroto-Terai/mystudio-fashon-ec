@@ -1,0 +1,43 @@
+{%- comment -%}
+  Closing 3-column "pillars" band: numbered mono label, hairline divider,
+  uppercase title, and supporting body copy per block.
+{%- endcomment -%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-16);">
+    {%- for block in section.blocks -%}
+      <div style="display:flex; flex-direction:column; gap:var(--space-4);" {{ block.shopify_attributes }}>
+        <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ block.settings.no }}</span>
+        <div style="height:1px; background:var(--border-default); margin:var(--space-2) 0;"></div>
+        <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ block.settings.title }}</h3>
+        <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ block.settings.body }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pillars",
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        { "type": "text", "id": "no", "label": "Number", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Materials first" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pillars",
+      "blocks": [
+        { "type": "pillar", "settings": { "no": "01", "title": "Materials first", "body": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." } },
+        { "type": "pillar", "settings": { "no": "02", "title": "Made to repair", "body": "Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement." } },
+        { "type": "pillar", "settings": { "no": "03", "title": "Small, numbered runs", "body": "Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
