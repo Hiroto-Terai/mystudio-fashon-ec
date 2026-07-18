@@ -1,0 +1,76 @@
+- generic [active] [ref=f6e1]:
+  - link "Skip to content" [ref=f6e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f6e3]: Free shipping on orders over ¥30,000
+  - banner [ref=f6e6]:
+    - generic [ref=f6e7]:
+      - link "A R C H I V E S" [ref=f6e8] [cursor=pointer]:
+        - /url: /
+      - navigation "Primary" [ref=f6e9]:
+        - link "Home" [ref=f6e11] [cursor=pointer]:
+          - /url: /
+        - link "Catalog" [ref=f6e13] [cursor=pointer]:
+          - /url: /collections/all
+        - link "Contact" [ref=f6e15] [cursor=pointer]:
+          - /url: /pages/contact
+      - generic [ref=f6e16]:
+        - button "Search" [ref=f6e17] [cursor=pointer]
+        - link "Wishlist" [ref=f6e21] [cursor=pointer]:
+          - /url: /pages/wishlist
+          - generic [ref=f6e24]: "1"
+        - button "Cart" [ref=f6e25] [cursor=pointer]:
+          - generic [ref=f6e29]: "1"
+  - main [ref=f6e30]:
+    - generic [ref=f6e33]:
+      - generic [ref=f6e34]: Collection
+      - heading "Collection" [level=1] [ref=f6e35]
+      - paragraph [ref=f6e36]: Product grid, filters and sort land in Sprint 2.
+  - contentinfo [ref=f6e38]:
+    - generic [ref=f6e40]:
+      - link "A R C H I V E S" [ref=f6e41] [cursor=pointer]:
+        - /url: /
+      - paragraph [ref=f6e42]: Considered garments and objects, archived for the long term. Tokyo — Worldwide.
+      - generic [ref=f6e43]:
+        - text: Newsletter
+        - generic [ref=f6e44]:
+          - textbox "EMAIL ADDRESS" [ref=f6e45]
+          - button "Subscribe" [ref=f6e46] [cursor=pointer]
+    - generic [ref=f6e50]:
+      - generic [ref=f6e51]: © 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.
+      - generic [ref=f6e52]:
+        - link "PRIVACY" [ref=f6e53] [cursor=pointer]:
+          - /url: /policies/privacy-policy
+        - link "TERMS" [ref=f6e54] [cursor=pointer]:
+          - /url: /policies/terms-of-service
+  - complementary "Cart" [ref=f6e55]:
+    - generic [ref=f6e56]:
+      - generic [ref=f6e57]: Cart — 1
+      - button "Close cart" [ref=f6e58] [cursor=pointer]
+    - generic [ref=f6e64]:
+      - link [ref=f6e65] [cursor=pointer]:
+        - /url: /products/the-collection-snowboard-liquid?variant=50302858559725
+        - 'img "The Collection Snowboard: Liquid" [ref=f6e66]'
+      - generic [ref=f6e67]:
+        - generic [ref=f6e68]: snowboard
+        - heading [level=4] [ref=f6e69]:
+          - 'link "The Collection Snowboard: Liquid" [ref=f6e70] [cursor=pointer]':
+            - /url: /products/the-collection-snowboard-liquid?variant=50302858559725
+        - generic [ref=f6e71]: $749.95
+        - generic [ref=f6e72]:
+          - button "Decrease" [ref=f6e73] [cursor=pointer]: −
+          - generic [ref=f6e74]: "1"
+          - button "Increase" [ref=f6e75] [cursor=pointer]: +
+      - button "Remove" [ref=f6e76] [cursor=pointer]
+    - generic [ref=f6e80]:
+      - generic [ref=f6e81]: あと $29,250.05 で送料無料
+      - generic [ref=f6e85]:
+        - textbox "COUPON — TRY WINTER10" [ref=f6e86]
+        - button "Apply" [ref=f6e87] [cursor=pointer]
+      - generic [ref=f6e88]:
+        - generic [ref=f6e89]: Subtotal
+        - generic [ref=f6e90]: $749.95
+      - generic [ref=f6e91]: Discount
+      - paragraph [ref=f6e93]: Shipping & taxes calculated at checkout.
+      - link "View cart" [ref=f6e94] [cursor=pointer]:
+        - /url: /cart
+      - button "Proceed to checkout" [ref=f6e96] [cursor=pointer]

@@ -92,6 +92,7 @@
 
 /* --- Base layer --- */
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0; font: var(--text-body); color: var(--text-primary); background: var(--surface-page);
@@ -194,6 +195,8 @@ button { font-family: inherit; }
   .as-eyebrow { font-size: 10px !important; }
 }
 
-.as-burger { display: none; }
-.as-mobmenu { display: none; }
+@media (min-width: 1001px) {
+  .as-burger { display: none; }
+  .as-mobmenu { display: none; }
+}
 .as-logo { white-space: nowrap; }

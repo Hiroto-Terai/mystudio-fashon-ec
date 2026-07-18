@@ -1,5 +1,3 @@
-design-reference/
-docs/
-.git/
-.gitignore
+design-reference/*
+docs/*
 README.md

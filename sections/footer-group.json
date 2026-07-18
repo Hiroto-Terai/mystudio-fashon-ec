@@ -4,6 +4,12 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "col-shop": { "type": "menu_column", "settings": { "title": "Shop" } },
+        "col-studio": { "type": "menu_column", "settings": { "title": "Studio" } },
+        "col-support": { "type": "menu_column", "settings": { "title": "Support" } }
+      },
+      "block_order": ["col-shop", "col-studio", "col-support"],
       "settings": {}
     }
   },
