@@ -1,12 +1,7 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
-      "settings": {
-        "eyebrow": "Search",
-        "heading": "Search",
-        "body": "Search results land in Sprint 9."
-      }
+      "type": "main-search"
     }
   },
   "order": [

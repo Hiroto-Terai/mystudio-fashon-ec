@@ -5,7 +5,13 @@
   "general": {
     "search": {
       "search": "Search",
-      "placeholder": "Search the archive"
+      "placeholder": "Search the archive",
+      "close": "Close",
+      "loading": "Searching…",
+      "no_suggestions": "No matches for",
+      "collections": "Collections",
+      "articles": "Journal",
+      "pages": "Pages"
     },
     "cart": {
       "title": "Cart",
@@ -104,6 +110,19 @@
     "weight": "Weight",
     "items_in_look": "{{ count }} items in this look",
     "empty_list": "No stylings published yet."
+  },
+  "search": {
+    "eyebrow": "Search",
+    "heading": "Search the archive",
+    "prompt": "Enter a term above to search products, journal entries and pages.",
+    "results_count": {
+      "one": "{{ count }} result",
+      "other": "{{ count }} results"
+    },
+    "no_results": "No results for \"{{ terms }}\"",
+    "browse_all": "Browse all products",
+    "popular_heading": "Popular products",
+    "page_label": "Page"
   },
   "blog": {
     "empty": "No articles published yet.",

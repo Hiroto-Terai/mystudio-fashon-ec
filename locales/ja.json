@@ -5,7 +5,13 @@
   "general": {
     "search": {
       "search": "検索",
-      "placeholder": "アーカイブを検索"
+      "placeholder": "アーカイブを検索",
+      "close": "閉じる",
+      "loading": "検索中…",
+      "no_suggestions": "一致する候補がありません:",
+      "collections": "コレクション",
+      "articles": "ジャーナル",
+      "pages": "ページ"
     },
     "cart": {
       "title": "カート",
@@ -104,6 +110,18 @@
     "weight": "体重",
     "items_in_look": "使用アイテム{{ count }}点",
     "empty_list": "公開中のスタイリングはまだありません。"
+  },
+  "search": {
+    "eyebrow": "検索",
+    "heading": "アーカイブを検索",
+    "prompt": "キーワードを入力すると、商品・ジャーナル・ページを横断して検索します。",
+    "results_count": {
+      "other": "{{ count }}件"
+    },
+    "no_results": "「{{ terms }}」に一致する結果はありませんでした",
+    "browse_all": "すべての商品を見る",
+    "popular_heading": "人気の商品",
+    "page_label": "ページ"
   },
   "blog": {
     "empty": "公開中の記事はまだありません。",

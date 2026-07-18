@@ -8,6 +8,9 @@
    Sprint 5: Wishlist page (Products/Stylings tabs) — Products are fetched
    from /products/{handle}.js and rendered client-side; Stylings are
    defensive (Sprint 6 hasn't shipped real styling data yet).
+   Sprint 9: Predictive search — debounced as-you-type fetch against
+   /search/suggest.json rendered into the header's search-panel suggest
+   dropdown.
    ============================================================ */
 (function () {
   'use strict';
@@ -103,8 +106,14 @@
         var panel = qs('[data-search-panel]');
         if (!panel) return;
         var open = panel.hasAttribute('hidden');
-        if (open) { panel.removeAttribute('hidden'); var input = qs('input', panel); if (input) input.focus(); }
-        else { panel.setAttribute('hidden', ''); }
+        if (open) {
+          panel.removeAttribute('hidden');
+          var input = qs('[data-search-input]', panel);
+          if (input) input.focus();
+        } else {
+          panel.setAttribute('hidden', '');
+          closeSearchSuggest(panel);
+        }
       });
     });
 
@@ -116,6 +125,151 @@
         if (open) { menu.removeAttribute('hidden'); body.classList.add('as-menu-open'); }
         else { menu.setAttribute('hidden', ''); body.classList.remove('as-menu-open'); }
       });
+    });
+  }
+
+  /* ---------- Predictive search (header search panel suggest dropdown) ----------
+     As-you-type suggestions via Shopify's Predictive Search API
+     (/search/suggest.json). Typo/spelling-variation tolerance is handled
+     server-side by that API, so this just debounces input, fetches, and
+     renders whatever resource types come back (queries/products/collections/
+     articles/pages). */
+  var PREDICTIVE_SEARCH_DEBOUNCE_MS = 200;
+  var PREDICTIVE_SEARCH_MIN_LENGTH = 2;
+  var PREDICTIVE_SEARCH_LIMIT = 6;
+
+  function closeSearchSuggest(panel) {
+    var suggest = qs('[data-search-suggest]', panel);
+    if (!suggest) return;
+    suggest.setAttribute('hidden', '');
+    suggest.innerHTML = '';
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function renderSearchSuggest(suggest, data) {
+    var resources = (data && data.resources && data.resources.results) || {};
+    var queries = resources.queries || [];
+    var products = resources.products || [];
+    var collections = resources.collections || [];
+    var articles = resources.articles || [];
+    var pages = resources.pages || [];
+    var hasAny = queries.length || products.length || collections.length || articles.length || pages.length;
+
+    if (!hasAny) {
+      var emptyText = suggest.getAttribute('data-empty-text') || 'No matches';
+      suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(emptyText) + '</p>';
+      suggest.removeAttribute('hidden');
+      return;
+    }
+
+    function linkGroup(list) {
+      var out = '';
+      list.forEach(function (item) {
+        out += '<a href="' + item.url + '" class="as-suggest-link as-clickable">' + escapeHtml(item.title) + '</a>';
+      });
+      return out;
+    }
+
+    var html = '<div class="as-suggest-panel">';
+
+    if (queries.length) {
+      html += '<div class="as-suggest-group">';
+      queries.forEach(function (q) {
+        /* styled_text is Shopify-rendered HTML (query text with the matched
+           portion wrapped in <b>) - safe to inject, same as Dawn's
+           predictive-search.js does. */
+        html += '<button type="button" class="as-suggest-query" data-suggest-query="' + escapeHtml(q.text) + '">' + (q.styled_text || escapeHtml(q.text)) + '</button>';
+      });
+      html += '</div>';
+    }
+
+    if (products.length) {
+      html += '<div class="as-suggest-group as-suggest-products">';
+      products.forEach(function (p) {
+        html += '<a href="' + p.url + '" class="as-suggest-product as-clickable">' +
+          '<span class="as-suggest-thumb">' + (p.image ? '<img src="' + imageUrlWithWidth(p.image, 120) + '" alt="" width="60" height="60" loading="lazy">' : '') + '</span>' +
+          '<span class="as-suggest-info"><span class="as-suggest-title">' + escapeHtml(p.title) + '</span><span class="as-suggest-price">' + formatMoney(p.price) + '</span></span>' +
+          '</a>';
+      });
+      html += '</div>';
+    }
+
+    if (collections.length) {
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-collections-label') || 'Collections') + '</span>' + linkGroup(collections) + '</div>';
+    }
+    if (articles.length) {
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-articles-label') || 'Journal') + '</span>' + linkGroup(articles) + '</div>';
+    }
+    if (pages.length) {
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-pages-label') || 'Pages') + '</span>' + linkGroup(pages) + '</div>';
+    }
+
+    html += '</div>';
+    suggest.innerHTML = html;
+    suggest.removeAttribute('hidden');
+  }
+
+  function bindPredictiveSearch() {
+    var panel = qs('[data-search-panel]');
+    if (!panel) return;
+    var input = qs('[data-search-input]', panel);
+    var suggest = qs('[data-search-suggest]', panel);
+    if (!input || !suggest || input.__predictiveBound) return;
+    input.__predictiveBound = true;
+
+    var debounceTimer = null;
+    var activeController = null;
+
+    function fetchSuggestions(query) {
+      if (activeController && activeController.abort) activeController.abort();
+      activeController = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var loadingText = suggest.getAttribute('data-loading-text') || 'Searching…';
+      suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(loadingText) + '</p>';
+      suggest.removeAttribute('hidden');
+
+      var url = '/search/suggest.json?q=' + encodeURIComponent(query) +
+        '&resources[type]=product,collection,article,page,query' +
+        '&resources[limit]=' + PREDICTIVE_SEARCH_LIMIT +
+        '&resources[options][unavailable_products]=last';
+
+      fetch(url, {
+        headers: { 'Accept': 'application/json' },
+        signal: activeController ? activeController.signal : undefined
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) { renderSearchSuggest(suggest, data); })
+        .catch(function (err) {
+          if (err && err.name === 'AbortError') return;
+          closeSearchSuggest(panel);
+        });
+    }
+
+    on(input, 'input', function () {
+      var query = input.value.trim();
+      window.clearTimeout(debounceTimer);
+      if (query.length < PREDICTIVE_SEARCH_MIN_LENGTH) { closeSearchSuggest(panel); return; }
+      debounceTimer = window.setTimeout(function () { fetchSuggestions(query); }, PREDICTIVE_SEARCH_DEBOUNCE_MS);
+    });
+
+    on(suggest, 'click', function (e) {
+      var queryBtn = e.target.closest('[data-suggest-query]');
+      if (!queryBtn) return;
+      e.preventDefault();
+      input.value = queryBtn.getAttribute('data-suggest-query');
+      closeSearchSuggest(panel);
+      var form = input.closest('form');
+      if (form) form.submit();
+    });
+
+    on(document, 'keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (panel.hasAttribute('hidden')) return;
+      if (!suggest.hasAttribute('hidden')) { closeSearchSuggest(panel); return; }
+      panel.setAttribute('hidden', '');
     });
   }
 
@@ -825,6 +979,7 @@
   /* ---------- init ---------- */
   function init() {
     bindHeader();
+    bindPredictiveSearch();
     bindCartDrawer();
     bindWishlistToggles();
     bindQuickAdd();
