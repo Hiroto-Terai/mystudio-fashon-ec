@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Sprint 0 — foundation",
+        "heading": "ARCHIVES",
+        "body": "Global chrome (header, footer, cart drawer) is live. Home sections land in Sprint 1."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,56 @@
+/* ARCHIVES Studio — Typography tokens
+   Bold, spaced-out grotesque (KITH) with a soft, disciplined hierarchy
+   (Soéju). Hierarchy is built from weight, size and LETTER-SPACING, not
+   from multiple typefaces. Uppercase eyebrows/labels carry wide tracking. */
+:root {
+  --font-sans: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Weights */
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-black:    800;
+
+  /* Type scale (px) — editorial, roomy top end */
+  --fs-2xs:  11px;
+  --fs-xs:   12px;
+  --fs-sm:   13px;
+  --fs-base: 15px;
+  --fs-md:   16px;
+  --fs-lg:   18px;
+  --fs-xl:   22px;
+  --fs-2xl:  28px;
+  --fs-3xl:  36px;
+  --fs-4xl:  48px;
+  --fs-5xl:  64px;
+  --fs-6xl:  88px;
+  --fs-7xl:  120px;
+
+  /* Line heights */
+  --lh-none:    1;
+  --lh-tight:   1.05;
+  --lh-snug:    1.2;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.7;
+
+  /* Letter-spacing — wide tracking is the brand signature */
+  --tracking-tighter: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.12em;
+  --tracking-widest:  0.22em;
+
+  /* --- Semantic roles --- */
+  --text-display:     var(--fw-black)    var(--fs-6xl)/var(--lh-none) var(--font-sans);
+  --text-h1:          var(--fw-bold)     var(--fs-4xl)/var(--lh-tight) var(--font-sans);
+  --text-h2:          var(--fw-bold)     var(--fs-3xl)/var(--lh-tight) var(--font-sans);
+  --text-h3:          var(--fw-semibold) var(--fs-xl)/var(--lh-snug) var(--font-sans);
+  --text-body:        var(--fw-regular)  var(--fs-base)/var(--lh-relaxed) var(--font-sans);
+  --text-body-sm:     var(--fw-regular)  var(--fs-sm)/var(--lh-normal) var(--font-sans);
+  --text-label:       var(--fw-semibold) var(--fs-xs)/var(--lh-none) var(--font-sans);
+  --text-mono:        var(--fw-regular)  var(--fs-xs)/var(--lh-normal) var(--font-mono);
+}

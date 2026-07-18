@@ -1,0 +1,26 @@
+{%- comment -%}
+  Temporary placeholder used until each view's real section lands in its sprint.
+{%- endcomment -%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-4);">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h1 style="font-weight:var(--fw-black); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading | default: 'Coming soon' }}</h1>
+    {%- if section.settings.body != blank -%}
+      <p style="font:var(--text-body); color:var(--text-secondary); max-width:520px; line-height:var(--lh-relaxed);">{{ section.settings.body }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Placeholder",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Coming soon" },
+    { "type": "textarea", "id": "body", "label": "Body" }
+  ],
+  "presets": [{ "name": "Placeholder" }]
+}
+{% endschema %}

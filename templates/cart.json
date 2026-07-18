@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Cart",
+        "heading": "Cart",
+        "body": "Cart page lands in Sprint 4."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

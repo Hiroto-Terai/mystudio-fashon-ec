@@ -1,0 +1,25 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content"
+  },
+  "general": {
+    "search": {
+      "search": "Search",
+      "placeholder": "Search the archive"
+    },
+    "cart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "subtotal": "Subtotal",
+      "checkout": "Proceed to checkout",
+      "view": "View cart"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "quick_add": "Quick add",
+      "sold_out": "Sold out"
+    }
+  }
+}

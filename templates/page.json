@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Page",
+        "heading": "Page",
+        "body": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

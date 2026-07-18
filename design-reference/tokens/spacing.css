@@ -1,0 +1,40 @@
+/* ARCHIVES Studio — Spacing, layout & grid
+   Built on Shopify Dawn's sectional rhythm, expanded for high-end editorial
+   breathing room (Cornier / Kanademono). Base unit = 4px. */
+:root {
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-32:  128px;
+  --space-40:  160px;
+  --space-48:  192px;
+
+  /* Layout — Dawn-mapped, roomier gutters */
+  --page-max:        1600px;   /* full-width container cap */
+  --page-narrow:     960px;    /* editorial reading width */
+  --page-gutter:     40px;     /* desktop side gutter (Dawn ~50; refined) */
+  --page-gutter-sm:  20px;     /* mobile side gutter */
+  --section-y:       96px;     /* vertical rhythm between sections */
+  --section-y-sm:    56px;
+
+  /* Product / block grids */
+  --grid-gap:        1px;      /* hairline gallery grid (KITH/Union) */
+  --grid-gap-airy:   24px;     /* separated editorial grid */
+  --grid-min-col:    240px;
+
+  /* Control sizing */
+  --control-h-sm:    36px;
+  --control-h-md:    44px;
+  --control-h-lg:    56px;
+  --control-pad-x:   20px;
+}
