@@ -39,7 +39,7 @@ Theme Check は Shopify MCP `validate_theme` で全ファイル検証済み。
 - [x] S3 商品詳細 / PDP（ギャラリー/在庫バッジ/会員価格/バリアント比較UI/FBT/アコーディオン/セール価格）
 - [x] S4 カート（Ajaxドロワー再描画 / 数量・削除 / 送料無料バー / クーポン / カートページ）
 - [x] S5 ウィッシュリスト（localStorage / Products・Stylingsタブ / Add・Remove / バッジ）
-- [ ] S6 スタイリング
+- [x] S6 スタイリング（metaobject一覧＋詳細 / 使用商品タグ / ホーム接続 / wishlist stylings）
 - [ ] S7 ジャーナル / 記事
 - [ ] S8 About
 - [ ] S9 検索
