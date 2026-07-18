@@ -186,12 +186,14 @@
     var active = root.getAttribute('data-member') === 'true';
     var price = qs('[data-pdp-price]', root);
     var memberPrice = qs('[data-pdp-member-price]', root);
+    var compare = qs('[data-pdp-compare]', root);
     var banner = qs('[data-member-banner]', root);
     var dot = qs('[data-member-dot]', root);
     var title = qs('[data-member-title]', root);
     var desc = qs('[data-member-desc]', root);
     if (price) price.classList.toggle('is-strike', active);
     if (memberPrice) memberPrice.hidden = !active;
+    if (compare) compare.hidden = active || root.getAttribute('data-on-sale') !== 'true';
     if (banner) banner.classList.toggle('is-active', active);
     if (dot) dot.classList.toggle('is-active', active);
     if (title) title.textContent = active ? title.getAttribute('data-member-text') : title.getAttribute('data-guest-text');
@@ -230,6 +232,7 @@
       var addBtn = qs('[data-add-to-cart]', root);
       var priceEl = qs('[data-pdp-price]', root);
       var memberPriceEl = qs('[data-pdp-member-price]', root);
+      var compareEl = qs('[data-pdp-compare]', root);
       var stockLine = qs('[data-stock-line]', root);
       var stockDot = qs('[data-stock-dot]', root);
       var purchaseBlock = qs('[data-pdp-purchase]', root);
@@ -266,6 +269,12 @@
         if (idInput) idInput.value = variant ? variant.id : '';
         if (priceEl && variant) priceEl.innerHTML = variant.price_html;
         if (memberPriceEl && variant) memberPriceEl.innerHTML = variant.member_price_html;
+        if (variant) root.setAttribute('data-on-sale', variant.on_sale ? 'true' : 'false');
+        if (compareEl && variant) {
+          compareEl.innerHTML = variant.compare_html || '';
+          var memberActive = root.getAttribute('data-member') === 'true';
+          compareEl.hidden = memberActive || !variant.on_sale;
+        }
 
         var available = variant ? variant.available : false;
 

@@ -44,6 +44,10 @@
     assign is_member = true
   endif
   assign member_price_amount = current_variant.price | times: 0.9 | round
+  assign is_on_sale = false
+  if current_variant.compare_at_price > current_variant.price
+    assign is_on_sale = true
+  endif
 
   assign review_count = product.id | modulo: 60 | plus: 12
 
@@ -80,7 +84,7 @@
     </div>
 
     {%- comment -%} Info column {%- endcomment -%}
-    <div class="as-pdp-info" data-pdp-root data-member="{{ is_member }}" data-low-stock-threshold="{{ low_stock_threshold }}" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
+    <div class="as-pdp-info" data-pdp-root data-member="{{ is_member }}" data-on-sale="{{ is_on_sale }}" data-low-stock-threshold="{{ low_stock_threshold }}" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
 
       {%- comment -%} Badges (★ inventory-aware) {%- endcomment -%}
       <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; min-height:24px;">
@@ -101,6 +105,7 @@
           <span style="font:var(--text-mono); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ review_count }} {{ 'products.product.reviews' | t }}</span>
         </div>
         <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+          <span data-pdp-compare style="font-size:var(--fs-xl); text-decoration:line-through; color:var(--text-tertiary);"{% if is_member or is_on_sale == false %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</span>
           <span data-pdp-price class="{% if is_member %}is-strike{% endif %}" style="font-size:var(--fs-xl);">{{ current_variant.price | money }}</span>
           <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{{ member_price_amount | money }}</span>
         </div>
@@ -147,6 +152,8 @@
               ],
               "price_html":{{ variant.price | money | json }},
               "member_price_html":{{ variant.price | times: 0.9 | round | money | json }},
+              "compare_html":{{ variant.compare_at_price | money | json }},
+              "on_sale":{% if variant.compare_at_price > variant.price %}true{% else %}false{% endif %},
               "inventory_management":{{ variant.inventory_management | json }},
               "inventory_quantity":{{ variant.inventory_quantity | json }},
               "title":{{ variant.title | json }}
@@ -321,8 +328,10 @@
   </div>
 
   {%- comment -%} FBT + Related (server-rendered from the product's collection; see snippets/pdp-recommendations.liquid for rationale) {%- endcomment -%}
-  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: 'products.product.fbt_heading' | t, layout: 'scroll', max: 8 -%}
-  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: 'products.product.related_heading' | t, layout: 'grid', max: 8 -%}
+  {%- assign fbt_heading = 'products.product.fbt_heading' | t -%}
+  {%- assign related_heading = 'products.product.related_heading' | t -%}
+  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: fbt_heading, layout: 'scroll', max: 8 -%}
+  {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: related_heading, layout: 'grid', max: 8 -%}
 </div>
 
 {%- comment -%} Size chart modal (dummy content, per spec) {%- endcomment -%}
