@@ -1,15 +1,130 @@
 {
   "sections": {
-    "main": {
-      "type": "placeholder",
+    "hero": {
+      "type": "hero",
       "settings": {
-        "eyebrow": "Sprint 0 — foundation",
-        "heading": "ARCHIVES",
-        "body": "Global chrome (header, footer, cart drawer) is live. Home sections land in Sprint 1."
+        "eyebrow": "01 / Seasonal",
+        "heading": "Raw\nStructure\nNo. 01",
+        "body": "A study in restraint — heavyweight organic cottons, technical outerwear, and quiet hardware. Made to be kept.",
+        "button_label": "Explore the collection",
+        "fallback_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop"
       }
+    },
+    "category-tiles": {
+      "type": "category-tiles",
+      "settings": {
+        "eyebrow": "Shop by category",
+        "heading": "Find your archive"
+      },
+      "blocks": {
+        "cat-1": { "type": "category", "settings": { "label": "Outerwear", "fallback_image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800&auto=format&fit=crop" } },
+        "cat-2": { "type": "category", "settings": { "label": "Denim", "fallback_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop" } },
+        "cat-3": { "type": "category", "settings": { "label": "Knitwear", "fallback_image": "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=800&auto=format&fit=crop" } },
+        "cat-4": { "type": "category", "settings": { "label": "Accessories", "fallback_image": "https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=800&auto=format&fit=crop" } }
+      },
+      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4"]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Featured / FW26",
+        "heading": "The Core Selection"
+      }
+    },
+    "ranking": {
+      "type": "ranking",
+      "settings": {
+        "eyebrow": "Weekly ranking",
+        "heading": "Most saved this week"
+      }
+    },
+    "staff-styling": {
+      "type": "staff-styling",
+      "settings": {
+        "eyebrow": "Staff styling",
+        "heading": "Worn by the floor"
+      },
+      "blocks": {
+        "staff-1": { "type": "staff", "settings": { "name": "Aoi", "role": "Store lead", "height": "168cm", "weight": "52kg", "fallback_image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop" } },
+        "staff-2": { "type": "staff", "settings": { "name": "Ren", "role": "Buyer", "height": "178cm", "weight": "66kg", "fallback_image": "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop" } },
+        "staff-3": { "type": "staff", "settings": { "name": "Kai", "role": "Visual merchandiser", "height": "174cm", "weight": "61kg", "fallback_image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop" } },
+        "staff-4": { "type": "staff", "settings": { "name": "Sara", "role": "Sales associate", "height": "162cm", "weight": "50kg", "fallback_image": "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=800&auto=format&fit=crop" } }
+      },
+      "block_order": ["staff-1", "staff-2", "staff-3", "staff-4"]
+    },
+    "brand-intro": {
+      "type": "brand-intro",
+      "settings": {
+        "eyebrow": "The Studio",
+        "heading": "Considered,\nnot seasonal",
+        "body": "ARCHIVES is a Tokyo studio making garments and objects designed to be kept, repaired, and archived — never replaced. Every release is small, documented, and numbered.",
+        "button_label": "About the studio",
+        "fallback_image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1400&auto=format&fit=crop"
+      }
+    },
+    "styling-hints": {
+      "type": "styling-hints",
+      "settings": {
+        "eyebrow": "Styling Hints",
+        "heading": "みんなの着こなしを見る",
+        "body": "気になるアイテムのコーデ実例をチェック。サムネイルをタップすると、使用アイテムがそのまま見られて買えます。",
+        "button_label": "すべてのコーディネートを見る"
+      },
+      "blocks": {
+        "st-1": { "type": "styling", "settings": { "item_count": 3, "fallback_image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=700&auto=format&fit=crop" } },
+        "st-2": { "type": "styling", "settings": { "item_count": 4, "fallback_image": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=700&auto=format&fit=crop" } },
+        "st-3": { "type": "styling", "settings": { "item_count": 2, "fallback_image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=700&auto=format&fit=crop" } },
+        "st-4": { "type": "styling", "settings": { "item_count": 5, "fallback_image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=700&auto=format&fit=crop" } },
+        "st-5": { "type": "styling", "settings": { "item_count": 3, "fallback_image": "https://images.unsplash.com/photo-1550246140-29f40b909e5a?q=80&w=700&auto=format&fit=crop" } },
+        "st-6": { "type": "styling", "settings": { "item_count": 4, "fallback_image": "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=700&auto=format&fit=crop" } },
+        "tag-1": { "type": "hashtag", "settings": { "label": "#Layering" } },
+        "tag-2": { "type": "hashtag", "settings": { "label": "#Monotone" } },
+        "tag-3": { "type": "hashtag", "settings": { "label": "#Workwear" } },
+        "tag-4": { "type": "hashtag", "settings": { "label": "#OffDuty" } }
+      },
+      "block_order": ["st-1", "st-2", "st-3", "st-4", "st-5", "st-6", "tag-1", "tag-2", "tag-3", "tag-4"]
+    },
+    "journal": {
+      "type": "journal",
+      "settings": {
+        "heading": "From the Journal"
+      }
+    },
+    "instagram": {
+      "type": "instagram",
+      "settings": {
+        "heading": "@archives.studio"
+      },
+      "blocks": {
+        "ig-1": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=500&auto=format&fit=crop" } },
+        "ig-2": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1479064555552-3ef4979f8908?q=80&w=500&auto=format&fit=crop" } },
+        "ig-3": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=500&auto=format&fit=crop" } },
+        "ig-4": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=500&auto=format&fit=crop" } },
+        "ig-5": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=500&auto=format&fit=crop" } },
+        "ig-6": { "type": "image", "settings": { "fallback_image": "https://images.unsplash.com/photo-1608234807905-4466023792f5?q=80&w=500&auto=format&fit=crop" } }
+      },
+      "block_order": ["ig-1", "ig-2", "ig-3", "ig-4", "ig-5", "ig-6"]
+    },
+    "pillars": {
+      "type": "pillars",
+      "blocks": {
+        "pillar-1": { "type": "pillar", "settings": { "no": "01", "title": "Materials first", "body": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." } },
+        "pillar-2": { "type": "pillar", "settings": { "no": "02", "title": "Made to repair", "body": "Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement." } },
+        "pillar-3": { "type": "pillar", "settings": { "no": "03", "title": "Small, numbered runs", "body": "Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely." } }
+      },
+      "block_order": ["pillar-1", "pillar-2", "pillar-3"]
     }
   },
   "order": [
-    "main"
+    "hero",
+    "category-tiles",
+    "featured-collection",
+    "ranking",
+    "staff-styling",
+    "brand-intro",
+    "styling-hints",
+    "journal",
+    "instagram",
+    "pillars"
   ]
 }

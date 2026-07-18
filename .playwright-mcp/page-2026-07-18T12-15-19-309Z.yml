@@ -1,0 +1,6 @@
+- generic [ref=f25e4]:
+  - heading "このウェブサイトを読み込む際に問題が発生しました" [level=1] [ref=f25e5]
+  - paragraph [ref=f25e6]: ページを更新してみてください。
+  - paragraph [ref=f25e7]: サイトが読み込まれない場合は、数分後にもう一度お試しください。
+  - link "ページを更新する" [ref=f25e8] [cursor=pointer]:
+    - /url: ""

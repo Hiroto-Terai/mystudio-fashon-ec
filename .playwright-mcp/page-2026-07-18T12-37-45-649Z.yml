@@ -1,0 +1,286 @@
+- generic [active] [ref=f33e1]:
+  - link "Skip to content" [ref=f33e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f33e3]: Free shipping on orders over ¥30,000
+  - banner [ref=f33e6]:
+    - generic [ref=f33e7]:
+      - link "A R C H I V E S" [ref=f33e8] [cursor=pointer]:
+        - /url: /
+      - navigation "Primary" [ref=f33e9]:
+        - link "Home" [ref=f33e11] [cursor=pointer]:
+          - /url: /
+        - link "Catalog" [ref=f33e13] [cursor=pointer]:
+          - /url: /collections/all
+        - link "Contact" [ref=f33e15] [cursor=pointer]:
+          - /url: /pages/contact
+      - generic [ref=f33e16]:
+        - button "Search" [ref=f33e17] [cursor=pointer]
+        - link "Wishlist" [ref=f33e21] [cursor=pointer]:
+          - /url: /pages/wishlist
+        - button "Cart" [ref=f33e24] [cursor=pointer]
+  - main [ref=f33e28]:
+    - generic [ref=f33e32]:
+      - generic [ref=f33e33]: 01 / Seasonal
+      - generic [ref=f33e34]:
+        - heading "Raw Structure No. 01" [level=1] [ref=f33e35]
+        - paragraph [ref=f33e36]: A study in restraint — heavyweight organic cottons, technical outerwear, and quiet hardware. Made to be kept.
+        - link "Explore the collection" [ref=f33e37] [cursor=pointer]:
+          - /url: /collections/all
+    - generic [ref=f33e41]:
+      - generic [ref=f33e42]:
+        - text: Shop by category
+        - heading "Find your archive" [level=2] [ref=f33e43]
+      - generic [ref=f33e44]:
+        - link "Outerwear Outerwear" [ref=f33e45] [cursor=pointer]:
+          - /url: "#"
+          - img "Outerwear" [ref=f33e46]
+          - generic [ref=f33e47]: Outerwear
+        - link "Denim Denim" [ref=f33e49] [cursor=pointer]:
+          - /url: "#"
+          - img "Denim" [ref=f33e50]
+          - generic [ref=f33e51]: Denim
+        - link "Knitwear Knitwear" [ref=f33e53] [cursor=pointer]:
+          - /url: "#"
+          - img "Knitwear" [ref=f33e54]
+          - generic [ref=f33e55]: Knitwear
+        - link "Accessories Accessories" [ref=f33e57] [cursor=pointer]:
+          - /url: "#"
+          - img "Accessories" [ref=f33e58]
+          - generic [ref=f33e59]: Accessories
+    - generic [ref=f33e62]:
+      - generic [ref=f33e63]:
+        - generic [ref=f33e64]:
+          - generic [ref=f33e65]: Featured / FW26
+          - heading "The Core Selection" [level=2] [ref=f33e66]
+        - link "View all" [ref=f33e67] [cursor=pointer]:
+          - /url: /collections/all
+      - generic [ref=f33e68]:
+        - generic [ref=f33e69]:
+          - generic [ref=f33e70]:
+            - img "Overdyed Field Jacket" [ref=f33e71]
+            - button "Wishlist" [ref=f33e72] [cursor=pointer]
+            - button "Quick add" [disabled] [ref=f33e76]
+          - generic [ref=f33e77]:
+            - generic [ref=f33e78]: Outerwear
+            - heading "Overdyed Field Jacket" [level=3] [ref=f33e79]
+            - generic [ref=f33e80]: ¥68,000
+        - generic [ref=f33e81]:
+          - generic [ref=f33e82]:
+            - img "Raw Denim Trouser" [ref=f33e83]
+            - button "Wishlist" [ref=f33e84] [cursor=pointer]
+            - button "Quick add" [disabled] [ref=f33e88]
+          - generic [ref=f33e89]:
+            - generic [ref=f33e90]: Bottoms
+            - heading "Raw Denim Trouser" [level=3] [ref=f33e91]
+            - generic [ref=f33e92]: ¥42,000
+        - generic [ref=f33e93]:
+          - generic [ref=f33e94]:
+            - img "Heavy Cotton Tee" [ref=f33e95]
+            - button "Wishlist" [ref=f33e96] [cursor=pointer]
+            - button "Quick add" [disabled] [ref=f33e100]
+          - generic [ref=f33e101]:
+            - generic [ref=f33e102]: Tops
+            - heading "Heavy Cotton Tee" [level=3] [ref=f33e103]
+            - generic [ref=f33e104]: ¥14,000
+        - generic [ref=f33e105]:
+          - generic [ref=f33e106]:
+            - img "Wool Melton Coat" [ref=f33e107]
+            - button "Wishlist" [ref=f33e108] [cursor=pointer]
+            - button "Quick add" [disabled] [ref=f33e112]
+          - generic [ref=f33e113]:
+            - generic [ref=f33e114]: Outerwear
+            - heading "Wool Melton Coat" [level=3] [ref=f33e115]
+            - generic [ref=f33e116]: ¥98,000
+    - generic [ref=f33e118]:
+      - generic [ref=f33e119]:
+        - generic [ref=f33e120]:
+          - generic [ref=f33e121]: Weekly ranking
+          - heading "Most saved this week" [level=2] [ref=f33e122]
+        - link "View all" [ref=f33e123] [cursor=pointer]:
+          - /url: /collections/all
+      - generic [ref=f33e124]:
+        - generic [ref=f33e125]:
+          - generic [ref=f33e126]:
+            - generic [ref=f33e127]: "1"
+            - img "Waxed Cotton Parka" [ref=f33e128]
+            - button "Quick add" [disabled] [ref=f33e130]
+          - generic [ref=f33e131]:
+            - generic [ref=f33e132]: Outerwear
+            - heading "Waxed Cotton Parka" [level=3] [ref=f33e133]
+            - generic [ref=f33e134]: ¥72,000
+        - generic [ref=f33e135]:
+          - generic [ref=f33e136]:
+            - generic [ref=f33e137]: "2"
+            - img "Ribbed Merino Sweater" [ref=f33e138]
+            - button "Quick add" [disabled] [ref=f33e140]
+          - generic [ref=f33e141]:
+            - generic [ref=f33e142]: Knitwear
+            - heading "Ribbed Merino Sweater" [level=3] [ref=f33e143]
+            - generic [ref=f33e144]: ¥36,000
+        - generic [ref=f33e145]:
+          - generic [ref=f33e146]:
+            - generic [ref=f33e147]: "3"
+            - img "Straight Fit Chino" [ref=f33e148]
+            - button "Quick add" [disabled] [ref=f33e150]
+          - generic [ref=f33e151]:
+            - generic [ref=f33e152]: Bottoms
+            - heading "Straight Fit Chino" [level=3] [ref=f33e153]
+            - generic [ref=f33e154]: ¥28,000
+        - generic [ref=f33e155]:
+          - generic [ref=f33e156]:
+            - generic [ref=f33e157]: "4"
+            - img "Canvas Tote, No. 3" [ref=f33e158]
+            - button "Quick add" [disabled] [ref=f33e160]
+          - generic [ref=f33e161]:
+            - generic [ref=f33e162]: Accessories
+            - heading "Canvas Tote, No. 3" [level=3] [ref=f33e163]
+            - generic [ref=f33e164]: ¥18,000
+    - generic [ref=f33e166]:
+      - generic [ref=f33e167]:
+        - generic [ref=f33e168]:
+          - generic [ref=f33e169]: Staff styling
+          - heading "Worn by the floor" [level=2] [ref=f33e170]
+        - link "See all" [ref=f33e171] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=f33e172]:
+        - generic [ref=f33e173]:
+          - link [ref=f33e174] [cursor=pointer]:
+            - /url: "#"
+            - img "Aoi" [ref=f33e175]
+          - generic [ref=f33e176]:
+            - generic [ref=f33e177]: Aoi — Store lead
+            - generic [ref=f33e178]: 168cm / 52kg
+        - generic [ref=f33e179]:
+          - link [ref=f33e180] [cursor=pointer]:
+            - /url: "#"
+            - img "Ren" [ref=f33e181]
+          - generic [ref=f33e182]:
+            - generic [ref=f33e183]: Ren — Buyer
+            - generic [ref=f33e184]: 178cm / 66kg
+        - generic [ref=f33e185]:
+          - link [ref=f33e186] [cursor=pointer]:
+            - /url: "#"
+            - img "Kai" [ref=f33e187]
+          - generic [ref=f33e188]:
+            - generic [ref=f33e189]: Kai — Visual merchandiser
+            - generic [ref=f33e190]: 174cm / 61kg
+        - generic [ref=f33e191]:
+          - link [ref=f33e192] [cursor=pointer]:
+            - /url: "#"
+            - img "Sara" [ref=f33e193]
+          - generic [ref=f33e194]:
+            - generic [ref=f33e195]: Sara — Sales associate
+            - generic [ref=f33e196]: 162cm / 50kg
+    - generic [ref=f33e201]:
+      - generic [ref=f33e202]: The Studio
+      - heading "Considered, not seasonal" [level=2] [ref=f33e203]
+      - paragraph [ref=f33e204]: ARCHIVES is a Tokyo studio making garments and objects designed to be kept, repaired, and archived — never replaced. Every release is small, documented, and numbered.
+      - link "About the studio" [ref=f33e205] [cursor=pointer]:
+        - /url: "#"
+    - generic [ref=f33e209]:
+      - generic [ref=f33e210]:
+        - generic [ref=f33e211]:
+          - generic [ref=f33e212]: Styling Hints
+          - heading "みんなの着こなしを見る" [level=2] [ref=f33e213]
+          - paragraph [ref=f33e214]: 気になるアイテムのコーデ実例をチェック。サムネイルをタップすると、使用アイテムがそのまま見られて買えます。
+        - generic [ref=f33e215]:
+          - link "#Layering" [ref=f33e216] [cursor=pointer]:
+            - /url: "#"
+          - link "#Monotone" [ref=f33e217] [cursor=pointer]:
+            - /url: "#"
+          - link "#Workwear" [ref=f33e218] [cursor=pointer]:
+            - /url: "#"
+          - link "#OffDuty" [ref=f33e219] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=f33e220]:
+        - link "3 items 使用アイテム3点" [ref=f33e221] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e222]:
+            - generic [ref=f33e223]: 3 items
+            - generic [ref=f33e224]: 使用アイテム3点
+        - link "4 items 使用アイテム4点" [ref=f33e228] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e229]:
+            - generic [ref=f33e230]: 4 items
+            - generic [ref=f33e231]: 使用アイテム4点
+        - link "2 items 使用アイテム2点" [ref=f33e235] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e236]:
+            - generic [ref=f33e237]: 2 items
+            - generic [ref=f33e238]: 使用アイテム2点
+        - link "5 items 使用アイテム5点" [ref=f33e242] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e243]:
+            - generic [ref=f33e244]: 5 items
+            - generic [ref=f33e245]: 使用アイテム5点
+        - link "3 items 使用アイテム3点" [ref=f33e249] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e250]:
+            - generic [ref=f33e251]: 3 items
+            - generic [ref=f33e252]: 使用アイテム3点
+        - link "4 items 使用アイテム4点" [ref=f33e256] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f33e257]:
+            - generic [ref=f33e258]: 4 items
+            - generic [ref=f33e259]: 使用アイテム4点
+      - link "すべてのコーディネートを見る" [ref=f33e264] [cursor=pointer]:
+        - /url: "#"
+    - generic [ref=f33e268]:
+      - generic [ref=f33e269]:
+        - heading "From the Journal" [level=2] [ref=f33e270]
+        - link "All stories" [ref=f33e271] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=f33e272]:
+        - generic [ref=f33e273]:
+          - 'img "Inside the workshop: how a field jacket is made" [ref=f33e275]'
+          - generic [ref=f33e276]:
+            - generic [ref=f33e277]: Craft — Jul 02, 2026
+            - 'heading "Inside the workshop: how a field jacket is made" [level=3] [ref=f33e278]'
+        - generic [ref=f33e279]:
+          - img "A guide to repairing raw denim" [ref=f33e281]
+          - generic [ref=f33e282]:
+            - generic [ref=f33e283]: Care — Jun 18, 2026
+            - heading "A guide to repairing raw denim" [level=3] [ref=f33e284]
+        - generic [ref=f33e285]:
+          - img "Notes from our first Tokyo pop-up" [ref=f33e287]
+          - generic [ref=f33e288]:
+            - generic [ref=f33e289]: Studio — Jun 04, 2026
+            - heading "Notes from our first Tokyo pop-up" [level=3] [ref=f33e290]
+    - generic [ref=f33e293]:
+      - heading "@archives.studio" [level=2] [ref=f33e294]
+      - link "Follow" [ref=f33e295] [cursor=pointer]:
+        - /url: "#"
+    - generic [ref=f33e305]:
+      - generic [ref=f33e306]:
+        - generic [ref=f33e307]: "01"
+        - heading "Materials first" [level=3] [ref=f33e309]
+        - paragraph [ref=f33e310]: Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend.
+      - generic [ref=f33e311]:
+        - generic [ref=f33e312]: "02"
+        - heading "Made to repair" [level=3] [ref=f33e314]
+        - paragraph [ref=f33e315]: Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement.
+      - generic [ref=f33e316]:
+        - generic [ref=f33e317]: "03"
+        - heading "Small, numbered runs" [level=3] [ref=f33e319]
+        - paragraph [ref=f33e320]: Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely.
+  - contentinfo [ref=f33e322]:
+    - generic [ref=f33e323]:
+      - generic [ref=f33e324]:
+        - link "A R C H I V E S" [ref=f33e325] [cursor=pointer]:
+          - /url: /
+        - paragraph [ref=f33e326]: Considered garments and objects, archived for the long term. Tokyo — Worldwide.
+        - generic [ref=f33e327]:
+          - text: Newsletter
+          - generic [ref=f33e328]:
+            - textbox "EMAIL ADDRESS" [ref=f33e329]
+            - button "Subscribe" [ref=f33e330] [cursor=pointer]
+      - generic [ref=f33e333]: Shop
+      - generic [ref=f33e335]: Studio
+      - generic [ref=f33e337]: Support
+    - generic [ref=f33e340]:
+      - generic [ref=f33e341]: © 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.
+      - generic [ref=f33e342]:
+        - link "PRIVACY" [ref=f33e343] [cursor=pointer]:
+          - /url: /policies/privacy-policy
+        - link "TERMS" [ref=f33e344] [cursor=pointer]:
+          - /url: /policies/terms-of-service

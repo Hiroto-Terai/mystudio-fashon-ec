@@ -123,7 +123,7 @@ button { font-family: inherit; }
 .as-navitem:hover .as-dropdown { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 .as-dropitem:hover { color: var(--color-ink) !important; }
 .as-styletile { flex: 1 1 0; min-width: 0; }
-.as-styletile:hover .as-stovl { opacity: 1; }
+.as-styletile:hover .as-stovl { opacity: 1 !important; }
 .as-card { position: relative; }
 .as-card .as-img { transition: transform var(--dur-image) var(--ease-standard); }
 .as-card:hover .as-img { transform: scale(var(--image-scale)); }
@@ -133,7 +133,9 @@ button { font-family: inherit; }
 .as-fillbtn { position: relative; overflow: hidden; z-index: 0; cursor: pointer; }
 .as-fillbtn::before { content: ""; position: absolute; inset: 0; background: var(--color-ink); z-index: -1; transform: scaleY(0); transform-origin: bottom; transition: transform var(--dur-base) var(--ease-standard); }
 .as-fillbtn:hover::before { transform: scaleY(1); }
-.as-fillbtn:hover { color: var(--color-white); }
+.as-fillbtn:hover { color: var(--color-white) !important; opacity: 1 !important; }
+/* Card/tile links must not inherit the generic a:hover fade (kills fill/scale) */
+a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; }
 .as-arrowbtn:hover .as-arrow { transform: translateX(4px); }
 .as-arrow { transition: transform var(--dur-base) var(--ease-standard); }
 .as-iconbtn { transition: opacity var(--dur-base) var(--ease-standard); }

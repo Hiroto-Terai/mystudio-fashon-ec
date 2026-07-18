@@ -1,0 +1,76 @@
+{%- comment -%}
+  "Weekly ranking" product grid: same shape as Featured but each card is
+  rendered with a numeric rank badge (1-based position in the collection).
+{%- endcomment -%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading }}</h2>
+    </div>
+    <a href="{{ section.settings.view_all_link | default: section.settings.collection.url | default: routes.all_products_collection_url }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">View all</a>
+  </div>
+  <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+    {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
+      {%- for product in section.settings.collection.products limit: 8 -%}
+        {%- render 'product-card', product: product, rank: forloop.index -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..4) -%}
+        {%- case i -%}
+          {%- when 1 -%}
+            {%- assign demo_image = 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop' -%}
+            {%- assign demo_cat = 'Outerwear' -%}
+            {%- assign demo_name = 'Waxed Cotton Parka' -%}
+            {%- assign demo_price = '¥72,000' -%}
+          {%- when 2 -%}
+            {%- assign demo_image = 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?q=80&w=800&auto=format&fit=crop' -%}
+            {%- assign demo_cat = 'Knitwear' -%}
+            {%- assign demo_name = 'Ribbed Merino Sweater' -%}
+            {%- assign demo_price = '¥36,000' -%}
+          {%- when 3 -%}
+            {%- assign demo_image = 'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?q=80&w=800&auto=format&fit=crop' -%}
+            {%- assign demo_cat = 'Bottoms' -%}
+            {%- assign demo_name = 'Straight Fit Chino' -%}
+            {%- assign demo_price = '¥28,000' -%}
+          {%- when 4 -%}
+            {%- assign demo_image = 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?q=80&w=800&auto=format&fit=crop' -%}
+            {%- assign demo_cat = 'Accessories' -%}
+            {%- assign demo_name = 'Canvas Tote, No. 3' -%}
+            {%- assign demo_price = '¥18,000' -%}
+        {%- endcase -%}
+        <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+          <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+            <span style="position:absolute; top:0; left:0; z-index:2; background:var(--color-ink); color:var(--color-white); font-weight:var(--fw-black); font-size:var(--fs-lg); padding:var(--space-2) var(--space-4);">{{ i }}</span>
+            <img class="as-img" src="{{ demo_image }}" alt="{{ demo_name }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+            <div class="as-quickadd">
+              <button type="button" disabled title="Connect a collection to enable quick add" style="width:100%; background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add' | t }}</button>
+            </div>
+          </div>
+          <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ demo_cat }}</span>
+            <h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ demo_name }}</h3>
+            <span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ demo_price }}</span>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ranking",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Weekly ranking" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Most saved this week" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Products are shown in the collection's sort order, numbered 1-8." },
+    { "type": "url", "id": "view_all_link", "label": "\"View all\" link" }
+  ],
+  "presets": [
+    { "name": "Ranking", "settings": { "eyebrow": "Weekly ranking", "heading": "Most saved this week" } }
+  ]
+}
+{% endschema %}

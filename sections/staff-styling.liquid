@@ -1,0 +1,69 @@
+{%- comment -%}
+  "Staff styling" grid: a 4-up hairline grid of staff lookbook cards, each
+  showing a photo plus name / role and height / weight in mono type.
+{%- endcomment -%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading }}</h2>
+    </div>
+    <a href="{{ section.settings.view_all_link | default: '#' }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">See all</a>
+  </div>
+  <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+    {%- for block in section.blocks -%}
+      <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: '#' }}" class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle); display:block;">
+          {%- if block.settings.image -%}
+            <img class="as-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+          {%- else -%}
+            <img class="as-img" src="{{ block.settings.fallback_image }}" alt="{{ block.settings.name | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+          {%- endif -%}
+        </a>
+        <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+          <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ block.settings.name }} — {{ block.settings.role }}</span>
+          <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ block.settings.height }} / {{ block.settings.weight }}</span>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Staff styling",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Staff styling" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Worn by the floor" },
+    { "type": "url", "id": "view_all_link", "label": "\"See all\" link" }
+  ],
+  "blocks": [
+    {
+      "type": "staff",
+      "name": "Staff",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_image", "label": "Fallback image URL", "info": "Used until a real image is picked above.", "default": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Aoi" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Store lead" },
+        { "type": "text", "id": "height", "label": "Height", "default": "168cm" },
+        { "type": "text", "id": "weight", "label": "Weight", "default": "52kg" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Staff styling",
+      "blocks": [
+        { "type": "staff", "settings": { "name": "Aoi", "role": "Store lead", "height": "168cm", "weight": "52kg", "fallback_image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "staff", "settings": { "name": "Ren", "role": "Buyer", "height": "178cm", "weight": "66kg", "fallback_image": "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "staff", "settings": { "name": "Kai", "role": "Visual merchandiser", "height": "174cm", "weight": "61kg", "fallback_image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "staff", "settings": { "name": "Sara", "role": "Sales associate", "height": "162cm", "weight": "50kg", "fallback_image": "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=800&auto=format&fit=crop" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

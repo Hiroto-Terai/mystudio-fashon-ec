@@ -121,11 +121,64 @@
     on(document, 'keydown', function (e) { if (e.key === 'Escape') CartDrawer.close(); });
   }
 
+  /* ---------- Quick add (product cards -> /cart/add.js) ---------- */
+  function updateCartBadge() {
+    fetch('/cart.js', { headers: { 'Accept': 'application/json' } })
+      .then(function (res) { return res.json(); })
+      .then(function (cart) {
+        qsa('[data-cart-badge]').forEach(function (badge) {
+          badge.textContent = cart.item_count;
+          badge.hidden = cart.item_count === 0;
+        });
+      });
+  }
+
+  function bindQuickAdd() {
+    qsa('[data-quick-add]').forEach(function (btn) {
+      if (btn.__asBound) return;
+      btn.__asBound = true;
+      on(btn, 'click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (btn.disabled) return;
+        var variantId = btn.getAttribute('data-variant-id');
+        if (!variantId) return;
+        var label = btn.textContent;
+        btn.disabled = true;
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: 1 })
+        })
+          .then(function (res) {
+            if (!res.ok) {
+              return res.json().then(function (err) {
+                throw new Error((err && err.description) || 'Could not add to cart');
+              });
+            }
+            return res.json();
+          })
+          .then(function () {
+            updateCartBadge();
+            CartDrawer.open();
+          })
+          .catch(function (err) {
+            window.alert(err.message || 'Could not add to cart');
+          })
+          .then(function () {
+            btn.disabled = false;
+            btn.textContent = label;
+          });
+      });
+    });
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
     bindCartDrawer();
     bindWishlistToggles();
+    bindQuickAdd();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }

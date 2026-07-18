@@ -1,0 +1,103 @@
+{%- comment -%}
+  "Styling Hints" community coordinate rail: heading + hashtag chips, a
+  horizontally scrolling row of square styling thumbnails (item-count badge +
+  hover overlay), and a closing CTA into the styling list.
+{%- endcomment -%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading }}</h2>
+      {%- if section.settings.body != blank -%}
+        <p style="max-width:460px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ section.settings.body }}</p>
+      {%- endif -%}
+    </div>
+    <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; align-items:center;">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'hashtag' -%}
+          <a href="{{ block.settings.link | default: '#' }}" class="as-clickable" style="border:1px solid var(--border-default); padding:8px 14px; font:var(--text-mono); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-4); display:flex; gap:var(--space-4); overflow-x:auto; scroll-snap-type:x mandatory;">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'styling' -%}
+        <a href="{{ block.settings.link | default: '#' }}" class="as-card as-clickable as-styletile" style="scroll-snap-align:start;" {{ block.shopify_attributes }}>
+          <div style="position:relative; overflow:hidden; aspect-ratio:1/1; background:var(--surface-subtle);">
+            {%- if block.settings.image -%}
+              <img class="as-img" src="{{ block.settings.image | image_url: width: 700 }}" alt="" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+            {%- else -%}
+              <img class="as-img" src="{{ block.settings.fallback_image }}" alt="" width="700" height="700" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+            {%- endif -%}
+            <div style="position:absolute; left:var(--space-3); bottom:var(--space-3); background:var(--surface-page); padding:4px 8px; font:var(--text-mono); font-size:9px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ block.settings.item_count }} items</div>
+            <div class="as-stovl" style="position:absolute; inset:0; background:rgba(0,0,0,.42); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity var(--dur-base) var(--ease-standard);">
+              <span style="color:var(--color-white); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:inline-flex; align-items:center; gap:var(--space-2);">
+                使用アイテム{{ block.settings.item_count }}点
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-8) var(--page-gutter) var(--section-y);">
+    <a href="{{ section.settings.button_link | default: '#' }}" class="as-fillbtn" style="display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">
+      {{ section.settings.button_label }}
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Styling hints",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Styling Hints" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "みんなの着こなしを見る" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "気になるアイテムのコーデ実例をチェック。サムネイルをタップすると、使用アイテムがそのまま見られて買えます。" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "すべてのコーディネートを見る" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "styling",
+      "name": "Styling photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_image", "label": "Fallback image URL", "info": "Used until a real image is picked above.", "default": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=700&auto=format&fit=crop" },
+        { "type": "number", "id": "item_count", "label": "Item count", "default": 3 },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    },
+    {
+      "type": "hashtag",
+      "name": "Hashtag",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "#Layering" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Styling hints",
+      "blocks": [
+        { "type": "styling", "settings": { "item_count": 3, "fallback_image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "styling", "settings": { "item_count": 4, "fallback_image": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "styling", "settings": { "item_count": 2, "fallback_image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "styling", "settings": { "item_count": 5, "fallback_image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "styling", "settings": { "item_count": 3, "fallback_image": "https://images.unsplash.com/photo-1550246140-29f40b909e5a?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "styling", "settings": { "item_count": 4, "fallback_image": "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=700&auto=format&fit=crop" } },
+        { "type": "hashtag", "settings": { "label": "#Layering" } },
+        { "type": "hashtag", "settings": { "label": "#Monotone" } },
+        { "type": "hashtag", "settings": { "label": "#Workwear" } },
+        { "type": "hashtag", "settings": { "label": "#OffDuty" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
