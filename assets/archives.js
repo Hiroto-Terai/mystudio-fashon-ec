@@ -125,9 +125,12 @@
   window.ArchivesCart.drawer = CartDrawer;
 
   function bindCartDrawer() {
-    qsa('[data-cart-open]').forEach(function (btn) { on(btn, 'click', function (e) { e.preventDefault(); CartDrawer.open(); }); });
-    qsa('[data-cart-close]').forEach(function (btn) { on(btn, 'click', function (e) { e.preventDefault(); CartDrawer.close(); }); });
-    on(CartDrawer.scrim(), 'click', function () { CartDrawer.close(); });
+    /* Delegated so open/close survive Section Rendering swaps of the drawer contents */
+    on(document, 'click', function (e) {
+      if (e.target.closest('[data-cart-open]')) { e.preventDefault(); CartDrawer.open(); }
+      else if (e.target.closest('[data-cart-close]')) { e.preventDefault(); CartDrawer.close(); }
+      else if (e.target.closest('[data-cart-scrim]')) { CartDrawer.close(); }
+    });
     on(document, 'keydown', function (e) { if (e.key === 'Escape') CartDrawer.close(); });
   }
 
