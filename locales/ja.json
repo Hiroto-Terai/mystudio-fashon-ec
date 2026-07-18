@@ -11,8 +11,23 @@
       "title": "カート",
       "empty": "カートは空です",
       "subtotal": "小計",
+      "discount": "割引",
+      "shipping": "配送料",
+      "shipping_value": "ご注文手続き時に計算",
+      "shipping_note": "配送料・税はご注文手続き時に計算されます。",
+      "total": "合計",
+      "summary": "サマリー",
       "checkout": "レジに進む",
-      "view": "カートを見る"
+      "view": "カートを見る",
+      "continue_shopping": "買い物を続ける",
+      "browse_collection": "コレクションを見る",
+      "remove": "削除",
+      "decrease": "数量を減らす",
+      "increase": "数量を増やす",
+      "coupon_placeholder": "クーポン — WINTER10 を試す",
+      "coupon_apply": "適用",
+      "coupon_invalid": "無効なコードです",
+      "coupon_applied": "{{ code }} 適用中 — {{ percent }}% OFF"
     }
   },
   "products": {

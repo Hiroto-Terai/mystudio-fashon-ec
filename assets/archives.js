@@ -1,13 +1,23 @@
 /* ============================================================
    ARCHIVES Studio — global theme behaviour
-   Sprint 0 scope: header (search toggle, mobile menu), cart drawer
-   open/close, wishlist (localStorage) + header badges.
-   Ajax cart line-item logic is layered on in later sprints.
+   Sprint 0: header (search toggle, mobile menu), cart drawer open/close,
+   wishlist (localStorage) + header badges.
+   Sprint 4: Ajax cart — add/change re-renders the cart drawer (and the
+   cart page, when open) via the Section Rendering API, plus a
+   client-side coupon demo.
    ============================================================ */
 (function () {
   'use strict';
 
   var WISHLIST_KEY = 'archives:wishlist';
+  var COUPON_KEY = 'archives:coupon';
+  /* Client-side discount demo only: Shopify has no public API to apply a
+     real discount code from the storefront without redirecting through
+     checkout, so this recalculates and displays the discount locally.
+     The actual order total is whatever applies at checkout. */
+  var COUPONS = { WINTER10: 0.10, ARCHIVE5: 0.05 };
+  var CART_SECTION_ID = 'cart-drawer';
+  var MAIN_CART_SECTION_ID = 'main-cart';
 
   /* ---------- small helpers ---------- */
   function qs(sel, root) { return (root || document).querySelector(sel); }
@@ -133,15 +143,84 @@
       });
   }
 
+  /* ---------- Ajax cart: Section Rendering + coupon demo ---------- */
+
+  /* Standard Shopify money formatter driven by {{ shop.money_format }},
+     exposed once as window.ArchivesMoneyFormat by sections/cart-drawer.liquid,
+     so JS-computed discount/total labels match the store's `| money` output. */
+  function formatMoney(cents) {
+    var format = window.ArchivesMoneyFormat || '${{amount}}';
+    var placeholder = /\{\{\s*(\w+)\s*\}\}/;
+    function withDelimiters(number, precision, thousands, decimalSep) {
+      precision = typeof precision === 'undefined' ? 2 : precision;
+      thousands = typeof thousands === 'undefined' ? ',' : thousands;
+      decimalSep = typeof decimalSep === 'undefined' ? '.' : decimalSep;
+      if (isNaN(number) || number == null) number = 0;
+      number = (number / 100.0).toFixed(precision);
+      var parts = number.split('.');
+      var dollars = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+      var rest = parts[1] ? decimalSep + parts[1] : '';
+      return dollars + rest;
+    }
+    var match = format.match(placeholder);
+    var key = match ? match[1] : 'amount';
+    var value;
+    switch (key) {
+      case 'amount_no_decimals': value = withDelimiters(cents, 0); break;
+      case 'amount_with_comma_separator': value = withDelimiters(cents, 2, '.', ','); break;
+      case 'amount_no_decimals_with_comma_separator': value = withDelimiters(cents, 0, '.', ','); break;
+      default: value = withDelimiters(cents, 2);
+    }
+    return match ? format.replace(placeholder, value) : format;
+  }
+
+  function cartDrawerContents() { return qs('[data-cart-drawer-contents]'); }
+  function mainCartContents() { return qs('[data-main-cart-contents]'); }
+
+  function parseSectionFragment(html, selector) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.querySelector(selector);
+  }
+
+  function swapContents(current, html, selector) {
+    if (!current || !html) return;
+    var fresh = parseSectionFragment(html, selector);
+    if (!fresh) return;
+    current.innerHTML = fresh.innerHTML;
+    var cents = fresh.getAttribute('data-cart-subtotal-cents');
+    if (cents !== null) current.setAttribute('data-cart-subtotal-cents', cents);
+  }
+
+  function requestedSectionIds() {
+    var ids = [CART_SECTION_ID];
+    if (mainCartContents()) ids.push(MAIN_CART_SECTION_ID);
+    return ids;
+  }
+
+  function applySectionsResponse(sections) {
+    if (!sections) return;
+    if (sections[CART_SECTION_ID]) swapContents(cartDrawerContents(), sections[CART_SECTION_ID], '[data-cart-drawer-contents]');
+    if (sections[MAIN_CART_SECTION_ID]) swapContents(mainCartContents(), sections[MAIN_CART_SECTION_ID], '[data-main-cart-contents]');
+    syncCouponUI();
+  }
+
   /* addToCart() is shared by product-card quick-add and the PDP form so
-     both go through the same /cart/add.js -> badge -> drawer flow. */
+     both go through the same /cart/add.js -> re-render -> badge -> drawer
+     flow. Section Rendering (sections param) re-renders the drawer's
+     markup (items/subtotal/free-ship bar) in the same request instead of
+     leaving it stuck on its server-first-paint state. */
   function addToCart(variantId, quantity, button) {
     var label = button ? button.textContent : '';
     if (button) button.disabled = true;
     return fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: variantId, quantity: quantity })
+      body: JSON.stringify({
+        id: variantId,
+        quantity: quantity,
+        sections: requestedSectionIds().join(','),
+        sections_url: window.location.pathname
+      })
     })
       .then(function (res) {
         if (!res.ok) {
@@ -150,6 +229,17 @@
           });
         }
         return res.json();
+      })
+      .then(function (result) {
+        if (result && result.sections) {
+          applySectionsResponse(result.sections);
+        } else {
+          /* Fallback for stores/proxies that strip the sections param on
+             /cart/add.js: fetch the rendered sections separately. */
+          return fetch('/?sections=' + requestedSectionIds().join(','), { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(applySectionsResponse);
+        }
       })
       .then(function () {
         updateCartBadge();
@@ -178,6 +268,131 @@
         if (!variantId) return;
         addToCart(variantId, 1, btn);
       });
+    });
+  }
+
+  /* ---------- Cart line quantity +/- and remove (drawer + cart page) ---------- */
+  var lineChangeBusy = false;
+
+  function changeLine(key, quantity) {
+    return fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        id: key,
+        quantity: quantity,
+        sections: requestedSectionIds().join(','),
+        sections_url: window.location.pathname
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          return res.json().then(function (err) {
+            throw new Error((err && err.description) || 'Could not update cart');
+          });
+        }
+        return res.json();
+      })
+      .then(function (cart) {
+        applySectionsResponse(cart.sections);
+        qsa('[data-cart-badge]').forEach(function (badge) {
+          badge.textContent = cart.item_count;
+          badge.hidden = cart.item_count === 0;
+        });
+      });
+  }
+
+  function bindCartLineControls() {
+    if (document.__cartLineBound) return;
+    document.__cartLineBound = true;
+    on(document, 'click', function (e) {
+      var isDec = e.target.closest('[data-qty-dec]');
+      var isInc = e.target.closest('[data-qty-inc]');
+      var isRemove = e.target.closest('[data-item-remove]');
+      if (!isDec && !isInc && !isRemove) return;
+      var row = e.target.closest('[data-cart-item]');
+      if (!row || lineChangeBusy) return;
+      e.preventDefault();
+      var key = row.getAttribute('data-key');
+      var quantity = parseInt(row.getAttribute('data-quantity'), 10) || 0;
+      if (isRemove) quantity = 0;
+      else if (isDec) quantity = Math.max(0, quantity - 1);
+      else if (isInc) quantity = quantity + 1;
+      lineChangeBusy = true;
+      changeLine(key, quantity)
+        .catch(function (err) { window.alert(err.message || 'Could not update cart'); })
+        .then(function () { lineChangeBusy = false; });
+    });
+  }
+
+  /* ---------- Coupon demo (client-side subtotal discount) ---------- */
+  function readCoupon() {
+    try { return sessionStorage.getItem(COUPON_KEY); } catch (e) { return null; }
+  }
+  function writeCoupon(code) {
+    try {
+      if (code) sessionStorage.setItem(COUPON_KEY, code);
+      else sessionStorage.removeItem(COUPON_KEY);
+    } catch (e) { /* sessionStorage unavailable (private mode etc.) - coupon just won't persist across renders */ }
+  }
+  function activeCoupon() {
+    var code = readCoupon();
+    if (code && !COUPONS.hasOwnProperty(code)) { writeCoupon(null); code = null; }
+    return code;
+  }
+
+  function renderDiscountInto(root, code) {
+    if (!root) return;
+    var subtotalCents = parseInt(root.getAttribute('data-cart-subtotal-cents'), 10) || 0;
+    var rate = code ? COUPONS[code] : 0;
+    var discountCents = code ? Math.round(subtotalCents * rate) : 0;
+    var row = qs('[data-cart-discount-row]', root);
+    var amountEl = qs('[data-cart-discount]', root);
+    if (row) row.hidden = !code;
+    if (amountEl) amountEl.textContent = code ? ('−' + formatMoney(discountCents)) : '';
+    var totalEl = qs('[data-cart-total]', root);
+    if (totalEl) totalEl.textContent = formatMoney(Math.max(0, subtotalCents - discountCents));
+  }
+
+  function syncCouponUI(showInvalid) {
+    var code = activeCoupon();
+    renderDiscountInto(cartDrawerContents(), code);
+    renderDiscountInto(mainCartContents(), code);
+    var msgEl = qs('[data-coupon-msg]', cartDrawerContents());
+    if (!msgEl) return;
+    if (showInvalid) {
+      msgEl.hidden = false;
+      msgEl.textContent = msgEl.getAttribute('data-invalid-text') || 'Invalid code';
+    } else if (code) {
+      msgEl.hidden = false;
+      var template = msgEl.getAttribute('data-applied-template') || '__CODE__ — __PERCENT__% off';
+      msgEl.textContent = template.replace('__CODE__', code).replace('__PERCENT__', Math.round(COUPONS[code] * 100));
+    } else {
+      msgEl.hidden = true;
+      msgEl.textContent = '';
+    }
+  }
+
+  function bindCoupon() {
+    if (document.__couponBound) return;
+    document.__couponBound = true;
+    function apply() {
+      var input = qs('[data-coupon-input]', cartDrawerContents());
+      var raw = input ? input.value.trim().toUpperCase() : '';
+      if (!raw) return;
+      if (COUPONS.hasOwnProperty(raw)) {
+        writeCoupon(raw);
+        syncCouponUI(false);
+      } else {
+        writeCoupon(null);
+        syncCouponUI(true);
+      }
+    }
+    on(document, 'click', function (e) {
+      if (e.target.closest('[data-coupon-apply]')) { e.preventDefault(); apply(); }
+    });
+    on(document, 'keydown', function (e) {
+      if (e.key === 'Enter' && e.target.closest('[data-coupon-input]')) { e.preventDefault(); apply(); }
     });
   }
 
@@ -418,6 +633,9 @@
     bindCartDrawer();
     bindWishlistToggles();
     bindQuickAdd();
+    bindCartLineControls();
+    bindCoupon();
+    syncCouponUI();
     bindCollectionFilters();
     bindMemberToggle();
     bindProductVariantPicker();
