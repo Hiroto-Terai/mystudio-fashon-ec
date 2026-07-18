@@ -1,7 +1,20 @@
 {%- comment -%}
   "Staff styling" grid: a 4-up hairline grid of staff lookbook cards, each
   showing a photo plus name / role and height / weight in mono type.
+
+  Renders real "styling" metaobjects when any are published; falls back to
+  the static blocks below otherwise.
 {%- endcomment -%}
+{%- liquid
+  assign has_styling_metaobjects = false
+  if metaobjects.styling.values.size > 0
+    assign has_styling_metaobjects = true
+  endif
+  assign styling_view_all_url = section.settings.view_all_link
+  if styling_view_all_url == blank
+    assign styling_view_all_url = routes.root_url | append: 'pages/styling'
+  endif
+-%}
 <section style="border-bottom:1px solid var(--border-default);">
   <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
     <div style="display:flex; flex-direction:column; gap:var(--space-4);">
@@ -10,24 +23,50 @@
       {%- endif -%}
       <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading }}</h2>
     </div>
-    <a href="{{ section.settings.view_all_link | default: '#' }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">See all</a>
+    <a href="{{ styling_view_all_url }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">See all</a>
   </div>
   <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
-    {%- for block in section.blocks -%}
-      <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);" {{ block.shopify_attributes }}>
-        <a href="{{ block.settings.link | default: '#' }}" class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle); display:block;">
-          {%- if block.settings.image -%}
-            <img class="as-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
-          {%- else -%}
-            <img class="as-img" src="{{ block.settings.fallback_image }}" alt="{{ block.settings.name | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
-          {%- endif -%}
-        </a>
-        <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
-          <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ block.settings.name }} — {{ block.settings.role }}</span>
-          <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ block.settings.height }} / {{ block.settings.weight }}</span>
+    {%- if has_styling_metaobjects -%}
+      {%- for styling in metaobjects.styling.values -%}
+        <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+          <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+            <a href="{{ styling.system.url }}" class="as-clickable" style="position:absolute; inset:0; display:block;">
+              {%- if styling.image_url.value -%}
+                <img class="as-img" src="{{ styling.image_url.value }}" alt="{{ styling.staff_name.value | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- endif -%}
+            </a>
+            <button type="button" data-wishlist-toggle="{{ styling.system.handle }}" data-wishlist-ns="stylings" class="as-wish as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+            </button>
+          </div>
+          <a href="{{ styling.system.url }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ styling.staff_name.value }} — {{ styling.staff_role.value }}</span>
+            <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ styling.height.value }} / {{ styling.weight.value }}</span>
+          </a>
         </div>
-      </div>
-    {%- endfor -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for block in section.blocks -%}
+        <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);" {{ block.shopify_attributes }}>
+          <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+            <a href="{{ block.settings.link | default: '#' }}" class="as-clickable" style="position:absolute; inset:0; display:block;">
+              {%- if block.settings.image -%}
+                <img class="as-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- else -%}
+                <img class="as-img" src="{{ block.settings.fallback_image }}" alt="{{ block.settings.name | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- endif -%}
+            </a>
+            <button type="button" data-wishlist-toggle="{{ block.id }}" data-wishlist-ns="stylings" class="as-wish as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+            </button>
+          </div>
+          <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ block.settings.name }} — {{ block.settings.role }}</span>
+            <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ block.settings.height }} / {{ block.settings.weight }}</span>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
   </div>
 </section>
 

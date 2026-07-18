@@ -1,15 +1,17 @@
 {%- comment -%}
   Wishlist page: heading + Products/Stylings tabs. Wishlist state lives entirely
   in localStorage (assets/archives.js, ArchivesWishlist store — two namespaces:
-  "products" holds product handles, "stylings" holds styling ids). This
-  section only renders the static shell, the empty states, and the <template>
-  markup used to build cards; assets/archives.js's bindWishlistPage() fetches
-  each product's /products/{handle}.js, fills the templates, and swaps the
-  panels/counts whenever the wishlist changes.
+  "products" holds product handles, "stylings" holds styling metaobject
+  handles). This section renders the static shell, the empty states, and the
+  <template> markup used to build cards; assets/archives.js's
+  bindWishlistPage() fetches each product's /products/{handle}.js, fills the
+  templates, and swaps the panels/counts whenever the wishlist changes.
 
-  Stylings have no real data source yet (that lands in Sprint 6), so the
-  Stylings tab always falls back to its empty state until a future sprint
-  populates window.ArchivesStylingDataset.
+  Stylings have no /products/{handle}.js equivalent, so this section instead
+  dumps every published "styling" metaobject's card data into
+  window.ArchivesStylingDataset (keyed by metaobject handle, the same id
+  used by data-wishlist-toggle on the styling cards) — bindWishlistPage()
+  looks up each saved handle in that dataset to render the Stylings tab.
 {%- endcomment -%}
 <div data-wishlist-page>
   <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-6);">
@@ -73,6 +75,21 @@
       </a>
     </div>
   </template>
+
+  <script>
+    window.ArchivesStylingDataset = window.ArchivesStylingDataset || {};
+    {%- for styling in metaobjects.styling.values -%}
+      window.ArchivesStylingDataset[{{ styling.system.handle | json }}] = {
+        img: {{ styling.image_url.value | json }},
+        url: {{ styling.system.url | json }},
+        staffName: {{ styling.staff_name.value | json }},
+        staffRole: {{ styling.staff_role.value | json }},
+        height: {{ styling.height.value | json }},
+        weight: {{ styling.weight.value | json }},
+        itemCount: {{ styling.products.value | size | json }}
+      };
+    {%- endfor -%}
+  </script>
 </div>
 
 {% schema %}
@@ -84,7 +101,7 @@
       "id": "styling_handle",
       "label": "Styling page handle",
       "default": "styling",
-      "info": "Used by the Stylings tab's empty-state link. The styling list page ships in a later sprint."
+      "info": "Used by the Stylings tab's empty-state link (links to /pages/&lt;handle&gt;, the styling-list section's page)."
     }
   ],
   "presets": [

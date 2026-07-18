@@ -96,5 +96,13 @@
     "empty_products": "ウィッシュリストは空です。",
     "empty_stylings": "保存されたスタイリングはまだありません。",
     "explore_styling": "スタッフスタイリングを見る"
+  },
+  "styling": {
+    "back_to_list": "← スタイリング一覧へ",
+    "staff_eyebrow": "スタッフ — {{ role }}",
+    "height": "身長",
+    "weight": "体重",
+    "items_in_look": "使用アイテム{{ count }}点",
+    "empty_list": "公開中のスタイリングはまだありません。"
   }
 }

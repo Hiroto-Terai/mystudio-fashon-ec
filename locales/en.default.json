@@ -96,5 +96,13 @@
     "empty_products": "Your wishlist is empty.",
     "empty_stylings": "No saved stylings yet.",
     "explore_styling": "Explore staff styling"
+  },
+  "styling": {
+    "back_to_list": "← Back to styling",
+    "staff_eyebrow": "Staff — {{ role }}",
+    "height": "Height",
+    "weight": "Weight",
+    "items_in_look": "{{ count }} items in this look",
+    "empty_list": "No stylings published yet."
   }
 }
