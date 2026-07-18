@@ -11,8 +11,23 @@
       "title": "Cart",
       "empty": "Your cart is empty",
       "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "shipping_value": "Calculated at checkout",
+      "shipping_note": "Shipping & taxes calculated at checkout.",
+      "total": "Total",
+      "summary": "Summary",
       "checkout": "Proceed to checkout",
-      "view": "View cart"
+      "view": "View cart",
+      "continue_shopping": "Continue shopping",
+      "browse_collection": "Browse the collection",
+      "remove": "Remove",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity",
+      "coupon_placeholder": "COUPON — TRY WINTER10",
+      "coupon_apply": "Apply",
+      "coupon_invalid": "Invalid code",
+      "coupon_applied": "{{ code }} applied — {{ percent }}% off"
     }
   },
   "products": {
