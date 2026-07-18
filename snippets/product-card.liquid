@@ -33,7 +33,7 @@
         >
       {%- endif -%}
     </a>
-    <button type="button" data-wishlist-toggle="{{ product.id }}" class="as-wish as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+    <button type="button" data-wishlist-toggle="{{ product.handle }}" data-wishlist-ns="products" class="as-wish as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
     </button>
     <div class="as-quickadd" style="z-index:2;">

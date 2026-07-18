@@ -38,7 +38,7 @@ Theme Check は Shopify MCP `validate_theme` で全ファイル検証済み。
 - [x] S2 コレクション / PLP（チップ / フィルタ / ソート / product-card / list-collections）
 - [x] S3 商品詳細 / PDP（ギャラリー/在庫バッジ/会員価格/バリアント比較UI/FBT/アコーディオン/セール価格）
 - [x] S4 カート（Ajaxドロワー再描画 / 数量・削除 / 送料無料バー / クーポン / カートページ）
-- [ ] S5 ウィッシュリスト
+- [x] S5 ウィッシュリスト（localStorage / Products・Stylingsタブ / Add・Remove / バッジ）
 - [ ] S6 スタイリング
 - [ ] S7 ジャーナル / 記事
 - [ ] S8 About
