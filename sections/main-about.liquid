@@ -1,0 +1,234 @@
+{%- comment -%}
+  About / studio story page. Seven full-bleed chapters lifted verbatim from
+  design-reference/Archives-Storefront.html (`<!-- ABOUT -->` block): opening
+  parallax hero, stacked ken-burns chapters, stats, history timeline,
+  materials, values, and a closing CTA. Scroll-driven reveal/ken-burns/
+  parallax rely entirely on the existing `.as-reveal` / `.as-ken` /
+  `.as-parallax` classes in assets/archives.css (animation-timeline: view()),
+  which already ship an `@supports not (animation-timeline: view())`
+  fallback — no JS is used here.
+{%- endcomment -%}
+<div>
+  {%- comment -%} 1. Opening hero {%- endcomment -%}
+  <div style="position:relative; min-height:80vh; overflow:hidden; display:flex; align-items:center; justify-content:center; background:var(--color-ink); border-bottom:1px solid var(--border-default);">
+    {%- if section.settings.image -%}
+      <img class="as-parallax" src="{{ section.settings.image | image_url: width: 1900 }}" alt="" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" loading="eager" style="position:absolute; left:0; right:0; top:-6%; width:100%; height:112%; object-fit:cover; opacity:.5;">
+    {%- else -%}
+      <img class="as-parallax" src="{{ section.settings.fallback_image }}" alt="" width="1900" height="1174" loading="eager" style="position:absolute; left:0; right:0; top:-6%; width:100%; height:112%; object-fit:cover; opacity:.5;">
+    {%- endif -%}
+    <div class="as-reveal" style="position:relative; text-align:center; color:var(--color-white); padding:var(--space-24) var(--space-8); max-width:1100px;">
+      {%- if section.settings.eyebrow != blank -%}
+        <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-size:var(--fs-xs); opacity:.8;">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:clamp(48px,9vw,140px); line-height:.92; letter-spacing:var(--tracking-tighter); text-transform:uppercase; margin-top:var(--space-6);">{{ section.settings.heading | newline_to_br }}</h1>
+      {%- if section.settings.lead != blank -%}
+        <p style="margin:var(--space-8) auto 0; font-size:var(--fs-lg); max-width:600px; opacity:.85; line-height:var(--lh-relaxed);">{{ section.settings.lead }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} 2. Chapters (full-bleed, stacked, ken burns + rise-in) {%- endcomment -%}
+  <div style="background:var(--color-ink);">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'chapter' -%}
+        <div style="position:relative; min-height:92vh; overflow:hidden; display:flex; align-items:flex-end; border-bottom:1px solid rgba(255,255,255,.12);" {{ block.shopify_attributes }}>
+          {%- if block.settings.image -%}
+            <img class="as-ken" src="{{ block.settings.image | image_url: width: 1900 }}" alt="" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          {%- else -%}
+            <img class="as-ken" src="{{ block.settings.fallback_image }}" alt="" width="1900" height="1174" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          {%- endif -%}
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.05) 58%);"></div>
+          <div class="as-reveal" style="position:relative; width:100%; max-width:var(--page-max); margin:0 auto; padding:var(--space-16) var(--page-gutter); color:var(--color-white);">
+            {%- if block.settings.index != blank -%}
+              <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-size:var(--fs-xs); opacity:.85;">{{ block.settings.index }}</span>
+            {%- endif -%}
+            <h2 style="font-weight:var(--fw-black); font-size:clamp(32px,5vw,72px); letter-spacing:var(--tracking-tight); text-transform:uppercase; line-height:1; margin-top:var(--space-4);">{{ block.settings.title }}</h2>
+            {%- if block.settings.body != blank -%}
+              <p style="margin-top:var(--space-5); max-width:520px; font-size:var(--fs-md); line-height:var(--lh-relaxed); opacity:.9;">{{ block.settings.body }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} 3. Stats {%- endcomment -%}
+  <section style="border-top:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+    <div class="as-reveal as-grid-4" style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-8);">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'stat' -%}
+          <div style="display:flex; flex-direction:column; gap:var(--space-2);" {{ block.shopify_attributes }}>
+            <span style="font-weight:var(--fw-black); font-size:var(--fs-4xl);">{{ block.settings.value }}</span>
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ block.settings.label }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} 4. History timeline {%- endcomment -%}
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      <h2 class="as-reveal" style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight); margin-bottom:var(--space-10);">{{ section.settings.timeline_heading }}</h2>
+      <div style="display:flex; flex-direction:column;">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'timeline_item' -%}
+            <div class="as-reveal as-timeline" style="display:grid; grid-template-columns:140px 1fr; gap:var(--space-8); padding:var(--space-6) 0; border-top:1px solid var(--border-default);" {{ block.shopify_attributes }}>
+              <span style="font-weight:var(--fw-black); font-size:var(--fs-xl);">{{ block.settings.year }}</span>
+              <div style="display:flex; flex-direction:column; gap:var(--space-2);">
+                <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-base); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ block.settings.title }}</h3>
+                <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); max-width:560px;">{{ block.settings.body }}</p>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 5. Materials {%- endcomment -%}
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);">
+      <h2 class="as-reveal" style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight);">{{ section.settings.materials_heading }}</h2>
+    </div>
+    <div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(3,1fr);">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'material' -%}
+          <div class="as-card as-reveal" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);" {{ block.shopify_attributes }}>
+            <div style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);">
+              {%- if block.settings.image -%}
+                <img class="as-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- else -%}
+                <img class="as-img" src="{{ block.settings.fallback_image }}" alt="{{ block.settings.name | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- endif -%}
+            </div>
+            <div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-2);">
+              <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-base); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ block.settings.name }}</h3>
+              <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ block.settings.body }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} 6. Values {%- endcomment -%}
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-16);">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'value' -%}
+          <div class="as-reveal" style="display:flex; flex-direction:column; gap:var(--space-4);" {{ block.shopify_attributes }}>
+            <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ block.settings.no }}</span>
+            <div style="height:1px; background:var(--border-default); margin:var(--space-2) 0;"></div>
+            <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ block.settings.title }}</h3>
+            <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ block.settings.body }}</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} 7. Closing CTA {%- endcomment -%}
+  <section style="background:var(--color-ink); color:var(--color-white);">
+    <div class="as-reveal" style="max-width:var(--page-max); margin:0 auto; padding:calc(var(--section-y) * 1.4) var(--page-gutter); text-align:center; display:flex; flex-direction:column; align-items:center; gap:var(--space-8);">
+      <h2 style="font-weight:var(--fw-black); font-size:clamp(32px,6vw,88px); letter-spacing:var(--tracking-tighter); text-transform:uppercase; line-height:.95;">{{ section.settings.cta_heading | newline_to_br }}</h2>
+      <a href="{{ section.settings.cta_button_link | default: routes.all_products_collection_url }}" class="as-fillbtn" style="border:1px solid var(--color-white); padding:16px var(--space-10); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);">{{ section.settings.cta_button_label }}</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "About",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "fallback_image", "label": "Hero fallback image URL", "info": "Used until a real image is picked above.", "default": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1900&auto=format&fit=crop" },
+    { "type": "text", "id": "eyebrow", "label": "Hero eyebrow", "default": "Est. 2019 — Tokyo" },
+    { "type": "textarea", "id": "heading", "label": "Hero heading", "info": "One line per break.", "default": "Made to\nbe kept" },
+    { "type": "textarea", "id": "lead", "label": "Hero lead", "default": "A Tokyo studio designing against the season — honest materials, restrained construction, numbered releases." },
+    { "type": "text", "id": "timeline_heading", "label": "Timeline heading", "default": "History" },
+    { "type": "text", "id": "materials_heading", "label": "Materials heading", "default": "Materials" },
+    { "type": "textarea", "id": "cta_heading", "label": "Closing heading", "info": "One line per break.", "default": "Start your\narchive" },
+    { "type": "text", "id": "cta_button_label", "label": "Closing button label", "default": "Shop the collection" },
+    { "type": "url", "id": "cta_button_link", "label": "Closing button link" }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_image", "label": "Fallback image URL", "info": "Used until a real image is picked above.", "default": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1900&auto=format&fit=crop" },
+        { "type": "text", "id": "index", "label": "Index label", "default": "Chapter 01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "A studio, not a brand" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "ARCHIVES began in a converted printworks in Shibuya in 2019 — three people, two sewing machines, and a refusal to work to a seasonal calendar." }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "2019" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Founded in Tokyo" }
+      ]
+    },
+    {
+      "type": "timeline_item",
+      "name": "Timeline entry",
+      "settings": [
+        { "type": "text", "id": "year", "label": "Year", "default": "2019" },
+        { "type": "text", "id": "title", "label": "Title", "default": "The first stitch" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "ARCHIVES opens as a two-person studio in a converted Shibuya printworks." }
+      ]
+    },
+    {
+      "type": "material",
+      "name": "Material",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_image", "label": "Fallback image URL", "info": "Used until a real image is picked above.", "default": "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=800&auto=format&fit=crop" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Japanese selvedge denim" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Woven on vintage shuttle looms in Okayama, finished with natural indigo that fades unevenly, honestly, over years of wear." }
+      ]
+    },
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        { "type": "text", "id": "no", "label": "Number", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Materials first" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About",
+      "blocks": [
+        { "type": "chapter", "settings": { "index": "Chapter 01", "title": "A studio, not a brand", "body": "ARCHIVES began in a converted printworks in Shibuya in 2019 — three people, two sewing machines, and a refusal to work to a seasonal calendar.", "fallback_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1900&auto=format&fit=crop" } },
+        { "type": "chapter", "settings": { "index": "Chapter 02", "title": "Sourced, not sold to us", "body": "We visit every mill and tannery in person. Fabric is chosen for how it ages, not how it photographs on a lookbook day.", "fallback_image": "https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=1900&auto=format&fit=crop" } },
+        { "type": "chapter", "settings": { "index": "Chapter 03", "title": "Built to be repaired", "body": "Every piece ships with a repair guide and a lifetime mending service. We would rather patch a garment than sell you a new one.", "fallback_image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1900&auto=format&fit=crop" } },
+        { "type": "chapter", "settings": { "index": "Chapter 04", "title": "Numbered, then archived", "body": "Each release carries a run number. Once it sells out, it is retired — recorded in the archive, never reprinted.", "fallback_image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1900&auto=format&fit=crop" } },
+        { "type": "stat", "settings": { "value": "2019", "label": "Founded in Tokyo" } },
+        { "type": "stat", "settings": { "value": "04", "label": "Releases per year" } },
+        { "type": "stat", "settings": { "value": "1,400+", "label": "Repairs completed" } },
+        { "type": "stat", "settings": { "value": "100%", "label": "Deadstock & organic fabric" } },
+        { "type": "timeline_item", "settings": { "year": "2019", "title": "The first stitch", "body": "ARCHIVES opens as a two-person studio in a converted Shibuya printworks." } },
+        { "type": "timeline_item", "settings": { "year": "2020", "title": "First numbered run", "body": "Run No. 001 — twelve field jackets, hand-numbered and sold directly to twelve people." } },
+        { "type": "timeline_item", "settings": { "year": "2021", "title": "Repair program launches", "body": "Every garment sold from this point ships with a lifetime repair guarantee." } },
+        { "type": "timeline_item", "settings": { "year": "2023", "title": "The Tokyo flagship", "body": "A single-room store opens beside the original workshop — no stockroom, just the current archive." } },
+        { "type": "timeline_item", "settings": { "year": "2026", "title": "Forty releases in", "body": "The archive passes its fortieth numbered release, each one still traceable back to its maker." } },
+        { "type": "material", "settings": { "name": "Japanese selvedge denim", "body": "Woven on vintage shuttle looms in Okayama, finished with natural indigo that fades unevenly, honestly, over years of wear.", "fallback_image": "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "material", "settings": { "name": "Heavyweight organic cotton", "body": "Grown without pesticides and loop-knitted at a mid-weight mill we have worked with since our first collection.", "fallback_image": "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "material", "settings": { "name": "Recycled technical shell", "body": "A weatherproof shell rebuilt from post-industrial nylon waste — quiet hardware, taped seams, no branding.", "fallback_image": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=800&auto=format&fit=crop" } },
+        { "type": "value", "settings": { "no": "01", "title": "Materials first", "body": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend." } },
+        { "type": "value", "settings": { "no": "02", "title": "Made to repair", "body": "Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement." } },
+        { "type": "value", "settings": { "no": "03", "title": "Small, numbered runs", "body": "Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely." } }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

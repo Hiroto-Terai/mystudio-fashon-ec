@@ -19,7 +19,7 @@
       {%- if section.settings.body != blank -%}
         <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); max-width:420px;">{{ section.settings.body }}</p>
       {%- endif -%}
-      <a href="{{ section.settings.button_link | default: '#' }}" class="as-fillbtn" style="align-self:flex-start; display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">
+      <a href="{{ section.settings.button_link | default: '/pages/about' }}" class="as-fillbtn" style="align-self:flex-start; display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">
         {{ section.settings.button_label }}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
