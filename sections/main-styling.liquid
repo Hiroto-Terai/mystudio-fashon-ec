@@ -1,0 +1,95 @@
+{%- comment -%}
+  Styling detail (metaobject template: templates/metaobject/styling.json).
+  Renders one "styling" metaobject entry: the coordinate photo, staff info
+  (name/role/height/weight), hashtag, and every product referenced by the
+  "products" (list.product_reference) field as a clickable, add-to-cart row.
+  `metaobject` is the metaobject drop Shopify injects on metaobject templates;
+  aliased to `styling` below to match the naming used across the other
+  styling sections/snippets.
+{%- endcomment -%}
+{%- liquid
+  assign styling = metaobject
+  assign styling_products = styling.products.value
+  assign product_count = styling_products | size
+
+  assign styling_list_url = routes.root_url | append: 'pages/styling'
+-%}
+<div style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);">
+    <a href="{{ styling_list_url }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'styling.back_to_list' | t }}</a>
+  </div>
+  <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
+    <div class="as-card" style="position:relative; overflow:hidden; aspect-ratio:4/5; background:var(--surface-subtle); border-right:1px solid var(--border-default);">
+      {%- if styling.image_url.value -%}
+        <img class="as-img" src="{{ styling.image_url.value }}" alt="{{ styling.title.value | default: styling.staff_name.value | escape }}" width="960" height="1200" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+      {%- endif -%}
+      <button type="button" data-wishlist-toggle="{{ styling.system.handle }}" data-wishlist-ns="stylings" class="as-wish as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-5); right:var(--space-5); background:var(--color-white); border:1px solid var(--border-default); width:40px; height:40px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+      </button>
+    </div>
+    <div class="as-pdp-info" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
+      <div style="display:flex; flex-direction:column; gap:var(--space-3);">
+        <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ 'styling.staff_eyebrow' | t: role: styling.staff_role.value }}</span>
+        <h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ styling.staff_name.value }}</h1>
+        <div style="display:flex; gap:var(--space-10); margin-top:var(--space-2);">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ 'styling.height' | t }}</span>
+            <span style="font-size:var(--fs-base);">{{ styling.height.value }}</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ 'styling.weight' | t }}</span>
+            <span style="font-size:var(--fs-base);">{{ styling.weight.value }}</span>
+          </div>
+        </div>
+      </div>
+      {%- if styling.hashtag.value != blank -%}
+        <span class="as-clickable" style="align-self:flex-start; border:1px solid var(--border-default); padding:8px 14px; font:var(--text-mono); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ styling.hashtag.value }}</span>
+      {%- endif -%}
+      <div style="display:flex; flex-direction:column; gap:var(--space-3); border-top:1px solid var(--border-default); padding-top:var(--space-6);">
+        <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ 'styling.items_in_look' | t: count: product_count }}</span>
+        {%- for product in styling_products -%}
+          {%- if product -%}
+            {%- liquid
+              assign item_variant = product.selected_or_first_available_variant
+              assign item_available = item_variant.available
+            -%}
+            <div style="display:grid; grid-template-columns:72px 1fr auto; gap:var(--space-4); align-items:center; padding:var(--space-3) 0; border-bottom:1px solid var(--border-default);">
+              <a href="{{ product.url }}" class="as-clickable" style="display:block; aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);">
+                {%- if product.featured_image -%}
+                  <img class="as-img" src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                {%- endif -%}
+              </a>
+              <a href="{{ product.url }}" class="as-clickable" style="display:flex; flex-direction:column; gap:3px;">
+                <span style="font-weight:var(--fw-medium); font-size:var(--fs-sm);">{{ product.title }}</span>
+                <span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ product.price | money }}</span>
+              </a>
+              <div style="display:flex; gap:var(--space-2); align-items:center;">
+                {%- if item_available -%}
+                  <button type="button" data-quick-add data-variant-id="{{ item_variant.id }}" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:10px 14px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">{{ 'products.product.quick_add' | t }}</button>
+                {%- else -%}
+                  <button type="button" disabled style="background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:10px 14px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">{{ 'products.product.sold_out' | t }}</button>
+                {%- endif -%}
+                <button type="button" data-wishlist-toggle="{{ product.handle }}" data-wishlist-ns="products" class="as-wish as-iconbtn" aria-label="{{ 'wishlist.add' | t }}" style="background:none; border:1px solid var(--border-default); width:38px; height:38px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+                </button>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main styling",
+  "settings": [],
+  "presets": [
+    { "name": "Main styling" }
+  ],
+  "enabled_on": {
+    "templates": ["metaobject"]
+  }
+}
+{% endschema %}

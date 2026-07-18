@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "styling-list",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

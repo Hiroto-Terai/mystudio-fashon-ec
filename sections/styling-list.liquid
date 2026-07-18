@@ -1,0 +1,72 @@
+{%- comment -%}
+  Styling list (templates/page.styling.json): heading + a hairline 4-up grid
+  of every published "styling" metaobject. Each tile is a square-ish
+  clickable thumbnail (hover overlay + item-count badge, matching the
+  styling-hints rail on the homepage) plus staff name/role/measurements below,
+  and links straight to the metaobject's own URL (styling.system.url).
+  Shows a placeholder message when no stylings are published yet.
+{%- endcomment -%}
+<div>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ section.settings.heading }}</h1>
+    {%- if section.settings.body != blank -%}
+      <p style="max-width:520px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4);">{{ section.settings.body }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if metaobjects.styling.values.size > 0 -%}
+    <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+      {%- for styling in metaobjects.styling.values -%}
+        {%- assign item_count = styling.products.value | size -%}
+        <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+          <div class="as-clickable as-styletile" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+            <a href="{{ styling.system.url }}" style="position:absolute; inset:0; display:block;">
+              {%- if styling.image_url.value -%}
+                <img class="as-img" src="{{ styling.image_url.value }}" alt="{{ styling.title.value | escape }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+              {%- endif -%}
+            </a>
+            <button type="button" data-wishlist-toggle="{{ styling.system.handle }}" data-wishlist-ns="stylings" class="as-wish as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+            </button>
+            <div style="position:absolute; left:var(--space-3); bottom:var(--space-3); background:var(--surface-page); padding:4px 8px; font:var(--text-mono); font-size:9px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ item_count }} {{ 'collection.items' | t }}</div>
+            <a href="{{ styling.system.url }}" class="as-stovl" style="position:absolute; inset:0; background:rgba(0,0,0,.42); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity var(--dur-base) var(--ease-standard);">
+              <span style="color:var(--color-white); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:inline-flex; align-items:center; gap:var(--space-2);">
+                {{ 'styling.items_in_look' | t: count: item_count }}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </span>
+            </a>
+          </div>
+          <a href="{{ styling.system.url }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+            <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ styling.staff_name.value }} — {{ styling.staff_role.value }}</span>
+            <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ styling.height.value }} / {{ styling.weight.value }}</span>
+            <span style="font:var(--text-mono); font-size:10px; color:var(--text-tertiary); text-transform:uppercase;">{{ item_count }} {{ 'collection.items' | t }}</span>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-16) var(--page-gutter); display:flex; flex-direction:column; align-items:center; gap:var(--space-4); text-align:center; border-top:1px solid var(--border-default);">
+      <p style="font:var(--text-body); color:var(--text-secondary);">{{ 'styling.empty_list' | t }}</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Styling list",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Staff" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "みんなの着こなし" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "ARCHIVESスタッフが実際に着こなしたコーディネート。気になる look を開くと、使用アイテムがそのまま見られて保存できます。" }
+  ],
+  "presets": [
+    { "name": "Styling list" }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}
