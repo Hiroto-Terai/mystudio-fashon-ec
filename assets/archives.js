@@ -265,6 +265,24 @@
         addBtn.textContent = addBtn.getAttribute('data-label-default') + ' — ' + qty;
       }
 
+      function updateOptionAvailability() {
+        var sel = selectedOptions();
+        optionGroups.forEach(function (group, gi) {
+          qsa('[data-option-value]', group).forEach(function (btn) {
+            var candidate = sel.slice();
+            candidate[gi] = btn.getAttribute('data-value');
+            var anyAvail = variants.some(function (v) {
+              if (!v.available) return false;
+              for (var j = 0; j < candidate.length; j++) {
+                if (candidate[j] !== null && v.options[j] !== candidate[j]) return false;
+              }
+              return true;
+            });
+            btn.classList.toggle('is-soldout', !anyAvail);
+          });
+        });
+      }
+
       function applyVariant(variant) {
         if (idInput) idInput.value = variant ? variant.id : '';
         if (priceEl && variant) priceEl.innerHTML = variant.price_html;
@@ -318,6 +336,7 @@
             var label = qs('[data-option-selected-label="' + idx + '"]', root);
             if (label) label.textContent = btn.getAttribute('data-value');
             applyVariant(findMatchingVariant());
+            updateOptionAvailability();
           });
         });
       });
@@ -353,6 +372,7 @@
       }
 
       refreshAddLabel();
+      updateOptionAvailability();
     });
   }
 
