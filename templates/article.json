@@ -1,12 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
-      "settings": {
-        "eyebrow": "Article",
-        "heading": "Article",
-        "body": "Article layout lands in Sprint 7."
-      }
+      "type": "main-article",
+      "settings": {}
     }
   },
   "order": [

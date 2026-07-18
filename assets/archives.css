@@ -247,3 +247,15 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 
 .as-size-chart-modal.is-open { display: flex !important; }
 
+/* --- Journal / article rich text body (Sprint 7) --- */
+.as-article-body { font: var(--text-body); color: var(--text-primary); line-height: var(--lh-loose); font-size: var(--fs-md); }
+.as-article-body > * + * { margin-top: var(--space-6); }
+.as-article-body h2 { font-weight: var(--fw-bold); font-size: var(--fs-2xl); letter-spacing: var(--tracking-tight); text-transform: uppercase; margin-top: var(--space-10); }
+.as-article-body h3 { font-weight: var(--fw-semibold); font-size: var(--fs-xl); letter-spacing: var(--tracking-tight); margin-top: var(--space-8); }
+.as-article-body a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
+.as-article-body a:hover { opacity: var(--hover-opacity); }
+.as-article-body img { width: 100%; height: auto; display: block; }
+.as-article-body blockquote { border-left: 2px solid var(--border-strong); padding-left: var(--space-6); font-style: italic; color: var(--text-secondary); }
+.as-article-body ul, .as-article-body ol { padding-left: var(--space-6); }
+.as-article-body li + li { margin-top: var(--space-2); }
+

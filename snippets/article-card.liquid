@@ -1,0 +1,26 @@
+{% doc %}
+  Renders an article card in the ARCHIVES journal grid style: bordered 4/3
+  image tile with category — date, title and excerpt below. Used by
+  sections/main-blog (journal index grid) and sections/main-article
+  (related articles rail). Mirrors the card markup already used by
+  sections/journal.liquid (home "From the Journal" rail).
+
+  @param {article} article - The article to render.
+
+  @example
+  {% render 'article-card', article: article %}
+{% enddoc %}
+<a href="{{ article.url }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+  <div style="aspect-ratio:4/3; overflow:hidden; background:var(--surface-subtle);">
+    {%- if article.image -%}
+      <img class="as-img" src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" width="{{ article.image.width }}" height="{{ article.image.height }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+    {%- else -%}
+      <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
+    {%- endif -%}
+  </div>
+  <div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3);">
+    <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ article.tags.first | default: 'Journal' }} — {{ article.published_at | date: '%b %d, %Y' }}</span>
+    <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); line-height:var(--lh-snug);">{{ article.title }}</h3>
+    <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ article.excerpt_or_content | strip_html | truncatewords: 20 }}</p>
+  </div>
+</a>

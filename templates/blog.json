@@ -1,12 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
-      "settings": {
-        "eyebrow": "Journal",
-        "heading": "From the Journal",
-        "body": "Editorial index lands in Sprint 7."
-      }
+      "type": "main-blog",
+      "settings": {}
     }
   },
   "order": [

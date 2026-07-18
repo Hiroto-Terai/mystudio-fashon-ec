@@ -1,0 +1,130 @@
+{%- comment -%}
+  Article detail (templates/article.json): back-to-journal bar, article
+  header (category — date, title, author), 16/9 hero image, rich-text body
+  (readable width via --page-narrow), optional comments
+  (blog.comments_enabled?), and a "More from the Journal" horizontal-scroll
+  rail of the blog's other articles. Mirrors the ARTICLE view in
+  design-reference/Archives-Storefront.html.
+{%- endcomment -%}
+{%- liquid
+  assign article_category = article.tags.first | default: 'Journal'
+  assign related_shown = 0
+  assign related_max = 6
+-%}
+<div>
+  <div style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);">
+      <a href="{{ blog.url }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'blog.back_to_journal' | t }}</a>
+    </div>
+
+    <article style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ article_category }} — {{ article.published_at | date: '%b %d, %Y' }}</span>
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); line-height:var(--lh-tight); margin:var(--space-5) 0 var(--space-4); text-transform:uppercase;">{{ article.title }}</h1>
+      {%- if article.author != blank -%}
+        <span style="display:block; margin-bottom:var(--space-8); font:var(--text-body-sm); color:var(--text-secondary);">{{ 'blog.by_author' | t: name: article.author }}</span>
+      {%- endif -%}
+
+      <div style="aspect-ratio:16/9; overflow:hidden; background:var(--surface-subtle); margin-bottom:var(--space-10);">
+        {%- if article.image -%}
+          <img src="{{ article.image | image_url: width: 1600 }}" alt="{{ article.title | escape }}" width="{{ article.image.width }}" height="{{ article.image.height }}" loading="eager" style="width:100%; height:100%; object-fit:cover;">
+        {%- else -%}
+          <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="as-article-body">
+        {{ article.content }}
+      </div>
+
+      {%- if blog.comments_enabled? -%}
+        <div style="margin-top:var(--space-12); border-top:1px solid var(--border-default); padding-top:var(--space-8);">
+          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-6);">{{ 'blog.comments_heading' | t: count: article.comments_count }}</span>
+
+          {%- if article.comments_count > 0 -%}
+            {%- paginate article.comments by 10 -%}
+              <div style="display:flex; flex-direction:column; gap:var(--space-6); margin-bottom:var(--space-8);">
+                {%- for comment in article.comments -%}
+                  <div style="border-bottom:1px solid var(--border-default); padding-bottom:var(--space-6);">
+                    <div style="display:flex; align-items:baseline; gap:var(--space-3); margin-bottom:var(--space-2);">
+                      <span style="font-weight:var(--fw-semibold); font-size:var(--fs-sm);">{{ comment.author }}</span>
+                      <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; text-transform:uppercase;">{{ comment.created_at | date: '%b %d, %Y' }}</span>
+                    </div>
+                    <div style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ comment.content }}</div>
+                  </div>
+                {%- endfor -%}
+              </div>
+              {%- if paginate.pages > 1 -%}
+                <nav class="as-pagination" role="navigation" aria-label="{{ 'collection.pagination.label' | t }}" style="display:flex; justify-content:center; margin-bottom:var(--space-8);">
+                  {{ paginate | default_pagination }}
+                </nav>
+              {%- endif -%}
+            {%- endpaginate -%}
+          {%- else -%}
+            <p style="font:var(--text-body-sm); color:var(--text-secondary); margin-bottom:var(--space-8);">{{ 'blog.no_comments' | t }}</p>
+          {%- endif -%}
+
+          {%- form 'new_comment', article -%}
+            {%- if form.posted_successfully? -%}
+              <p style="font:var(--text-body-sm); color:var(--text-primary); margin-bottom:var(--space-5); border:1px solid var(--border-default); padding:var(--space-4);">
+                {%- if blog.moderated? -%}{{ 'blog.comment_pending' | t }}{%- else -%}{{ 'blog.comment_posted' | t }}{%- endif -%}
+              </p>
+            {%- endif -%}
+            {%- if form.errors -%}
+              <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <div style="display:flex; flex-direction:column; gap:var(--space-4); max-width:480px;">
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'blog.comment_name' | t }}
+                <input type="text" name="comment[author]" value="{{ form.author }}" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'blog.comment_email' | t }}
+                <input type="email" name="comment[email]" value="{{ form.email }}" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'blog.comment_body' | t }}
+                <textarea name="comment[body]" rows="5" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal; resize:vertical;">{{ form.body }}</textarea>
+              </label>
+              <button type="submit" style="align-self:flex-start; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'blog.comment_submit' | t }}</button>
+            </div>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </article>
+  </div>
+
+  {%- if blog.articles.size > 1 -%}
+    <section style="border-bottom:1px solid var(--border-default);">
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);">
+        <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'blog.related_heading' | t }}</span>
+      </div>
+      <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--section-y); display:flex; gap:var(--space-5); overflow-x:auto; scroll-snap-type:x mandatory;">
+        {%- for related in blog.articles -%}
+          {%- if related.id == article.id -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- if related_shown >= related_max -%}
+            {%- break -%}
+          {%- endif -%}
+          {%- assign related_shown = related_shown | plus: 1 -%}
+          <div style="flex:0 0 320px; scroll-snap-align:start;">
+            {%- render 'article-card', article: related -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main article",
+  "settings": [],
+  "presets": [
+    { "name": "Main article" }
+  ],
+  "enabled_on": {
+    "templates": ["article"]
+  }
+}
+{% endschema %}
