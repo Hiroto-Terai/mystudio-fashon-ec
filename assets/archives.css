@@ -136,6 +136,9 @@ button { font-family: inherit; }
 .as-fillbtn:hover { color: var(--color-white) !important; opacity: 1 !important; }
 /* Card/tile links must not inherit the generic a:hover fade (kills fill/scale) */
 a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; }
+/* Inverted fill button for dark backgrounds: fills white with ink text on hover */
+.as-fillbtn.as-inv::before { background: var(--color-white); }
+.as-fillbtn.as-inv:hover { color: var(--color-ink) !important; }
 .as-arrowbtn:hover .as-arrow { transform: translateX(4px); }
 .as-arrow { transition: transform var(--dur-base) var(--ease-standard); }
 .as-iconbtn { transition: opacity var(--dur-base) var(--ease-standard); }

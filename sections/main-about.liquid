@@ -132,7 +132,7 @@
   <section style="background:var(--color-ink); color:var(--color-white);">
     <div class="as-reveal" style="max-width:var(--page-max); margin:0 auto; padding:calc(var(--section-y) * 1.4) var(--page-gutter); text-align:center; display:flex; flex-direction:column; align-items:center; gap:var(--space-8);">
       <h2 style="font-weight:var(--fw-black); font-size:clamp(32px,6vw,88px); letter-spacing:var(--tracking-tighter); text-transform:uppercase; line-height:.95;">{{ section.settings.cta_heading | newline_to_br }}</h2>
-      <a href="{{ section.settings.cta_button_link | default: routes.all_products_collection_url }}" class="as-fillbtn" style="border:1px solid var(--color-white); padding:16px var(--space-10); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);">{{ section.settings.cta_button_label }}</a>
+      <a href="{{ section.settings.cta_button_link | default: routes.all_products_collection_url }}" class="as-fillbtn as-inv" style="border:1px solid var(--color-white); padding:16px var(--space-10); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);">{{ section.settings.cta_button_label }}</a>
     </div>
   </section>
 </div>
