@@ -1,0 +1,39 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "ARCHIVES Studio",
+    "theme_version": "0.1.0",
+    "theme_author": "Hiroto Terai",
+    "theme_documentation_url": "https://github.com/Hiroto-Terai/mystudio-fashon-ec",
+    "theme_support_url": "https://github.com/Hiroto-Terai/mystudio-fashon-ec/issues"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Commerce",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold (¥)",
+        "default": 30000,
+        "info": "Amount in yen for the cart drawer free-shipping progress bar."
+      },
+      {
+        "type": "text",
+        "id": "member_tag",
+        "label": "Member customer tag",
+        "default": "member",
+        "info": "Logged-in customers with this tag see member pricing."
+      }
+    ]
+  }
+]

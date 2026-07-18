@@ -1,0 +1,51 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=e3]: Free shipping on orders over ¥30,000
+  - banner [ref=e6]:
+    - generic [ref=e7]:
+      - link "A R C H I V E S" [ref=e8] [cursor=pointer]:
+        - /url: /
+      - navigation "Primary" [ref=e9]:
+        - link "Home" [ref=e11] [cursor=pointer]:
+          - /url: /
+        - link "Catalog" [ref=e13] [cursor=pointer]:
+          - /url: /collections/all
+        - link "Contact" [ref=e15] [cursor=pointer]:
+          - /url: /pages/contact
+      - generic [ref=e16]:
+        - button "Search" [ref=e17] [cursor=pointer]
+        - link "Wishlist" [ref=e21] [cursor=pointer]:
+          - /url: /pages/wishlist
+          - generic [ref=e24]: "0"
+        - button "Cart" [ref=e25] [cursor=pointer]:
+          - generic [ref=e29]: "0"
+  - main [ref=e30]:
+    - generic [ref=e33]:
+      - generic [ref=e34]: Sprint 0 — foundation
+      - heading "ARCHIVES" [level=1] [ref=e35]
+      - paragraph [ref=e36]: Global chrome (header, footer, cart drawer) is live. Home sections land in Sprint 1.
+  - contentinfo [ref=e38]:
+    - generic [ref=e40]:
+      - link "A R C H I V E S" [ref=e41] [cursor=pointer]:
+        - /url: /
+      - paragraph [ref=e42]: Considered garments and objects, archived for the long term. Tokyo — Worldwide.
+      - generic [ref=e43]:
+        - text: Newsletter
+        - generic [ref=e44]:
+          - textbox "EMAIL ADDRESS" [ref=e45]
+          - button "Subscribe" [ref=e46] [cursor=pointer]
+    - generic [ref=e50]:
+      - generic [ref=e51]: © 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.
+      - generic [ref=e52]:
+        - link "PRIVACY" [ref=e53] [cursor=pointer]:
+          - /url: /policies/privacy-policy
+        - link "TERMS" [ref=e54] [cursor=pointer]:
+          - /url: /policies/terms-of-service
+  - complementary "Cart" [ref=e55]:
+    - generic [ref=e56]:
+      - generic [ref=e57]: Cart — 0
+      - button "Close cart" [ref=e58] [cursor=pointer]
+    - generic [ref=e63]:
+      - generic [ref=e64]: Your cart is empty
+      - button "Continue shopping" [ref=e65] [cursor=pointer]

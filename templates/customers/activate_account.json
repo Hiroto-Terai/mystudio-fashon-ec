@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Account",
+        "heading": "Activate Account",
+        "body": "Account UI lands in a later sprint."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Collections",
+        "heading": "All collections",
+        "body": "Coming in Sprint 2."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

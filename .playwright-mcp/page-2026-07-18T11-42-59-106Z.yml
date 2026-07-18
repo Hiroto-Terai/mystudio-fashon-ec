@@ -1,0 +1,47 @@
+- generic [ref=f15e1]:
+  - link "Skip to content" [ref=f15e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f15e3]: Free shipping on orders over ¥30,000
+  - banner [ref=f15e6]:
+    - generic [ref=f15e7]:
+      - link "A R C H I V E S" [ref=f15e8] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f15e16]:
+        - button "Menu" [active] [ref=f15e59] [cursor=pointer]
+        - button "Search" [ref=f15e17] [cursor=pointer]
+        - link "Wishlist" [ref=f15e21] [cursor=pointer]:
+          - /url: /pages/wishlist
+        - button "Cart" [ref=f15e24] [cursor=pointer]
+    - generic [ref=f15e62]:
+      - link "Home" [ref=f15e64] [cursor=pointer]:
+        - /url: /
+      - link "Catalog" [ref=f15e66] [cursor=pointer]:
+        - /url: /collections/all
+      - link "Contact" [ref=f15e68] [cursor=pointer]:
+        - /url: /pages/contact
+  - main [ref=f15e28]:
+    - generic [ref=f15e31]:
+      - generic [ref=f15e32]: Sprint 0 — foundation
+      - heading "ARCHIVES" [level=1] [ref=f15e33]
+      - paragraph [ref=f15e34]: Global chrome (header, footer, cart drawer) is live. Home sections land in Sprint 1.
+  - contentinfo [ref=f15e36]:
+    - generic [ref=f15e37]:
+      - generic [ref=f15e38]:
+        - link "A R C H I V E S" [ref=f15e39] [cursor=pointer]:
+          - /url: /
+        - paragraph [ref=f15e40]: Considered garments and objects, archived for the long term. Tokyo — Worldwide.
+        - generic [ref=f15e41]:
+          - text: Newsletter
+          - generic [ref=f15e42]:
+            - textbox "EMAIL ADDRESS" [ref=f15e43]
+            - button "Subscribe" [ref=f15e44] [cursor=pointer]
+      - generic [ref=f15e47]: Shop
+      - generic [ref=f15e49]: Studio
+      - generic [ref=f15e51]: Support
+    - generic [ref=f15e54]:
+      - generic [ref=f15e55]: © 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.
+      - generic [ref=f15e56]:
+        - link "PRIVACY" [ref=f15e57] [cursor=pointer]:
+          - /url: /policies/privacy-policy
+        - link "TERMS" [ref=f15e58] [cursor=pointer]:
+          - /url: /policies/terms-of-service

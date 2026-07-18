@@ -1,0 +1,53 @@
+/* ARCHIVES Studio — Color tokens
+   Raw & organic monochrome. Absolute white, warm off-white paper, deep
+   charcoal ink. Razor-thin low-contrast borders (#E5E5E5). No neon/primary.
+   Functional colors are muted & desaturated, used sparingly. */
+:root {
+  /* --- Base neutral scale (warm-leaning greys) --- */
+  --color-white:      #FFFFFF;
+  --color-paper:      #F9F9F8; /* subtle off-white surface */
+  --color-n-50:       #F9F9F8;
+  --color-n-100:      #F1F0EE;
+  --color-n-150:      #ECEBE8;
+  --color-n-200:      #E5E5E5; /* the signature hairline border */
+  --color-n-300:      #C9C8C5;
+  --color-n-400:      #9A9A98;
+  --color-n-500:      #767674;
+  --color-n-600:      #565654;
+  --color-n-700:      #3D3D3B;
+  --color-n-800:      #232322;
+  --color-n-900:      #111111; /* charcoal ink */
+  --color-ink:        #111111;
+  --color-black:      #000000;
+
+  /* --- Muted functional colors (organic, never neon) --- */
+  --color-clay:       #8A3B2E; /* sale / error — muted brick */
+  --color-moss:       #4A5D3A; /* success — muted olive */
+  --color-stone:      #6B6357; /* info / accent — taupe */
+
+  /* --- Semantic: text --- */
+  --text-primary:     var(--color-ink);
+  --text-secondary:   var(--color-n-500);
+  --text-tertiary:    var(--color-n-400);
+  --text-inverse:     var(--color-white);
+  --text-sale:        var(--color-clay);
+
+  /* --- Semantic: surfaces --- */
+  --surface-page:     var(--color-white);
+  --surface-subtle:   var(--color-paper);
+  --surface-card:     var(--color-white);
+  --surface-inverse:  var(--color-ink);
+  --surface-hover:    var(--color-n-100);
+  --surface-scrim:    rgba(17,17,17,0.28);
+
+  /* --- Semantic: borders / lines --- */
+  --border-default:   var(--color-n-200);
+  --border-subtle:    var(--color-n-150);
+  --border-strong:    var(--color-ink);
+  --border-inverse:   rgba(255,255,255,0.24);
+
+  /* --- Semantic: interactive --- */
+  --focus-ring:       var(--color-ink);
+  --control-fg:       var(--color-ink);
+  --control-bg:       var(--color-white);
+}

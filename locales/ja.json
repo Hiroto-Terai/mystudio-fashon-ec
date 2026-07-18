@@ -1,0 +1,25 @@
+{
+  "accessibility": {
+    "skip_to_content": "コンテンツへスキップ"
+  },
+  "general": {
+    "search": {
+      "search": "検索",
+      "placeholder": "アーカイブを検索"
+    },
+    "cart": {
+      "title": "カート",
+      "empty": "カートは空です",
+      "subtotal": "小計",
+      "checkout": "レジに進む",
+      "view": "カートを見る"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "カートに追加",
+      "quick_add": "クイック追加",
+      "sold_out": "売り切れ"
+    }
+  }
+}

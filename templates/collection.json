@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "placeholder",
+      "settings": {
+        "eyebrow": "Collection",
+        "heading": "Collection",
+        "body": "Product grid, filters and sort land in Sprint 2."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

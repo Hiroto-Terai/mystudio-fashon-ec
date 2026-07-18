@@ -1,0 +1,22 @@
+{%- liquid
+  assign text = section.settings.text
+-%}
+{%- if text != blank -%}
+  <div class="as-announcement" style="border-bottom:1px solid var(--border-default); text-align:center; padding:11px var(--space-4);">
+    <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-widest); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ text }}</span>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Announcement text",
+      "default": "Free shipping on orders over ¥30,000"
+    }
+  ]
+}
+{% endschema %}

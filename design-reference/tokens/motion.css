@@ -1,0 +1,40 @@
+/* ARCHIVES Studio — Borders, radii, elevation & motion
+   Sharp corners, hairline borders, near-flat elevation. Motion is slow and
+   buttery: long image scales on hover, refined slide-over drawers. */
+:root {
+  /* Borders */
+  --border-width:   1px;
+  --border-hair:    1px;
+  --border-thick:   1.5px;
+
+  /* Radii — architectural, near-square */
+  --radius-none: 0;
+  --radius-xs:   1px;
+  --radius-sm:   2px;
+  --radius-md:   3px;
+  --radius-lg:   6px;
+  --radius-pill: 999px;
+
+  /* Elevation — used almost exclusively for overlays/drawers */
+  --shadow-none:   none;
+  --shadow-sm:     0 1px 2px rgba(17,17,17,0.04);
+  --shadow-card:   0 1px 3px rgba(17,17,17,0.05), 0 8px 24px rgba(17,17,17,0.04);
+  --shadow-drawer: -24px 0 60px rgba(17,17,17,0.12);
+  --shadow-pop:    0 12px 40px rgba(17,17,17,0.12);
+
+  /* Motion — the "soft & premium tactility" system */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);   /* buttery ease-out */
+  --ease-inout:    cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+
+  --dur-fast:   180ms;
+  --dur-base:   320ms;
+  --dur-slow:   560ms;
+  --dur-image:  900ms;   /* slow image scale on hover */
+  --dur-drawer: 480ms;   /* slide-over transition */
+
+  /* Interaction deltas */
+  --hover-opacity: 0.62;   /* text/icon hover = fade */
+  --image-scale:   1.045;  /* product image hover scale */
+  --press-scale:   0.985;  /* button press */
+}

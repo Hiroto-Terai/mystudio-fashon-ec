@@ -1,0 +1,8 @@
+<section style="min-height:80vh; display:flex; align-items:center; justify-content:center; padding:var(--section-y) var(--page-gutter);">
+  <div style="max-width:420px; width:100%; text-align:center; display:flex; flex-direction:column; gap:var(--space-5);">
+    <span style="font-weight:var(--fw-black); font-size:var(--fs-lg); letter-spacing:var(--tracking-widest); text-transform:uppercase;">{{ shop.name }}</span>
+    <span class="eyebrow" style="font-size:var(--fs-xs);">Gift card</span>
+    <div style="font-weight:var(--fw-black); font-size:var(--fs-4xl);">{{ gift_card.balance | money }}</div>
+    <div style="border:1px solid var(--border-default); padding:var(--space-4); font:var(--text-mono); font-size:var(--fs-sm); letter-spacing:var(--tracking-wide);">{{ gift_card.code | format_code }}</div>
+  </div>
+</section>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/tokens/colors.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/tokens/typography.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/tokens/motion.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/base.css">
+<link rel="stylesheet" href="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/styles.css">
+<script src="_ds/archives-studio-design-system-af1b12f2-ac7a-475b-a8c4-2167db560237/_ds_bundle.js"></script>
+<style>
+  .as-navlink { position:relative; cursor:pointer; }
+  .as-navlink::after { content:""; position:absolute; left:0; bottom:-6px; height:1px; width:100%; background:var(--color-ink); transform:scaleX(0); transform-origin:left; transition:transform var(--dur-base) var(--ease-standard); }
+  .as-navlink:hover::after { transform:scaleX(1); }
+  .as-navlink:hover { opacity:1; }
+  .as-navlink.is-active::after { transform:scaleX(1); }
+  .as-navitem { position:relative; display:flex; align-items:center; padding:27px 0; }
+  .as-dropdown { opacity:0; visibility:hidden; transform:translateX(-50%) translateY(10px); transition:opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard); z-index:50; }
+  .as-navitem:hover .as-dropdown { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+  .as-dropitem:hover { color:var(--color-ink) !important; }
+  .as-styletile { flex:1 1 0; min-width:0; }
+  .as-styletile:hover .as-stovl { opacity:1; }
+  .as-card { position:relative; }
+  .as-card .as-img { transition:transform var(--dur-image) var(--ease-standard); }
+  .as-card:hover .as-img { transform:scale(var(--image-scale)); }
+  .as-quickadd { position:absolute; left:0; right:0; bottom:0; transform:translateY(100%); transition:transform var(--dur-base) var(--ease-standard); }
+  .as-card:hover .as-quickadd { transform:translateY(0); }
+  .as-clickable { cursor:pointer; }
+  .as-fillbtn { position:relative; overflow:hidden; z-index:0; cursor:pointer; }
+  .as-fillbtn::before { content:""; position:absolute; inset:0; background:var(--color-ink); z-index:-1; transform:scaleY(0); transform-origin:bottom; transition:transform var(--dur-base) var(--ease-standard); }
+  .as-fillbtn:hover::before { transform:scaleY(1); }
+  .as-fillbtn:hover { color:var(--color-white); }
+  .as-arrowbtn:hover .as-arrow { transform:translateX(4px); }
+  .as-arrow { transition:transform var(--dur-base) var(--ease-standard); }
+  .as-iconbtn { transition:opacity var(--dur-base) var(--ease-standard); }
+  .as-iconbtn:hover { opacity:var(--hover-opacity); }
+  .as-wish.is-active svg { fill:var(--color-ink); }
+  @keyframes asFade { from{opacity:0} to{opacity:1} }
+  @keyframes asRise { from { opacity:0; transform:translateY(42px); } to { opacity:1; transform:none; } }
+  @keyframes asKen { from { transform:scale(1.14); } to { transform:scale(1); } }
+  @keyframes asPar { from { transform:translateY(-6%); } to { transform:translateY(6%); } }
+  .as-reveal { animation:asRise linear both; animation-timeline:view(); animation-range:entry 0% entry 44%; }
+  .as-ken { animation:asKen linear both; animation-timeline:view(); animation-range:entry 0% cover 65%; }
+  .as-parallax { animation:asPar linear both; animation-timeline:view(); }
+  @supports not (animation-timeline: view()) { .as-reveal, .as-ken, .as-parallax { animation:none !important; opacity:1 !important; transform:none !important; } }
+  /* Imagery tweak */
+  .as-mono img, .as-mono video { filter:grayscale(1) contrast(1.03); }
+  .as-contrast img, .as-contrast video { filter:grayscale(1) contrast(1.4) brightness(.95); }
+  /* Mood tweak */
+  .as-soft h1, .as-soft h2, .as-soft h3 { font-weight:var(--fw-medium) !important; letter-spacing:var(--tracking-normal) !important; text-transform:none !important; }
+  .as-soft .as-eyebrow { text-transform:uppercase; }
+  .as-brutal h1, .as-brutal h2 { letter-spacing:var(--tracking-tighter) !important; }
+  @media (max-width:1000px){ .as-hero{grid-template-columns:1fr !important} .as-2col{grid-template-columns:1fr !important} .as-grid-4{grid-template-columns:repeat(2,1fr) !important} .as-grid-3{grid-template-columns:repeat(2,1fr) !important} .as-nav-center{display:none !important} .as-pdp{grid-template-columns:1fr !important} .as-pdp-info{position:static !important} }
+  @media (max-width:560px){ .as-grid-4{grid-template-columns:1fr !important} .as-grid-3{grid-template-columns:1fr !important} .as-footer-grid{grid-template-columns:1fr !important} }
+  .as-burger { display:none; }
+  .as-mobmenu { display:none; }
+  @media (max-width:1000px){
+    .as-burger { display:flex !important; align-items:center; justify-content:center; }
+    .as-mobmenu { display:block; }
+    .as-grid-6 { grid-template-columns:repeat(3,1fr) !important; }
+  }
+  @media (max-width:760px){
+    h1 { font-size:clamp(30px,9vw,54px) !important; line-height:1.03 !important; }
+    h2 { font-size:clamp(23px,6.5vw,40px) !important; }
+    .as-timeline { grid-template-columns:1fr !important; gap:var(--space-2) !important; }
+    .as-pdp-info { padding:var(--space-8) var(--page-gutter) !important; }
+    .as-hero > div:last-child { padding:var(--space-10) var(--page-gutter) !important; }
+    .as-styletile { flex:0 0 64% !important; }
+  }
+  @media (max-width:1000px){
+    .as-headrow { display:flex !important; justify-content:space-between; }
+    .as-logo { justify-self:auto !important; }
+    .as-headicons { justify-self:auto !important; }
+  }
+  .as-logo { white-space:nowrap; }
+  @media (max-width:560px){
+    .as-logo { font-size:var(--fs-sm) !important; letter-spacing:0.14em !important; }
+    .as-headicons { gap:var(--space-4) !important; }
+    .as-cart-item { grid-template-columns:80px 1fr !important; }
+    .as-cart-item > div:last-child { grid-column:2 !important; align-items:flex-start !important; }
+    h1 { font-size:clamp(28px,8.5vw,44px) !important; }
+    h2 { font-size:clamp(21px,6vw,32px) !important; }
+    .as-styletile { flex:0 0 76% !important; }
+    .as-eyebrow { font-size:10px !important; }
+  }
+</style>
+</helmet>
+
+<div class="as-root {{ rootClass }}" style="font-family:var(--font-sans); background:var(--surface-page); color:var(--text-primary); min-height:100vh; position:relative; overflow-x:hidden; {{ rootVars }}">
+
+  <!-- Announcement Bar -->
+  <div style="border-bottom:1px solid var(--border-default); text-align:center; padding:11px var(--space-4);">
+    <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-widest); color:var(--text-secondary); font-size:var(--fs-2xs);">Free shipping on orders over ¥30,000</span>
+  </div>
+
+  <!-- Header -->
+  <header style="border-bottom:1px solid var(--border-default); position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.9); backdrop-filter:blur(12px);">
+    <div class="as-headrow" style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter); height:76px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;">
+      <span onClick="{{ goHome }}" class="as-clickable as-logo" style="font-weight:var(--fw-black); font-size:var(--fs-lg); letter-spacing:var(--tracking-widest); text-transform:uppercase; justify-self:start;">A R C H I V E S</span>
+      <nav class="as-nav-center" style="display:flex; gap:var(--space-10); justify-self:center;">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+          <div class="as-navitem">
+            <span onClick="{{ item.go }}" class="as-navlink {{ item.activeClass }}" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ item.label }}</span>
+            <sc-if value="{{ item.hasMenu }}" hint-placeholder-val="{{ false }}">
+              <div class="as-dropdown" style="position:absolute; top:100%; left:50%; min-width:210px; background:var(--surface-page); border:1px solid var(--border-default); padding:var(--space-4); display:flex; flex-direction:column; gap:2px; box-shadow:var(--shadow-drawer);">
+                <sc-for list="{{ item.menu }}" as="m" hint-placeholder-count="4">
+                  <span onClick="{{ m.go }}" class="as-clickable as-dropitem" style="font:var(--text-body-sm); color:var(--text-secondary); padding:var(--space-2); white-space:nowrap; transition:color var(--dur-base) var(--ease-standard);">{{ m.label }}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </nav>
+      <div class="as-headicons" style="display:flex; gap:var(--space-5); justify-self:end; align-items:center;">
+        <button onClick="{{ toggleMenu }}" class="as-iconbtn as-burger" aria-label="Menu" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+        <button onClick="{{ toggleSearch }}" class="as-iconbtn" aria-label="Search" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+        <button onClick="{{ goWishlist }}" class="as-iconbtn" aria-label="Wishlist" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg><sc-if value="{{ hasWish }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:-7px; right:-9px; background:var(--color-ink); color:var(--color-white); font-size:9px; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">{{ wishCount }}</span></sc-if></button>
+        <button onClick="{{ openCart }}" class="as-iconbtn" aria-label="Cart" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg><sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; top:-7px; right:-9px; background:var(--color-ink); color:var(--color-white); font-size:9px; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">{{ cartCount }}</span></sc-if></button>
+      </div>
+    </div>
+    <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="border-top:1px solid var(--border-default); background:var(--surface-page);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-5) var(--page-gutter); display:flex; align-items:center; gap:var(--space-4);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-n-400)" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input autofocus placeholder="SEARCH THE ARCHIVE" style="flex:1; border:none; outline:none; background:none; font:var(--text-body); letter-spacing:var(--tracking-wide); text-transform:uppercase; font-size:var(--fs-sm);" /><button onClick="{{ toggleSearch }}" class="as-iconbtn" style="background:none; border:none; cursor:pointer; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary);">Close</button></div></div>
+    </sc-if>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div class="as-mobmenu" style="border-top:1px solid var(--border-default); background:var(--surface-page);">
+        <div style="padding:var(--space-2) var(--page-gutter) var(--space-6);">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+            <div style="border-bottom:1px solid var(--border-default); padding:var(--space-5) 0;">
+              <span onClick="{{ item.go }}" class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm);">{{ item.label }}</span>
+              <sc-if value="{{ item.hasMenu }}" hint-placeholder-val="{{ false }}"><div style="display:flex; flex-wrap:wrap; gap:var(--space-3) var(--space-5); margin-top:var(--space-4);"><sc-for list="{{ item.menu }}" as="m" hint-placeholder-count="4"><span onClick="{{ m.go }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary);">{{ m.label }}</span></sc-for></div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <main>
+  <!-- HOME -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <section class="as-hero" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.05fr 0.95fr; border-bottom:1px solid var(--border-default);">
+        <div class="as-card" style="position:relative; overflow:hidden; aspect-ratio:4/5; border-right:1px solid var(--border-default);"><img class="as-img" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="display:flex; flex-direction:column; justify-content:space-between; padding:var(--space-16) var(--space-12); background:var(--surface-subtle);">
+          <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">01 / Seasonal</span>
+          <div style="display:flex; flex-direction:column; gap:var(--space-8);">
+            <h1 style="font-weight:var(--fw-black); font-size:var(--fs-5xl); line-height:var(--lh-tight); letter-spacing:var(--tracking-tight); text-transform:uppercase;">Raw<br>Structure<br>No. 01</h1>
+            <p style="max-width:380px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">A study in restraint — heavyweight organic cottons, technical outerwear, and quiet hardware. Made to be kept.</p>
+            <span onClick="{{ goCollection }}" class="as-fillbtn" style="align-self:flex-start; display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">Explore the collection <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+          </div>
+        </div>
+      </section>
+      <!-- Shop by category -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Shop by category</span><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">Find your archive</h2></div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          <sc-for list="{{ categoryTiles }}" as="ct" hint-placeholder-count="4">
+            <div onClick="{{ ct.go }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); position:relative; aspect-ratio:1/1; overflow:hidden;">
+              <img class="as-img" src="{{ ct.img }}" alt="{{ ct.label }}" style="width:100%; height:100%; object-fit:cover;" />
+              <div style="position:absolute; inset:0; display:flex; align-items:flex-end; padding:var(--space-6); background:linear-gradient(to top, rgba(0,0,0,.42), transparent 58%);"><span style="color:var(--color-white); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm);">{{ ct.label }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <!-- Featured -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between;">
+          <div style="display:flex; flex-direction:column; gap:var(--space-4);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Featured / FW26</span><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">The Core Selection</h2></div>
+          <span onClick="{{ goCollection }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">View all</span>
+        </div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          <sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+            <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+              <div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+                <img onClick="{{ p.open }}" class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" />
+                <button onClick="{{ p.toggleWish }}" class="as-wish {{ p.wishCls }} as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button>
+                <div class="as-quickadd"><button onClick="{{ p.add }}" style="width:100%; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Quick add</button></div>
+              </div>
+              <div onClick="{{ p.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ p.cat }}</span><h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <!-- Weekly ranking -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between;"><div style="display:flex; flex-direction:column; gap:var(--space-4);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Weekly ranking</span><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">Most saved this week</h2></div><span onClick="{{ goCollection }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">View all</span></div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          <sc-for list="{{ ranking }}" as="p" hint-placeholder-count="4">
+            <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+              <div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
+                <span style="position:absolute; top:0; left:0; z-index:2; background:var(--color-ink); color:var(--color-white); font-weight:var(--fw-black); font-size:var(--fs-lg); padding:var(--space-2) var(--space-4);">{{ p.rank }}</span>
+                <img onClick="{{ p.open }}" class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" />
+                <div class="as-quickadd"><button onClick="{{ p.add }}" style="width:100%; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Quick add</button></div>
+              </div>
+              <div onClick="{{ p.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ p.cat }}</span><h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <!-- Staff styling -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between;"><div style="display:flex; flex-direction:column; gap:var(--space-4);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Staff styling</span><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">Worn by the floor</h2></div><span onClick="{{ goStyling }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">See all</span></div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          <sc-for list="{{ stylings }}" as="st" hint-placeholder-count="4">
+            <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+              <div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);"><img onClick="{{ st.open }}" class="as-img" src="{{ st.img }}" alt="" style="width:100%; height:100%; object-fit:cover;" /><button onClick="{{ st.toggleWish }}" class="as-wish {{ st.wishCls }} as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button></div>
+              <div onClick="{{ st.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ st.staff.name }} — {{ st.staff.role }}</span><span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ st.staff.height }} / {{ st.staff.weight }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <!-- Brand intro -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div class="as-2col" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1fr 1fr;">
+          <div class="as-card" style="overflow:hidden; min-height:460px;"><img class="as-img" src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1400&auto=format&fit=crop" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
+          <div style="padding:var(--section-y) var(--space-12); display:flex; flex-direction:column; justify-content:center; gap:var(--space-6); border-left:1px solid var(--border-default);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">The Studio</span><h2 style="font-weight:var(--fw-black); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; line-height:var(--lh-tight);">Considered,<br>not seasonal</h2><p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); max-width:420px;">ARCHIVES is a Tokyo studio making garments and objects designed to be kept, repaired, and archived — never replaced. Every release is small, documented, and numbered.</p><span onClick="{{ goAbout }}" class="as-fillbtn" style="align-self:flex-start; display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">About the studio <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>
+        </div>
+      </section>
+      <!-- Styling Hints (community coordinates) -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
+          <div style="display:flex; flex-direction:column; gap:var(--space-4);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Styling Hints</span><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">みんなの着こなしを見る</h2><p style="max-width:460px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">気になるアイテムのコーデ実例をチェック。サムネイルをタップすると、使用アイテムがそのまま見られて買えます。</p></div>
+          <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; align-items:center;"><sc-for list="{{ hashtags }}" as="h" hint-placeholder-count="4"><span onClick="{{ h.go }}" class="as-clickable" style="border:1px solid var(--border-default); padding:8px 14px; font:var(--text-mono); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ h.label }}</span></sc-for></div>
+        </div>
+        <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-4); display:flex; gap:var(--space-4); overflow-x:auto; scroll-snap-type:x mandatory;">
+          <sc-for list="{{ stylings }}" as="st" hint-placeholder-count="6">
+            <div onClick="{{ st.open }}" class="as-card as-clickable as-styletile" style="scroll-snap-align:start;">
+              <div style="position:relative; overflow:hidden; aspect-ratio:1/1; background:var(--surface-subtle);">
+                <img class="as-img" src="{{ st.img }}" alt="" style="width:100%; height:100%; object-fit:cover;" />
+                <div style="position:absolute; left:var(--space-3); bottom:var(--space-3); background:var(--surface-page); padding:4px 8px; font:var(--text-mono); font-size:9px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ st.itemCount }} items</div>
+                <div class="as-stovl" style="position:absolute; inset:0; background:rgba(0,0,0,.42); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity var(--dur-base) var(--ease-standard);"><span style="color:var(--color-white); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:inline-flex; align-items:center; gap:var(--space-2);">使用アイテム{{ st.itemCount }}点 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-8) var(--page-gutter) var(--section-y);"><span onClick="{{ goStyling }}" class="as-fillbtn" style="display:inline-flex; align-items:center; gap:var(--space-3); border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">すべてのコーディネートを見る <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>
+      </section>
+      <!-- Editorial -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12); display:flex; align-items:flex-end; justify-content:space-between;"><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">From the Journal</h2><span onClick="{{ goEditorial }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">All stories</span></div>
+        <div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(3,1fr);">
+          <sc-for list="{{ articles }}" as="a" hint-placeholder-count="3">
+            <div onClick="{{ a.open }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div style="aspect-ratio:4/3; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ a.img }}" alt="{{ a.title }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ a.cat }} — {{ a.date }}</span><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); line-height:var(--lh-snug);">{{ a.title }}</h3></div></div>
+          </sc-for>
+        </div>
+      </section>
+      <!-- Instagram -->
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10); display:flex; align-items:center; justify-content:space-between;"><h2 style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight);">@archives.studio</h2><span class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--text-secondary);">Follow</span></div>
+        <div class="as-grid-6" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(6,1fr);">
+          <sc-for list="{{ instagram }}" as="ig" hint-placeholder-count="6"><div class="as-card" style="aspect-ratio:1/1; overflow:hidden; border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><img class="as-img" src="{{ ig }}" alt="" style="width:100%; height:100%; object-fit:cover;" /></div></sc-for>
+        </div>
+      </section>
+      <section style="border-bottom:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-16);" class="as-grid-3"><sc-for list="{{ pillars }}" as="c" hint-placeholder-count="3"><div style="display:flex; flex-direction:column; gap:var(--space-4);"><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ c.no }}</span><div style="height:1px; background:var(--border-default); margin:var(--space-2) 0;"></div><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ c.title }}</h3><p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ c.body }}</p></div></sc-for></div></section>
+    </div>
+  </sc-if>
+
+  <!-- COLLECTION -->
+  <sc-if value="{{ isCollection }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <section style="border-bottom:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Collection</span><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ collectionTitle }}</h1><p style="max-width:520px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4);">{{ collectionDesc }}</p></div>
+        <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--space-6); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-4);"><div style="display:flex; gap:var(--space-2);"><sc-for list="{{ catChips }}" as="chip" hint-placeholder-count="4"><span onClick="{{ chip.go }}" class="as-clickable" style="{{ chip.style }}">{{ chip.label }}</span></sc-for></div><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ collectionCount }} items</span></div>
+        <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+          <sc-for list="{{ collectionProducts }}" as="p" hint-placeholder-count="4">
+            <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+              <div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);"><img onClick="{{ p.open }}" class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" /><button onClick="{{ p.toggleWish }}" class="as-wish {{ p.wishCls }} as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button><div class="as-quickadd"><button onClick="{{ p.add }}" style="width:100%; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Quick add</button></div></div>
+              <div onClick="{{ p.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ p.cat }}</span><h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- PRODUCT -->
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:1px solid var(--border-default);">
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);"><span onClick="{{ goCollection }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">← Back to collection</span></div>
+      <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
+        <div style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;"><sc-for list="{{ pdp.gallery }}" as="g" hint-placeholder-count="4"><div class="as-card" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><img class="as-img" src="{{ g }}" alt="" style="width:100%; height:100%; object-fit:cover;" /></div></sc-for></div>
+        <div class="as-pdp-info" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
+          <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; min-height:24px;"><sc-for list="{{ pdp.badges }}" as="b" hint-placeholder-count="1"><span style="{{ b.style }}">{{ b.label }}</span></sc-for></div>
+          <div style="display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ pdp.cat }} — {{ pdp.sku }}</span><h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ pdp.name }}</h1><div style="display:flex; align-items:center; gap:var(--space-3);"><span style="color:var(--color-ink); letter-spacing:2px;">{{ pdp.starsStr }}</span><span style="font:var(--text-mono); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ pdp.reviewCount }} reviews</span></div><div style="display:flex; align-items:baseline; gap:var(--space-3);"><span style="font-size:var(--fs-xl); {{ pdp.priceStrike }}">{{ pdp.priceLabel }}</span><sc-if value="{{ pdp.isMember }}" hint-placeholder-val="{{ false }}"><span style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);">{{ pdp.memberPriceLabel }}</span></sc-if></div></div>
+          <div onClick="{{ pdp.toggleMember }}" class="as-clickable" style="{{ pdp.memberBanner }}"><div style="display:flex; align-items:center; gap:var(--space-3);"><span style="width:8px; height:8px; border-radius:999px; background:{{ pdp.memberDot }};"></span><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">{{ pdp.memberTitle }}</span></div><span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ pdp.memberDesc }}</span></div>
+          <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ pdp.desc }}</p>
+          <div style="display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">Colour — {{ pdp.selectedColor }}</span><div style="display:flex; gap:var(--space-3);"><sc-for list="{{ pdp.colors }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.select }}" aria-label="{{ c.name }}" class="as-iconbtn" style="{{ c.style }}"></button></sc-for></div></div>
+          <div style="display:flex; flex-direction:column; gap:var(--space-3);"><div style="display:flex; justify-content:space-between; align-items:center;"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">Size</span><span class="as-navlink as-clickable" style="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">Size chart</span></div><div style="display:flex; gap:var(--space-2); flex-wrap:wrap;"><sc-for list="{{ pdp.sizes }}" as="s" hint-placeholder-count="5"><span onClick="{{ s.select }}" class="as-clickable" style="{{ s.style }}">{{ s.label }}</span></sc-for></div><div style="min-height:22px; display:flex; align-items:center; gap:var(--space-2);"><span style="width:7px; height:7px; border-radius:999px; background:{{ pdp.stockDot }}; flex:none;"></span><span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ pdp.stockLine }}</span></div></div>
+          <sc-if value="{{ pdp.purchasable }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; gap:var(--space-3); align-items:stretch;"><div style="display:flex; align-items:center; border:1px solid var(--border-default);"><button onClick="{{ pdp.qtyDec }}" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">−</button><span style="width:36px; text-align:center;">{{ pdp.qty }}</span><button onClick="{{ pdp.qtyInc }}" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">+</button></div><button onClick="{{ pdp.addToCart }}" style="flex:1; background:var(--color-ink); color:var(--color-white); border:1px solid var(--color-ink); cursor:pointer; padding:16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Add to cart — {{ pdp.qty }}</button></div>
+          </sc-if>
+          <sc-if value="{{ pdp.soldOut }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--border-default); background:var(--surface-subtle); padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-3);"><sc-if value="{{ pdp.restockIdle }}" hint-placeholder-val="{{ true }}"><div style="display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">再入荷通知を受け取る — Notify me</span><div style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink);"><input value="{{ pdp.notifyEmail }}" onInput="{{ pdp.onNotify }}" placeholder="EMAIL ADDRESS" class="as-input" style="flex:1; padding:var(--space-2) 0; text-transform:uppercase; letter-spacing:var(--tracking-wide);" /><button onClick="{{ pdp.submitRestock }}" class="as-arrowbtn as-iconbtn" style="background:none; border:none; padding:var(--space-2); cursor:pointer; color:var(--color-ink);"><svg class="as-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button></div></div></sc-if><sc-if value="{{ pdp.restockDone }}" hint-placeholder-val="{{ false }}"><span style="font:var(--text-body-sm);">✓ 入荷次第メールでお知らせします。</span></sc-if></div>
+          </sc-if>
+          <div style="border-top:1px solid var(--border-default); margin-top:var(--space-2);"><sc-for list="{{ pdp.accordion }}" as="a" hint-placeholder-count="3"><div style="border-bottom:1px solid var(--border-default);"><div onClick="{{ a.toggle }}" class="as-clickable" style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-5) 0;"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ a.title }}</span><span style="font-size:var(--fs-md); color:var(--text-secondary);">{{ a.sign }}</span></div><sc-if value="{{ a.open }}" hint-placeholder-val="{{ false }}"><p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-bottom:var(--space-5);">{{ a.body }}</p></sc-if></div></sc-for></div>
+        </div>
+      </div>
+      <section style="border-top:1px solid var(--border-default);">
+        <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">よく一緒に購入されています</span></div>
+        <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter) var(--section-y); display:flex; gap:var(--space-5); overflow-x:auto; scroll-snap-type:x mandatory;">
+          <sc-for list="{{ fbtCarousel }}" as="p" hint-placeholder-count="4">
+            <div class="as-card" style="flex:0 0 240px; scroll-snap-align:start; border:1px solid var(--border-default);">
+              <div onClick="{{ p.open }}" class="as-clickable" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" /></div>
+              <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span onClick="{{ p.open }}" class="as-clickable" style="font:var(--text-mono); text-transform:uppercase; color:var(--text-tertiary); font-size:10px;">{{ p.cat }}</span><h3 onClick="{{ p.open }}" class="as-clickable" style="font-weight:var(--fw-medium); font-size:var(--fs-sm);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span><button onClick="{{ p.add }}" style="margin-top:var(--space-2); background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:10px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">Add to cart</button></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="border-top:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">You may also like</span></div><div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);"><sc-for list="{{ relatedProducts }}" as="p" hint-placeholder-count="4"><div onClick="{{ p.open }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-4) var(--space-5) var(--space-5); display:flex; flex-direction:column; gap:var(--space-1);"><h3 style="font-weight:var(--fw-medium); font-size:var(--fs-sm);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span></div></div></sc-for></div></section>
+    </div>
+  </sc-if>
+
+  <!-- WISHLIST -->
+  <sc-if value="{{ isWishlist }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-6);"><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">Wishlist</h1></div>
+      <div style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter); display:flex; gap:var(--space-8); border-bottom:1px solid var(--border-default);"><span onClick="{{ setWishProducts }}" class="as-clickable" style="{{ wishTabProdStyle }}">Products ({{ wishCount }})</span><span onClick="{{ setWishStylings }}" class="as-clickable" style="{{ wishTabStyleStyle }}">Stylings ({{ wishStylingCount }})</span></div>
+      <sc-if value="{{ showWishProducts }}" hint-placeholder-val="{{ true }}"><div>
+      <sc-if value="{{ hasWish }}" hint-placeholder-val="{{ false }}"><div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);"><sc-for list="{{ wishItems }}" as="p" hint-placeholder-count="3"><div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div onClick="{{ p.open }}" class="as-clickable" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-3);"><h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span><div style="display:flex; gap:var(--space-2);"><button onClick="{{ p.add }}" style="flex:1; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:11px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">Add</button><button onClick="{{ p.toggleWish }}" class="as-iconbtn" style="background:none; border:1px solid var(--border-default); cursor:pointer; padding:11px 14px; font:var(--text-mono); font-size:10px; text-transform:uppercase;">Remove</button></div></div></div></sc-for></div></sc-if>
+      <sc-if value="{{ wishEmpty }}" hint-placeholder-val="{{ true }}"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-24) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-5); align-items:flex-start;"><span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">Your wishlist is empty.</span><span onClick="{{ goCollection }}" class="as-fillbtn" style="border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">Browse the collection</span></div></sc-if>
+      </div></sc-if>
+      <sc-if value="{{ showWishStylings }}" hint-placeholder-val="{{ false }}"><div>
+        <sc-if value="{{ hasWishStyling }}" hint-placeholder-val="{{ false }}"><div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);"><sc-for list="{{ wishStylingItems }}" as="st" hint-placeholder-count="3"><div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);"><img onClick="{{ st.open }}" class="as-img" src="{{ st.img }}" alt="" style="width:100%; height:100%; object-fit:cover;" /><button onClick="{{ st.toggleWish }}" class="as-wish {{ st.wishCls }} as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button></div><div onClick="{{ st.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ st.staff.name }} — {{ st.staff.role }}</span><span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ st.staff.height }} / {{ st.staff.weight }}</span><span style="font:var(--text-mono); font-size:10px; color:var(--text-tertiary); text-transform:uppercase;">{{ st.itemCount }} items</span></div></div></sc-for></div></sc-if>
+        <sc-if value="{{ wishStylingEmpty }}" hint-placeholder-val="{{ true }}"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-24) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-5); align-items:flex-start;"><span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">No saved stylings yet.</span><span onClick="{{ goStyling }}" class="as-fillbtn" style="border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">Explore staff styling</span></div></sc-if>
+      </div></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- STYLING LIST -->
+  <sc-if value="{{ isStyling }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Staff</span><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">Styling</h1><p style="max-width:520px; font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4);">Worn and styled by the ARCHIVES floor team. Open a look to see every piece — and save the ones you like.</p></div>
+      <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+        <sc-for list="{{ stylings }}" as="st" hint-placeholder-count="4">
+          <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
+            <div class="as-clickable" style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);"><img onClick="{{ st.open }}" class="as-img" src="{{ st.img }}" alt="" style="width:100%; height:100%; object-fit:cover;" /><button onClick="{{ st.toggleWish }}" class="as-wish {{ st.wishCls }} as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button></div>
+            <div onClick="{{ st.open }}" class="as-clickable" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ st.staff.name }} — {{ st.staff.role }}</span><span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ st.staff.height }} / {{ st.staff.weight }}</span><span style="font:var(--text-mono); font-size:10px; color:var(--text-tertiary); text-transform:uppercase;">{{ st.itemCount }} items</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- STYLING DETAIL -->
+  <sc-if value="{{ isStylingDetail }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:1px solid var(--border-default);">
+      <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);"><span onClick="{{ goStyling }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">← Back to styling</span></div>
+      <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
+        <div class="as-card" style="position:relative; overflow:hidden; aspect-ratio:4/5; background:var(--surface-subtle); border-right:1px solid var(--border-default);"><img class="as-img" src="{{ styling.img }}" alt="" style="width:100%; height:100%; object-fit:cover;" /><button onClick="{{ styling.toggleWish }}" class="as-wish {{ styling.wishCls }} as-iconbtn" aria-label="Favourite styling" style="position:absolute; top:var(--space-5); right:var(--space-5); background:var(--color-white); border:1px solid var(--border-default); width:40px; height:40px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button></div>
+        <div class="as-pdp-info" style="padding:var(--space-12); display:flex; flex-direction:column; gap:var(--space-6); position:sticky; top:76px; align-self:start;">
+          <div style="display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-xs);">Staff — {{ styling.staff.role }}</span><h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ styling.staff.name }}</h1><div style="display:flex; gap:var(--space-10); margin-top:var(--space-2);"><div style="display:flex; flex-direction:column; gap:2px;"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">Height</span><span style="font-size:var(--fs-base);">{{ styling.staff.height }}</span></div><div style="display:flex; flex-direction:column; gap:2px;"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">Weight</span><span style="font-size:var(--fs-base);">{{ styling.staff.weight }}</span></div></div></div>
+          <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ styling.comment }}</p>
+          <div style="display:flex; flex-direction:column; gap:var(--space-3); border-top:1px solid var(--border-default); padding-top:var(--space-6);">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">Items in this styling</span>
+            <sc-for list="{{ styling.items }}" as="it" hint-placeholder-count="3">
+              <div style="display:grid; grid-template-columns:72px 1fr auto; gap:var(--space-4); align-items:center; padding:var(--space-3) 0; border-bottom:1px solid var(--border-default);">
+                <div onClick="{{ it.open }}" class="as-clickable" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);"><img src="{{ it.img }}" alt="{{ it.name }}" style="width:100%; height:100%; object-fit:cover;" /></div>
+                <div onClick="{{ it.open }}" class="as-clickable" style="display:flex; flex-direction:column; gap:3px;"><span style="font-weight:var(--fw-medium); font-size:var(--fs-sm);">{{ it.name }}</span><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ it.priceLabel }}</span></div>
+                <div style="display:flex; gap:var(--space-2); align-items:center;"><button onClick="{{ it.add }}" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:10px 14px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">Add</button><button onClick="{{ it.toggleWish }}" class="as-wish {{ it.wishCls }} as-iconbtn" aria-label="Add to wishlist" style="background:none; border:1px solid var(--border-default); width:38px; height:38px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></button></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- EDITORIAL -->
+  <sc-if value="{{ isEditorial }}" hint-placeholder-val="{{ false }}">
+    <div><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-12);"><span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Editorial</span><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">The Journal</h1></div><div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(3,1fr);"><sc-for list="{{ articles }}" as="a" hint-placeholder-count="3"><div onClick="{{ a.open }}" class="as-card as-clickable" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div style="aspect-ratio:4/3; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ a.img }}" alt="{{ a.title }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ a.cat }} — {{ a.date }}</span><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); line-height:var(--lh-snug);">{{ a.title }}</h3><p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ a.excerpt }}</p></div></div></sc-for></div></div>
+  </sc-if>
+
+  <!-- ARTICLE -->
+  <sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);"><span onClick="{{ goEditorial }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">← Back to journal</span></div><article style="max-width:760px; margin:0 auto; padding:var(--section-y) var(--page-gutter);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ art.cat }} — {{ art.date }}</span><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); line-height:var(--lh-tight); margin:var(--space-5) 0 var(--space-8); text-transform:uppercase;">{{ art.title }}</h1><div style="aspect-ratio:16/9; overflow:hidden; background:var(--surface-subtle); margin-bottom:var(--space-10);"><img src="{{ art.img }}" alt="{{ art.title }}" style="width:100%; height:100%; object-fit:cover;" /></div><sc-for list="{{ art.paras }}" as="para" hint-placeholder-count="3"><p style="font:var(--text-body); color:var(--text-primary); line-height:var(--lh-loose); margin-bottom:var(--space-6); font-size:var(--fs-md);">{{ para }}</p></sc-for><sc-if value="{{ art.hasProducts }}" hint-placeholder-val="{{ false }}"><div style="margin-top:var(--space-10); border-top:1px solid var(--border-default); padding-top:var(--space-8);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-6);">Shop this story</span><div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);"><sc-for list="{{ art.products }}" as="p" hint-placeholder-count="2"><div class="as-card" style="border:1px solid var(--border-default); display:flex; flex-direction:column;"><div onClick="{{ p.open }}" class="as-clickable" style="aspect-ratio:4/3; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);"><span onClick="{{ p.open }}" class="as-clickable" style="font:var(--text-mono); text-transform:uppercase; color:var(--text-tertiary); font-size:10px;">{{ p.cat }}</span><h3 onClick="{{ p.open }}" class="as-clickable" style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ p.name }}</h3><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ p.priceLabel }}</span><div style="display:flex; gap:var(--space-2); margin-top:var(--space-2);"><button onClick="{{ p.add }}" style="flex:1; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:11px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px;">Add to cart</button><button onClick="{{ p.open }}" class="as-iconbtn" style="background:none; border:1px solid var(--border-default); cursor:pointer; padding:11px 14px; font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide);">View</button></div></div></div></sc-for></div></div></sc-if></article></div>
+  </sc-if>
+
+  <!-- ABOUT -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <!-- 1. Opening hero -->
+      <div style="position:relative; min-height:80vh; overflow:hidden; display:flex; align-items:center; justify-content:center; background:var(--color-ink); border-bottom:1px solid var(--border-default);">
+        <img class="as-parallax" src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1900&auto=format&fit=crop" alt="" style="position:absolute; left:0; right:0; top:-6%; width:100%; height:112%; object-fit:cover; opacity:.5;" />
+        <div class="as-reveal" style="position:relative; text-align:center; color:var(--color-white); padding:var(--space-24) var(--space-8); max-width:1100px;">
+          <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-size:var(--fs-xs); opacity:.8;">Est. 2019 — Tokyo</span>
+          <h1 style="font-weight:var(--fw-black); font-size:clamp(48px,9vw,140px); line-height:.92; letter-spacing:var(--tracking-tighter); text-transform:uppercase; margin-top:var(--space-6);">Made to<br>be kept</h1>
+          <p style="margin:var(--space-8) auto 0; font-size:var(--fs-lg); max-width:600px; opacity:.85; line-height:var(--lh-relaxed);">A Tokyo studio designing against the season — honest materials, restrained construction, numbered releases.</p>
+        </div>
+      </div>
+
+      <!-- 2. Chapters (full-bleed, stacked) -->
+      <div style="background:var(--color-ink);">
+        <sc-for list="{{ aboutChapters }}" as="ch" hint-placeholder-count="4">
+          <div style="position:relative; min-height:92vh; overflow:hidden; display:flex; align-items:flex-end; border-bottom:1px solid rgba(255,255,255,.12);">
+            <img class="as-ken" src="{{ ch.img }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.05) 58%);"></div>
+            <div class="as-reveal" style="position:relative; width:100%; max-width:var(--page-max); margin:0 auto; padding:var(--space-16) var(--page-gutter); color:var(--color-white);"><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-size:var(--fs-xs); opacity:.85;">{{ ch.no }}</span><h2 style="font-weight:var(--fw-black); font-size:clamp(32px,5vw,72px); letter-spacing:var(--tracking-tight); text-transform:uppercase; line-height:1; margin-top:var(--space-4);">{{ ch.title }}</h2><p style="margin-top:var(--space-5); max-width:520px; font-size:var(--fs-md); line-height:var(--lh-relaxed); opacity:.9;">{{ ch.body }}</p></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- 3. Stats -->
+      <section style="border-top:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div class="as-reveal as-grid-4" style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-8);"><sc-for list="{{ aboutStats }}" as="s" hint-placeholder-count="4"><div style="display:flex; flex-direction:column; gap:var(--space-2);"><span style="font-weight:var(--fw-black); font-size:var(--fs-4xl);">{{ s.num }}</span><span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ s.label }}</span></div></sc-for></div></section>
+
+      <!-- 4. History timeline -->
+      <section style="border-bottom:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);"><h2 class="as-reveal" style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight); margin-bottom:var(--space-10);">History</h2><div style="display:flex; flex-direction:column;"><sc-for list="{{ aboutTimeline }}" as="t" hint-placeholder-count="5"><div class="as-reveal as-timeline" style="display:grid; grid-template-columns:140px 1fr; gap:var(--space-8); padding:var(--space-6) 0; border-top:1px solid var(--border-default);"><span style="font-weight:var(--fw-black); font-size:var(--fs-xl);">{{ t.year }}</span><div style="display:flex; flex-direction:column; gap:var(--space-2);"><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-base); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ t.title }}</h3><p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); max-width:560px;">{{ t.body }}</p></div></div></sc-for></div></div></section>
+
+      <!-- 5. Materials -->
+      <section style="border-bottom:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-8);"><h2 class="as-reveal" style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight);">Materials</h2></div><div class="as-grid-3" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(3,1fr);"><sc-for list="{{ aboutMaterials }}" as="m" hint-placeholder-count="3"><div class="as-card as-reveal" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);"><div style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle);"><img class="as-img" src="{{ m.img }}" alt="{{ m.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-2);"><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-base); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ m.name }}</h3><p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ m.desc }}</p></div></div></sc-for></div></section>
+
+      <!-- 6. Values -->
+      <section style="border-bottom:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-16);" class="as-grid-3"><sc-for list="{{ pillars }}" as="c" hint-placeholder-count="3"><div class="as-reveal" style="display:flex; flex-direction:column; gap:var(--space-4);"><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ c.no }}</span><div style="height:1px; background:var(--border-default); margin:var(--space-2) 0;"></div><h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ c.title }}</h3><p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ c.body }}</p></div></sc-for></div></section>
+
+      <!-- 7. Closing CTA -->
+      <section style="background:var(--color-ink); color:var(--color-white);"><div class="as-reveal" style="max-width:var(--page-max); margin:0 auto; padding:calc(var(--section-y) * 1.4) var(--page-gutter); text-align:center; display:flex; flex-direction:column; align-items:center; gap:var(--space-8);"><h2 style="font-weight:var(--fw-black); font-size:clamp(32px,6vw,88px); letter-spacing:var(--tracking-tighter); text-transform:uppercase; line-height:.95;">Start your<br>archive</h2><span onClick="{{ goCollection }}" class="as-clickable" style="border:1px solid var(--color-white); padding:16px var(--space-10); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);">Shop the collection</span></div></section>
+    </div>
+  </sc-if>
+
+  <!-- CART PAGE -->
+  <sc-if value="{{ isCartPage }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:1px solid var(--border-default); min-height:50vh;"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);"><h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-bottom:var(--space-10);">Cart</h1>
+      <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><div class="as-2col" style="display:grid; grid-template-columns:1.6fr 0.8fr; gap:var(--space-16); align-items:start;"><div style="border-top:1px solid var(--border-default);"><sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2"><div style="display:grid; grid-template-columns:100px 1fr auto; gap:var(--space-6); padding:var(--space-6) 0; border-bottom:1px solid var(--border-default); align-items:start;"><div style="aspect-ratio:3/4; background:var(--surface-subtle); overflow:hidden;"><img src="{{ it.img }}" alt="{{ it.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; text-transform:uppercase;">{{ it.cat }}</span><h4 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ it.name }}</h4><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ it.priceLabel }}</span><div style="display:flex; align-items:center; border:1px solid var(--border-default); align-self:flex-start; margin-top:var(--space-3);"><button onClick="{{ it.dec }}" style="width:34px; height:34px; background:none; border:none; cursor:pointer; font-size:var(--fs-md);">−</button><span style="width:34px; text-align:center;">{{ it.qty }}</span><button onClick="{{ it.inc }}" style="width:34px; height:34px; background:none; border:none; cursor:pointer; font-size:var(--fs-md);">+</button></div></div><div style="display:flex; flex-direction:column; align-items:flex-end; gap:var(--space-4);"><span style="font-weight:var(--fw-medium);">{{ it.lineLabel }}</span><button onClick="{{ it.remove }}" class="as-navlink" style="background:none; border:none; cursor:pointer; font:var(--text-mono); color:var(--text-tertiary); font-size:10px; text-transform:uppercase;">Remove</button></div></div></sc-for></div><div style="border:1px solid var(--border-default); padding:var(--space-8); display:flex; flex-direction:column; gap:var(--space-4);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Summary</span><div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);"><span>Subtotal</span><span>{{ subtotalLabel }}</span></div><div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);"><span>Shipping</span><span>{{ shippingLabel }}</span></div><div style="height:1px; background:var(--border-default);"></div><div style="display:flex; justify-content:space-between; font-weight:var(--fw-semibold); font-size:var(--fs-md);"><span>Total</span><span>{{ totalLabel }}</span></div><button style="width:100%; background:var(--color-ink); color:var(--color-white); border:1px solid var(--color-ink); cursor:pointer; padding:16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); margin-top:var(--space-2);">Proceed to checkout</button></div></div></sc-if>
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:var(--space-24) 0; display:flex; flex-direction:column; gap:var(--space-6); align-items:flex-start;"><span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">Your cart is empty.</span><span onClick="{{ goCollection }}" class="as-fillbtn" style="border:1px solid var(--color-ink); padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">Browse the collection</span></div></sc-if>
+    </div></div>
+  </sc-if>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background:var(--surface-page);">
+    <div class="as-footer-grid" style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:var(--space-12);">
+      <div style="display:flex; flex-direction:column; gap:var(--space-6);"><span onClick="{{ goHome }}" class="as-clickable" style="font-weight:var(--fw-black); font-size:var(--fs-md); letter-spacing:var(--tracking-widest); text-transform:uppercase;">A R C H I V E S</span><p style="font:var(--text-body-sm); color:var(--text-secondary); max-width:300px; line-height:var(--lh-relaxed);">Considered garments and objects, archived for the long term. Tokyo — Worldwide.</p><div style="margin-top:var(--space-4);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">Newsletter</span><div style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink); margin-top:var(--space-3); max-width:320px;"><input placeholder="EMAIL ADDRESS" style="flex:1; border:none; outline:none; background:none; padding:var(--space-3) 0; font:var(--text-body-sm); letter-spacing:var(--tracking-wide); text-transform:uppercase;" /><button class="as-arrowbtn as-iconbtn" aria-label="Subscribe" style="background:none; border:none; cursor:pointer; padding:var(--space-2); color:var(--color-ink); display:flex;"><svg class="as-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button></div></div></div>
+      <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="3"><div style="display:flex; flex-direction:column; gap:var(--space-4);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-2xs); margin-bottom:var(--space-2);">{{ col.title }}</span><sc-for list="{{ col.links }}" as="l" hint-placeholder-count="4"><span onClick="{{ l.go }}" class="as-navlink as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); align-self:flex-start;">{{ l.label }}</span></sc-for></div></sc-for>
+    </div>
+    <div style="border-top:1px solid var(--border-default);"><div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); display:flex; align-items:center; justify-content:space-between;"><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">© 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.</span><div style="display:flex; gap:var(--space-6);"><span class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">PRIVACY</span><span class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">TERMS</span></div></div></div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}"><div onClick="{{ closeCart }}" style="position:fixed; inset:0; background:var(--surface-scrim); z-index:90; animation:asFade var(--dur-base) var(--ease-standard);"></div></sc-if>
+  <div style="{{ drawerStyle }}">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-6); border-bottom:1px solid var(--border-default);"><span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Cart — {{ cartCount }}</span><button onClick="{{ closeCart }}" class="as-iconbtn" aria-label="Close cart" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
+    <div style="flex:1; overflow-y:auto;">
+      <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><div><sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2"><div style="display:grid; grid-template-columns:84px 1fr auto; gap:var(--space-4); padding:var(--space-6); border-bottom:1px solid var(--border-default);"><div style="aspect-ratio:3/4; background:var(--surface-subtle); overflow:hidden;"><img src="{{ it.img }}" alt="{{ it.name }}" style="width:100%; height:100%; object-fit:cover;" /></div><div style="display:flex; flex-direction:column; gap:var(--space-2);"><span style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; text-transform:uppercase;">{{ it.cat }}</span><h4 style="font-weight:var(--fw-medium); font-size:var(--fs-sm);">{{ it.name }}</h4><span style="font-size:var(--fs-sm); color:var(--text-secondary);">{{ it.priceLabel }}</span><div style="display:flex; align-items:center; border:1px solid var(--border-default); align-self:flex-start; margin-top:var(--space-2);"><button onClick="{{ it.dec }}" aria-label="Decrease" style="width:30px; height:30px; background:none; border:none; cursor:pointer; color:var(--color-ink); font-size:var(--fs-md);">−</button><span style="width:30px; text-align:center; font:var(--text-body-sm);">{{ it.qty }}</span><button onClick="{{ it.inc }}" aria-label="Increase" style="width:30px; height:30px; background:none; border:none; cursor:pointer; color:var(--color-ink); font-size:var(--fs-md);">+</button></div></div><button onClick="{{ it.remove }}" class="as-iconbtn" aria-label="Remove" style="background:none; border:none; cursor:pointer; color:var(--text-tertiary); align-self:flex-start; display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div></sc-for></div></sc-if>
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:var(--space-24) var(--space-6); text-align:center; display:flex; flex-direction:column; gap:var(--space-4); align-items:center;"><span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs);">Your cart is empty</span><button onClick="{{ closeCart }}" class="as-fillbtn" style="border:1px solid var(--color-ink); background:none; cursor:pointer; padding:13px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">Continue shopping</button></div></sc-if>
+    </div>
+    <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><div style="border-top:1px solid var(--border-default); padding:var(--space-6);"><div style="margin-bottom:var(--space-4);"><span style="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary); display:block; margin-bottom:var(--space-2);">{{ freeShipMsg }}</span><div style="height:5px; background:var(--surface-subtle);"><div style="height:100%; background:var(--color-ink); width:{{ freeShipPct }}; transition:width var(--dur-base) var(--ease-standard);"></div></div></div>
+        <div style="display:flex; align-items:center; border:1px solid var(--border-default); margin-bottom:var(--space-2);"><input value="{{ couponInput }}" onInput="{{ onCoupon }}" placeholder="COUPON — TRY WINTER10" class="as-input" style="flex:1; padding:var(--space-3);" /><button onClick="{{ applyCoupon }}" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:0 var(--space-5); align-self:stretch; font:var(--text-label); text-transform:uppercase; font-size:10px; letter-spacing:var(--tracking-wide);">Apply</button></div>
+        <sc-if value="{{ couponMsg }}" hint-placeholder-val="{{ false }}"><span style="font:var(--text-body-sm); color:var(--text-secondary); display:block; margin-bottom:var(--space-3);">{{ couponMsg }}</span></sc-if>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-2);"><span style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">Subtotal</span><span style="font-weight:var(--fw-semibold); font-size:var(--fs-md);">{{ subtotalLabel }}</span></div>
+        <sc-if value="{{ hasDiscount }}" hint-placeholder-val="{{ false }}"><div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-2);"><span style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">Discount</span><span style="font-weight:var(--fw-semibold); font-size:var(--fs-md);">−{{ discountLabel }}</span></div></sc-if><p style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; margin-bottom:var(--space-4);">Shipping &amp; taxes calculated at checkout.</p><button onClick="{{ goCartPage }}" style="width:100%; background:none; color:var(--color-ink); border:1px solid var(--color-ink); cursor:pointer; padding:13px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); margin-bottom:var(--space-3);">View cart</button><button style="width:100%; background:var(--color-ink); color:var(--color-white); border:1px solid var(--color-ink); cursor:pointer; padding:16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">Proceed to checkout</button></div></sc-if>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;mood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Brutalist&quot;,&quot;Editorial&quot;,&quot;Refined&quot;],&quot;default&quot;:&quot;Brutalist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Type mood&quot;},&quot;gridTone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Hairline&quot;,&quot;Ink&quot;,&quot;Bare&quot;],&quot;default&quot;:&quot;Hairline&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Grid framing&quot;},&quot;imagery&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Colour&quot;,&quot;Monochrome&quot;,&quot;High contrast&quot;],&quot;default&quot;:&quot;Colour&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Imagery&quot;},&quot;spacing&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Compact&quot;,&quot;Standard&quot;,&quot;Gallery&quot;],&quot;default&quot;:&quot;Standard&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Whitespace&quot;}}">
+class Component extends DCLogic {
+  state = { view:"home", cartOpen:false, searchOpen:false, menuOpen:false, cart:{}, wishlist:{}, wishStyling:{}, wishTab:"products", collectionCat:"all", productId:null, articleId:null, stylingId:null, pdpSize:"M", pdpQty:1, accordionOpen:"details", pdpColor:null, member:false, restock:{}, notifyEmail:"", couponInput:"", coupon:null };
+
+  catalog = [
+    { id:"tee", name:"Heavyweight Organic Tee", cat:"Apparel", sku:"AR-01", price:13200,
+      img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop",
+      gallery:["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1503341504253-dff4815485f1?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1000&auto=format&fit=crop"],
+      desc:"A boxy, heavyweight tee in 240gsm organic cotton. Garment-dyed, tubular body, ribbed collar. Cut to sit clean and hold its shape wash after wash.", colors:[{name:"Black",hex:"#111111"},{name:"Stone",hex:"#d9d4cc"},{name:"Slate",hex:"#4a4f54"}], sizeStock:{XS:2,S:0,M:1,L:0,XL:2}, arrivedToday:false },
+    { id:"parka", name:"Structured Technical Parka", cat:"Outerwear", sku:"AR-02", price:41800,
+      img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1200&auto=format&fit=crop",
+      gallery:["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1608063615781-e2ef8c73d114?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1520975954732-35dd22299614?q=80&w=1000&auto=format&fit=crop"],
+      desc:"A weatherproof parka in coated technical cotton. Storm-sealed seams, articulated sleeves, and matte hardware. Fully lined with a two-way front zip.", colors:[{name:"Black",hex:"#111111"},{name:"Olive",hex:"#5b5f4a"}], sizeStock:{XS:0,S:6,M:9,L:7,XL:5}, arrivedToday:true },
+    { id:"denim", name:"Raw Edge Denim Pant", cat:"Apparel", sku:"AR-03", price:26400,
+      img:"https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1200&auto=format&fit=crop",
+      gallery:["https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1604176354204-9268737828e4?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1475178626620-a4d074967452?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=1000&auto=format&fit=crop"],
+      desc:"Straight-leg trousers in 14oz raw selvedge denim. Left unwashed to fade to the wearer. Chain-stitched hems and a mid-rise, relaxed line.", colors:[{name:"Indigo",hex:"#2d3a4d"},{name:"Black",hex:"#111111"}], sizeStock:{XS:0,S:4,M:6,L:3,XL:0}, arrivedToday:false },
+    { id:"bangle", name:"Minimalist Bangle (Silver)", cat:"Hardware", sku:"AR-04", price:33000,
+      img:"https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1200&auto=format&fit=crop",
+      gallery:["https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=1000&auto=format&fit=crop","https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=1000&auto=format&fit=crop"],
+      desc:"A solid bangle in recycled sterling silver with a brushed, unpolished finish. Weighted, seamless, and made to patina with wear.", colors:[{name:"Silver",hex:"#c9ccce"}], sizeStock:{XS:0,S:0,M:0,L:0,XL:0}, arrivedToday:false },
+  ];
+
+  articlesData = [
+    { id:"materials", cat:"Study", date:"JUN 2026", title:"On Honest Materials", img:"https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=1400&auto=format&fit=crop", excerpt:"Why we design against the season and toward the archive.", paras:["We begin every release with the cloth, not the calendar. A garment is only as honest as the material it is built from.","Heavyweight organic cottons, coated technical shells, recycled hardware. Each is chosen for how it ages, not how it photographs on day one.","The result is a wardrobe that rewards time — pieces soften, fade, and settle, becoming more yours with every wear."], products:["tee","denim"] },
+    { id:"construction", cat:"Studio", date:"MAY 2026", title:"The Long Archive", img:"https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1400&auto=format&fit=crop", excerpt:"Inside our numbered, documented production runs.", paras:["Every ARCHIVES release is small, documented, and numbered. We keep a physical sample of each production run in the studio.","This archive is not nostalgia. It is a working reference: when a garment is reissued or repaired, we return to the original sample.","Nothing is made to expire. Everything is made to be found again."], products:["parka","bangle"] },
+    { id:"care", cat:"Care", date:"APR 2026", title:"Repair, Not Replace", img:"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1400&auto=format&fit=crop", excerpt:"How our lifetime repair programme works.", paras:["Every piece we make is backed by a lifetime repair programme. Bring a garment back and we will restore it in the studio that built it.","Reinforced seams and honest hardware make most repairs simple.","Buy less, keep longer, waste nothing. That is the whole idea."], products:["denim","tee"] },
+  ];
+
+  stylingsData = [
+    { id:"s1", img:"https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?q=80&w=1200&auto=format&fit=crop", staff:{name:"NAOKI I.", role:"Daikanyama", height:"178cm", weight:"62kg"}, comment:"Sized up one in the parka for a boxier line over the heavyweight tee. Raw denim cropped just above the ankle keeps it sharp.", items:["parka","tee","denim"] },
+    { id:"s2", img:"https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1200&auto=format&fit=crop", staff:{name:"MISAKI T.", role:"Ginza", height:"163cm", weight:"50kg"}, comment:"I like the tee oversized and half-tucked. The silver bangle is the only accent I need — quiet but heavy on the wrist.", items:["tee","denim","bangle"] },
+    { id:"s3", img:"https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?q=80&w=1200&auto=format&fit=crop", staff:{name:"REN K.", role:"Online", height:"181cm", weight:"68kg"}, comment:"Full raw-denim proposal. Wears in fast if you live in it — mine are three months deep and fading beautifully.", items:["denim","bangle"] },
+    { id:"s4", img:"https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?q=80&w=1200&auto=format&fit=crop", staff:{name:"AOI S.", role:"Daikanyama", height:"170cm", weight:"57kg"}, comment:"Parka thrown over everything in transitional weather. Technical cotton takes the rain and still reads clean in the city.", items:["parka","bangle","tee"] },
+    { id:"s5", img:"https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=1200&auto=format&fit=crop", staff:{name:"YUI M.", role:"Online", height:"158cm", weight:"46kg"}, comment:"Petite frame — I size down in the tee and let the raw denim do the talking. The bangle finishes it.", items:["tee","bangle"] },
+    { id:"s6", img:"https://images.unsplash.com/photo-1479064555552-3ef4979f8908?q=80&w=1200&auto=format&fit=crop", staff:{name:"KENTA O.", role:"Ginza", height:"175cm", weight:"64kg"}, comment:"Layered denim-on-denim under the parka. Monotone throughout, hardware kept to a single silver piece.", items:["parka","denim","bangle"] },
+  ];
+
+  yen(n){ return "¥" + n.toLocaleString("en-US"); }
+  nav(view, patch){ this.setState({ view, cartOpen:false, searchOpen:false, menuOpen:false, ...(patch||{}) }); if (typeof window!=="undefined") window.scrollTo({top:0}); }
+  componentDidMount(){ this._raf=null; this._onScroll=()=>{ if(this._raf) return; this._raf=requestAnimationFrame(()=>{ this._raf=null; this.updateScroll(); }); }; window.addEventListener("scroll", this._onScroll, {passive:true}); window.addEventListener("resize", this._onScroll, {passive:true}); this.updateScroll(); }
+  componentWillUnmount(){ window.removeEventListener("scroll", this._onScroll); window.removeEventListener("resize", this._onScroll); }
+  componentDidUpdate(){ this.updateScroll(); }
+  updateScroll(){
+    if (typeof window==="undefined") return;
+    const vh=window.innerHeight;
+    document.querySelectorAll(".as-reveal").forEach(el=>{ if(el.getBoundingClientRect().top < vh*0.85) el.classList.add("is-in"); });
+    document.querySelectorAll("[data-parallax]").forEach(el=>{ const r=el.getBoundingClientRect(); const rate=parseFloat(el.getAttribute("data-parallax"))||0.2; const off=(r.top + r.height/2 - vh/2) * -rate; el.style.transform="translateY("+off.toFixed(1)+"px)"; });
+    const oh=document.querySelector("#as-about-hero");
+    if(oh){ const r=oh.getBoundingClientRect(); const p=Math.min(1,Math.max(0,(-r.top)/vh)); const t=document.querySelector("[data-hero-text]"); if(t){ t.style.opacity=String(1-p); t.style.transform="translateY("+(p*-40).toFixed(1)+"px)"; } }
+    const sc=document.querySelector("#as-scrolly");
+    if(sc){ const r=sc.getBoundingClientRect(); const total=sc.offsetHeight - vh; const p=Math.min(1,Math.max(0,(-r.top)/(total||1))); const scenes=sc.querySelectorAll(".as-scene"); const n=scenes.length; const idx=Math.min(n-1,Math.floor(p*n + 0.00001)); scenes.forEach((el,i)=>{ el.style.opacity=i===idx?"1":"0"; el.style.transform=i===idx?"scale(1)":"scale(1.05)"; }); }
+  }
+
+  add = (id) => this.setState(s => ({ cart:{ ...s.cart, [id]:(s.cart[id]||0)+1 }, cartOpen:true }));
+  addQty = (id,n) => this.setState(s => ({ cart:{ ...s.cart, [id]:(s.cart[id]||0)+n }, cartOpen:true }));
+  inc = (id) => this.setState(s => ({ cart:{ ...s.cart, [id]:(s.cart[id]||0)+1 } }));
+  dec = (id) => this.setState(s => { const q=(s.cart[id]||0)-1; const cart={...s.cart}; if(q<=0) delete cart[id]; else cart[id]=q; return {cart}; });
+  remove = (id) => this.setState(s => { const cart={...s.cart}; delete cart[id]; return {cart}; });
+  toggleWish = (id) => this.setState(s => { const w={...s.wishlist}; if(w[id]) delete w[id]; else w[id]=true; return {wishlist:w}; });
+  toggleWishStyling = (id) => this.setState(s => { const w={...s.wishStyling}; if(w[id]) delete w[id]; else w[id]=true; return {wishStyling:w}; });
+  viewProduct = (id) => this.nav("product", { productId:id, pdpQty:1, pdpSize:"M", pdpColor:null, accordionOpen:"details" });
+
+  chipStyle(a){ const b="padding:8px 16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs); border:1px solid var(--border-default);"; return a? b+" background:var(--color-ink); color:var(--color-white); border-color:var(--color-ink);" : b+" background:none; color:var(--text-secondary);"; }
+  sizeStyle(a){ const b="min-width:46px; text-align:center; padding:11px 14px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); border:1px solid var(--color-ink);"; return a? b+" background:var(--color-ink); color:var(--color-white);" : b+" background:none; color:var(--color-ink);"; }
+  sizeStyle2(sel,so){ const b="min-width:46px; text-align:center; padding:11px 14px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); border:1px solid var(--color-ink);"; if(so) return b+" color:var(--text-tertiary); border-color:var(--border-default); background:none; text-decoration:line-through; cursor:pointer;"; return sel? b+" background:var(--color-ink); color:var(--color-white);" : b+" background:none; color:var(--color-ink);"; }
+  swatchStyle(hex,sel){ return "width:26px; height:26px; border-radius:999px; background:"+hex+"; cursor:pointer; border:1px solid var(--border-default); box-shadow:"+(sel?"0 0 0 2px var(--surface-page), 0 0 0 3px var(--color-ink)":"none")+";"; }
+  badgeStyle(kind){ const b="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); padding:5px 10px; white-space:nowrap;"; return kind==="ink"? b+" background:var(--color-ink); color:var(--color-white);" : b+" background:none; color:var(--text-secondary); border:1px solid var(--border-default);"; }
+
+  productVM(p){ const s=this.state; return { ...p, priceLabel:this.yen(p.price), wishCls:s.wishlist[p.id]?"is-active":"", add:()=>this.add(p.id), toggleWish:()=>this.toggleWish(p.id), open:()=>this.viewProduct(p.id) }; }
+
+  renderVals(){
+    const s=this.state;
+
+    // ---- Tweak props (expressive, reshape the whole feel) ----
+    const gridTone = this.props.gridTone ?? "Hairline";
+    const imagery  = this.props.imagery  ?? "Colour";
+    const spacing  = this.props.spacing  ?? "Standard";
+    const mood     = this.props.mood     ?? "Brutalist";
+    let rootVars = "";
+    if (gridTone==="Ink") rootVars += "--border-default:var(--color-ink);";
+    else if (gridTone==="Bare") rootVars += "--border-default:transparent;";
+    if (spacing==="Compact") rootVars += "--section-y:52px;--page-gutter:22px;";
+    else if (spacing==="Gallery") rootVars += "--section-y:132px;--page-gutter:60px;";
+    let rootClass = "";
+    if (imagery==="Monochrome") rootClass += "as-mono ";
+    else if (imagery==="High contrast") rootClass += "as-contrast ";
+    if (mood==="Refined") rootClass += "as-soft ";
+    else if (mood==="Brutalist") rootClass += "as-brutal ";
+
+    const ids=Object.keys(s.cart);
+    const cartCount=ids.reduce((n,id)=>n+s.cart[id],0);
+    const subtotal=ids.reduce((sum,id)=>sum+(this.catalog.find(p=>p.id===id).price*s.cart[id]),0);
+    const shipping = subtotal>=30000||subtotal===0 ? 0 : 900;
+    const couponMap={WINTER10:0.10, ARCHIVE5:0.05};
+    const cp=s.coupon;
+    const discount = cp&&cp.valid ? Math.round(subtotal*cp.rate) : 0;
+    const grandTotal = Math.max(0, subtotal - discount) + shipping;
+    const freeRemain = Math.max(0, 30000 - subtotal);
+    const wishIds=Object.keys(s.wishlist);
+
+    const products=this.catalog.map(p=>this.productVM(p));
+    const catFilter=s.collectionCat;
+    const collectionProducts=this.catalog.filter(p=>catFilter==="all"?true:p.cat.toLowerCase()===catFilter).map(p=>this.productVM(p));
+    const cats=["all","apparel","outerwear","hardware"];
+    const catChips=cats.map(c=>({ label:c==="all"?"All":c, style:this.chipStyle(catFilter===c), go:()=>this.setState({collectionCat:c}) }));
+    const collectionTitles={all:"All Pieces",apparel:"Apparel",outerwear:"Outerwear",hardware:"Hardware"};
+
+    const cartItems=ids.map(id=>{ const p=this.catalog.find(x=>x.id===id); return { ...p, qty:s.cart[id], priceLabel:this.yen(p.price), lineLabel:this.yen(p.price*s.cart[id]), inc:()=>this.inc(id), dec:()=>this.dec(id), remove:()=>this.remove(id) }; });
+    const wishItems=wishIds.map(id=>this.productVM(this.catalog.find(p=>p.id===id)));
+
+    const prod=this.catalog.find(p=>p.id===s.productId)||this.catalog[0];
+    const sizeKeys=Object.keys(prod.sizeStock||{XS:5,S:5,M:5,L:5,XL:5});
+    const selSize=s.pdpSize;
+    const selStock=(prod.sizeStock||{})[selSize] ?? 5;
+    const sizes=sizeKeys.map(sz=>{ const st=(prod.sizeStock||{})[sz]; const so=st===0; return { label:sz, style:this.sizeStyle2(selSize===sz,so), select:()=>this.setState({pdpSize:sz}) }; });
+    const firstColor=(prod.colors&&prod.colors[0]&&prod.colors[0].name)||"";
+    const selColor=s.pdpColor||firstColor;
+    const colors=(prod.colors||[]).map(c=>({ name:c.name, style:this.swatchStyle(c.hex,selColor===c.name), select:()=>this.setState({pdpColor:c.name}) }));
+    const totalStock=Object.values(prod.sizeStock||{}).reduce((a,b)=>a+b,0);
+    const badges=[];
+    if(totalStock===0) badges.push({label:"再入荷通知受付中",style:this.badgeStyle("ghost")});
+    else { if(prod.arrivedToday) badges.push({label:"本日入荷",style:this.badgeStyle("ink")}); if(totalStock<=5) badges.push({label:"残りわずか",style:this.badgeStyle("ink")}); if(totalStock>5&&!prod.arrivedToday) badges.push({label:"在庫あり",style:this.badgeStyle("ghost")}); }
+    let stockLine, stockDot;
+    if(selStock===0){ stockLine="選択中のサイズは在庫切れです"; stockDot="var(--text-tertiary)"; }
+    else if(selStock<=3){ stockLine="残りわずか — 残り"+selStock+"点"; stockDot="var(--color-ink)"; }
+    else { stockLine="在庫あり — お届け可能"; stockDot="#8fb98f"; }
+    const isMember=s.member;
+    const memberPrice=Math.round(prod.price*0.9/100)*100;
+    const restockKey=prod.id+"_"+selSize;
+    const restockDone=!!s.restock[restockKey];
+    const reviewCounts={tee:128,parka:64,denim:92,bangle:41};
+    const accItems=[
+      {key:"details",title:"Details & Fit",body:prod.desc},
+      {key:"materials",title:"Materials & Care",body:"Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme."},
+      {key:"shipping",title:"Shipping & Returns",body:"Free express shipping on orders over ¥30,000. 30-day returns on unworn pieces with tags attached."},
+    ].map(a=>({ title:a.title, body:a.body, open:s.accordionOpen===a.key, sign:s.accordionOpen===a.key?"–":"+", toggle:()=>this.setState(st=>({accordionOpen:st.accordionOpen===a.key?null:a.key})) }));
+    const pdp={
+      ...prod, priceLabel:this.yen(prod.price), qty:s.pdpQty, sizes, colors, accordion:accItems,
+      starsStr:"★★★★☆", reviewCount:reviewCounts[prod.id]||40,
+      badges, stockLine, stockDot, selectedColor:selColor,
+      isMember, priceStrike:isMember?"text-decoration:line-through; color:var(--text-tertiary); font-size:var(--fs-md);":"", memberPriceLabel:this.yen(memberPrice),
+      memberBanner:"border:1px solid "+(isMember?"var(--color-ink)":"var(--border-default)")+"; background:"+(isMember?"var(--surface-subtle)":"transparent")+"; padding:var(--space-4); display:flex; flex-direction:column; gap:var(--space-2); cursor:pointer;",
+      memberDot:isMember?"#8fb98f":"var(--text-tertiary)",
+      memberTitle:isMember?"あなたは会員価格対象です":"ゲスト表示中",
+      memberDesc:isMember?"ゴールド会員 — 10% OFF 適用中 / 保有クーポン利用可":"タップで会員価格をプレビュー（ゴールド会員 10% OFF）",
+      toggleMember:()=>this.setState(st=>({member:!st.member})),
+      purchasable:selStock>0, soldOut:selStock===0,
+      restockIdle:!restockDone, restockDone, notifyEmail:s.notifyEmail,
+      onNotify:(e)=>this.setState({notifyEmail:e.target.value}),
+      submitRestock:()=>this.setState(st=>({restock:{...st.restock,[restockKey]:true}})),
+      qtyInc:()=>this.setState(st=>({pdpQty:st.pdpQty+1})), qtyDec:()=>this.setState(st=>({pdpQty:Math.max(1,st.pdpQty-1)})), addToCart:()=>this.addQty(prod.id,s.pdpQty),
+    };
+    const relatedProducts=this.catalog.filter(p=>p.id!==prod.id&&p.cat===prod.cat).concat(this.catalog.filter(p=>p.id!==prod.id&&p.cat!==prod.cat)).slice(0,4).map(p=>this.productVM(p));
+    const fbtCarousel=this.catalog.map(p=>this.productVM(p));
+
+    const articles=this.articlesData.map(a=>({ ...a, open:()=>this.nav("article",{articleId:a.id}) }));
+    const art0=this.articlesData.find(a=>a.id===s.articleId)||this.articlesData[0];
+    const artProducts=(art0.products||[]).map(pid=>this.productVM(this.catalog.find(p=>p.id===pid)));
+    const art={ ...art0, products:artProducts, hasProducts:artProducts.length>0 };
+
+    const goCat=(c)=>()=>this.nav("collection",{collectionCat:c});
+    const shopMenu=[{label:"All Pieces",go:goCat("all")},{label:"Apparel",go:goCat("apparel")},{label:"Outerwear",go:goCat("outerwear")},{label:"Hardware",go:goCat("hardware")}];
+    const navItems=[
+      {label:"New",key:"c-all",go:goCat("all"),menu:shopMenu},
+      {label:"Apparel",key:"c-apparel",go:goCat("apparel"),menu:shopMenu},
+      {label:"Styling",key:"styling",go:()=>this.nav("styling"),menu:[{label:"All Staff Styling",go:()=>this.nav("styling")},{label:"Saved Looks",go:()=>this.nav("wishlist")}]},
+      {label:"Editorial",key:"editorial",go:()=>this.nav("editorial"),menu:[{label:"The Journal",go:()=>this.nav("editorial")},{label:"On Honest Materials",go:()=>this.nav("article",{articleId:"materials"})},{label:"The Long Archive",go:()=>this.nav("article",{articleId:"construction"})},{label:"Repair, Not Replace",go:()=>this.nav("article",{articleId:"care"})}]},
+      {label:"About",key:"about",go:()=>this.nav("about"),menu:[{label:"Our Story",go:()=>this.nav("about")},{label:"History",go:()=>this.nav("about")},{label:"Materials",go:()=>this.nav("about")},{label:"Stockists",go:()=>this.nav("about")}]},
+    ].map(n=>({ ...n, hasMenu:!!(n.menu&&n.menu.length), activeClass:((n.key==="editorial"&&s.view==="editorial")||(n.key==="about"&&s.view==="about")||(n.key==="styling"&&(s.view==="styling"||s.view==="stylingDetail"))||(n.key.startsWith("c-")&&s.view==="collection"))?"is-active":"" }));
+
+    const footerCols=[
+      {title:"Shop",links:[{label:"New Arrivals",go:()=>this.nav("collection",{collectionCat:"all"})},{label:"Apparel",go:()=>this.nav("collection",{collectionCat:"apparel"})},{label:"Outerwear",go:()=>this.nav("collection",{collectionCat:"outerwear"})},{label:"Hardware",go:()=>this.nav("collection",{collectionCat:"hardware"})}]},
+      {title:"Studio",links:[{label:"About",go:()=>this.nav("about")},{label:"Editorial",go:()=>this.nav("editorial")},{label:"Styling",go:()=>this.nav("styling")},{label:"Wishlist",go:()=>this.nav("wishlist")}]},
+      {title:"Support",links:[{label:"Cart",go:()=>this.nav("cart")},{label:"Shipping",go:()=>this.nav("about")},{label:"Returns",go:()=>this.nav("about")},{label:"Contact",go:()=>this.nav("about")}]},
+    ];
+
+    const stylingVM=(st)=>({ ...st, wishCls:s.wishStyling[st.id]?"is-active":"", itemCount:st.items.length, toggleWish:()=>this.toggleWishStyling(st.id), open:()=>this.nav("stylingDetail",{stylingId:st.id}) });
+    const stylings=this.stylingsData.map(stylingVM);
+    const wishStyleIds=Object.keys(s.wishStyling);
+    const wishStylingItems=wishStyleIds.map(id=>stylingVM(this.stylingsData.find(x=>x.id===id)));
+    const curStyling=this.stylingsData.find(x=>x.id===s.stylingId)||this.stylingsData[0];
+    const styling={ ...curStyling, items:curStyling.items.map(pid=>this.productVM(this.catalog.find(p=>p.id===pid))) };
+    const wishTab=s.wishTab||"products";
+    const tabStyle=(a)=>{ const b="padding-bottom:var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); margin-bottom:-1px;"; return a? b+" color:var(--color-ink); border-bottom:2px solid var(--color-ink);" : b+" color:var(--text-tertiary); border-bottom:2px solid transparent;"; };
+
+    const drawerStyle=["position:fixed","top:0","right:0","bottom:0","width:420px","max-width:92vw","background:var(--surface-page)","z-index:95","display:flex","flex-direction:column","box-shadow:var(--shadow-drawer)","transition:transform var(--dur-drawer) var(--ease-standard)","transform:translateX("+(s.cartOpen?"0":"100%")+")"].join(";");
+
+    return {
+      rootVars, rootClass,
+      navItems, footerCols, products,
+      pillars:[
+        {no:"01",title:"Considered Materials",body:"Heavyweight organic cottons, coated technical shells and recycled hardware — sourced for longevity, not season."},
+        {no:"02",title:"Archival Construction",body:"Reinforced seams, raw hems and pattern work refined over multiple production cycles in our Tokyo studio."},
+        {no:"03",title:"Care & Repair",body:"Every piece is backed by our lifetime repair programme. Bring it in, keep it longer, waste nothing."},
+      ],
+      isHome:s.view==="home", isCollection:s.view==="collection", isProduct:s.view==="product", isEditorial:s.view==="editorial", isArticle:s.view==="article", isAbout:s.view==="about", isCartPage:s.view==="cart", isWishlist:s.view==="wishlist",
+      collectionProducts, catChips, collectionTitle:collectionTitles[catFilter]||"All Pieces", collectionDesc:"Considered garments and objects, archived for the long term. Filter the release below.", collectionCount:collectionProducts.length,
+      pdp, relatedProducts, articles, art,
+      goAbout:()=>this.nav("about"),
+      hashtags:[{label:"#秋コーデ",go:()=>this.nav("styling")},{label:"#オフィスカジュアル",go:()=>this.nav("styling")},{label:"#モノトーン",go:()=>this.nav("styling")},{label:"#UNISEX",go:()=>this.nav("styling")}],
+      categoryTiles:[
+        {label:"Apparel", img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=900&auto=format&fit=crop", go:goCat("apparel")},
+        {label:"Outerwear", img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=900&auto=format&fit=crop", go:goCat("outerwear")},
+        {label:"Hardware", img:"https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=900&auto=format&fit=crop", go:goCat("hardware")},
+        {label:"View all", img:"https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=900&auto=format&fit=crop", go:goCat("all")},
+      ],
+      ranking:this.catalog.map((p,i)=>({ ...this.productVM(p), rank:String(i+1).padStart(2,"0") })),
+      instagram:["https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?q=80&w=600&auto=format&fit=crop","https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=600&auto=format&fit=crop","https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?q=80&w=600&auto=format&fit=crop","https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?q=80&w=600&auto=format&fit=crop","https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=600&auto=format&fit=crop","https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=600&auto=format&fit=crop"],
+      wishItems, hasWish:wishIds.length>0, wishCount:wishIds.length, wishEmpty:wishIds.length===0,
+      stylings, styling, isStyling:s.view==="styling", isStylingDetail:s.view==="stylingDetail", goStyling:()=>this.nav("styling"),
+      wishStylingItems, wishStylingCount:wishStyleIds.length, hasWishStyling:wishStyleIds.length>0, wishStylingEmpty:wishStyleIds.length===0,
+      aboutChapters:[
+        {no:"Chapter 01",title:"The Cloth First",img:"https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=1900&auto=format&fit=crop",body:"Every release begins with the material, not the calendar. We weigh, wash, and wear fabric for weeks before a pattern is cut."},
+        {no:"Chapter 02",title:"Built To Last",img:"https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1900&auto=format&fit=crop",body:"Reinforced seams, raw hems, cold-rolled hardware. Construction refined over multiple production cycles in our Tokyo studio."},
+        {no:"Chapter 03",title:"Small & Numbered",img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1900&auto=format&fit=crop",body:"Each run is documented and numbered — a physical archive of everything we have made. A working reference, not nostalgia."},
+        {no:"Chapter 04",title:"Kept, Not Replaced",img:"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1900&auto=format&fit=crop",body:"A lifetime repair programme keeps garments in service. Buy less, keep longer, waste nothing."},
+      ],
+      aboutStats:[ {num:"2019",label:"Founded — Tokyo"}, {num:"140+",label:"Numbered releases"}, {num:"6",label:"Global stockists"}, {num:"∞",label:"Lifetime repairs"} ],
+      aboutTimeline:[
+        {year:"2019",title:"The First Cut",body:"ARCHIVES opens as a two-person studio in Daikanyama with a single heavyweight tee."},
+        {year:"2021",title:"Technical Outerwear",body:"The coated technical parka launches, defining the studio's approach to weatherproof construction."},
+        {year:"2023",title:"The Repair Programme",body:"A lifetime repair service is introduced across every category, backed by the studio archive."},
+        {year:"2024",title:"Hardware",body:"Recycled sterling silver objects join the line — bangles, rings, and signets."},
+        {year:"2026",title:"Raw Structure No. 01",body:"The current seasonal edit — a study in restraint across apparel, outerwear, and hardware."},
+      ],
+      aboutMaterials:[
+        {name:"Organic Cotton",desc:"240gsm loomed heavyweight, garment-dyed and pre-shrunk to hold its shape.",img:"https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1200&auto=format&fit=crop"},
+        {name:"Technical Shell",desc:"Coated cotton with storm-sealed seams and a matte, unbranded finish.",img:"https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1200&auto=format&fit=crop"},
+        {name:"Recycled Silver",desc:"Reclaimed sterling silver, brushed and unpolished, made to patina with wear.",img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop"},
+      ],
+      wishTab, setWishProducts:()=>this.setState({wishTab:"products"}), setWishStylings:()=>this.setState({wishTab:"stylings"}), showWishProducts:wishTab==="products", showWishStylings:wishTab==="stylings", wishTabProdStyle:tabStyle(wishTab==="products"), wishTabStyleStyle:tabStyle(wishTab==="stylings"),
+      goHome:()=>this.nav("home"), goCollection:()=>this.nav("collection",{collectionCat:"all"}), goEditorial:()=>this.nav("editorial"), goWishlist:()=>this.nav("wishlist"), goCartPage:()=>this.nav("cart"),
+      cartOpen:s.cartOpen, searchOpen:s.searchOpen,
+      openCart:()=>this.setState({cartOpen:true}), closeCart:()=>this.setState({cartOpen:false}), toggleSearch:()=>this.setState(st=>({searchOpen:!st.searchOpen})),
+      menuOpen:s.menuOpen, toggleMenu:()=>this.setState(st=>({menuOpen:!st.menuOpen})),
+      cartCount, hasItems:cartCount>0, cartEmpty:cartCount===0, cartItems,
+      subtotalLabel:this.yen(subtotal), shippingLabel:shipping===0?"Free":this.yen(shipping), totalLabel:this.yen(grandTotal),
+      fbtCarousel,
+      couponInput:s.couponInput, onCoupon:(e)=>this.setState({couponInput:e.target.value}),
+      applyCoupon:()=>this.setState(st=>{ const code=(st.couponInput||"").trim().toUpperCase(); const rate=couponMap[code]; return { coupon:{code, rate:rate||0, valid:!!rate} }; }),
+      couponMsg: cp? (cp.valid? cp.code+" 適用 — "+Math.round(cp.rate*100)+"% OFF" : "コードが無効です") : "",
+      hasDiscount:discount>0, discountLabel:this.yen(discount),
+      freeShipMsg: freeRemain>0? "あと "+this.yen(freeRemain)+" で送料無料" : "送料無料の対象です",
+      freeShipPct: Math.min(100, subtotal/30000*100).toFixed(0)+"%",
+      drawerStyle,
+    };
+  }
+}
+</script>
+</body>
+</html>

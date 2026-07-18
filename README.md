@@ -1,0 +1,46 @@
+# ARCHIVES Studio — Shopify Theme
+
+Claude Design「Archives Storefront」を Shopify テーマ（Liquid, skeletonから自作）として
+実装したファッションEC ショーケース。
+
+- **ストア**: `mystudio-fashion-ec.myshopify.com`
+- **デザイン正典**: `design-reference/`（元デザインHTML＋トークン）
+- **実装スペック / スプリント計画**: `docs/spec.md`
+
+## 構成
+
+| ディレクトリ | 内容 |
+|---|---|
+| `layout/` | `theme.liquid`（共通レイアウト）, `password.liquid` |
+| `sections/` | header/footer グループ、announcement-bar、header、footer、placeholder |
+| `snippets/` | cart-drawer ほか |
+| `assets/` | `archives.css`（トークン＋ベース＋コンポーネント）, `archives.js`（グローバル挙動） |
+| `config/` | `settings_schema.json`, `settings_data.json` |
+| `locales/` | `en.default.json`, `ja.json` |
+| `templates/` | 各ページテンプレート（JSON/Liquid） |
+
+## 開発
+
+```bash
+# ストアに接続してローカルプレビュー
+shopify theme dev --store mystudio-fashion-ec.myshopify.com
+
+# 未公開テーマとしてアップロード
+shopify theme push --unpublished --store mystudio-fashion-ec.myshopify.com
+```
+
+Theme Check は Shopify MCP `validate_theme` で全ファイル検証済み。
+
+## 進捗
+
+- [x] S0 基盤（トークン / レイアウト / ヘッダー / フッター / カートドロワー / グローバルJS）
+- [ ] S1 ホーム
+- [ ] S2 コレクション / PLP
+- [ ] S3 商品詳細 / PDP
+- [ ] S4 カート
+- [ ] S5 ウィッシュリスト
+- [ ] S6 スタイリング
+- [ ] S7 ジャーナル / 記事
+- [ ] S8 About
+- [ ] S9 検索
+- [ ] S10 実データ接続 & 会員価格 & QA
