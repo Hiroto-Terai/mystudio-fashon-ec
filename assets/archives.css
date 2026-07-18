@@ -143,6 +143,17 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 .as-wish.is-active svg { fill: var(--color-ink); }
 .as-input { border: none; outline: none; background: none; font: var(--text-body-sm); letter-spacing: var(--tracking-wide); text-transform: uppercase; }
 
+/* --- Collection filter/sort + pagination (Sprint 2) --- */
+.as-filter-group > summary { list-style: none; }
+.as-filter-group > summary::-webkit-details-marker,
+.as-filter-group > summary::marker { display: none; content: ""; }
+.as-filter-group > summary:hover { opacity: var(--hover-opacity); }
+.as-pagination .pagination { display: flex; align-items: center; gap: var(--space-2); font: var(--text-mono); text-transform: uppercase; letter-spacing: var(--tracking-wide); font-size: var(--fs-xs); }
+.as-pagination .pagination a,
+.as-pagination .pagination span.page { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px; padding: 0 var(--space-2); border: 1px solid var(--border-default); }
+.as-pagination .pagination span.page.current { background: var(--color-ink); color: var(--color-white); border-color: var(--color-ink); }
+.as-pagination .pagination a:hover { opacity: var(--hover-opacity); }
+
 /* --- Scroll-driven & keyframe animations --- */
 @keyframes asFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes asRise { from { opacity: 0; transform: translateY(42px); } to { opacity: 1; transform: none; } }
@@ -202,3 +213,37 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-mobmenu { display: none; }
 }
 .as-logo { white-space: nowrap; }
+
+/* --- PDP (Sprint 3) --- */
+.as-badge { font: var(--text-mono); font-size: 10px; text-transform: uppercase; letter-spacing: var(--tracking-wide); padding: 5px 10px; white-space: nowrap; }
+.as-badge-ink { background: var(--color-ink); color: var(--color-white); }
+.as-badge-ghost { background: none; color: var(--text-secondary); border: 1px solid var(--border-default); }
+
+[data-pdp-price].is-strike { text-decoration: line-through; color: var(--text-tertiary); font-size: var(--fs-md); }
+
+.as-member-banner { border: 1px solid var(--border-default); background: transparent; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.as-member-banner.is-active { border-color: var(--color-ink); background: var(--surface-subtle); }
+.as-member-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--text-tertiary); display: inline-block; }
+.as-member-dot.is-active { background: #8fb98f; }
+
+.as-swatch { width: 26px; height: 26px; border-radius: 999px; border: 1px solid var(--border-default); cursor: pointer; padding: 0; }
+.as-swatch.is-selected { box-shadow: 0 0 0 2px var(--surface-page), 0 0 0 3px var(--color-ink); }
+.as-swatch.is-soldout { opacity: 0.35; cursor: not-allowed; }
+
+.as-option-btn { min-width: 46px; text-align: center; padding: 11px 14px; font: var(--text-label); text-transform: uppercase; letter-spacing: var(--tracking-wide); font-size: var(--fs-xs); border: 1px solid var(--color-ink); background: none; color: var(--color-ink); cursor: pointer; }
+.as-option-btn.is-selected { background: var(--color-ink); color: var(--color-white); }
+.as-option-btn.is-soldout { color: var(--text-tertiary); border-color: var(--border-default); background: none; text-decoration: line-through; cursor: pointer; }
+
+[data-qty-input]::-webkit-inner-spin-button,
+[data-qty-input]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+[data-qty-input] { -moz-appearance: textfield; appearance: textfield; }
+
+.as-pdp-accordion > summary { list-style: none; cursor: pointer; }
+.as-pdp-accordion > summary::-webkit-details-marker,
+.as-pdp-accordion > summary::marker { display: none; content: ""; }
+.as-pdp-accordion > summary:hover { opacity: var(--hover-opacity); }
+.as-pdp-accordion .as-accordion-sign::after { content: "+"; }
+.as-pdp-accordion[open] .as-accordion-sign::after { content: "\2013"; }
+
+.as-size-chart-modal.is-open { display: flex !important; }
+

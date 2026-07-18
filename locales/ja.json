@@ -19,7 +19,57 @@
     "product": {
       "add_to_cart": "カートに追加",
       "quick_add": "クイック追加",
-      "sold_out": "売り切れ"
+      "sold_out": "売り切れ",
+      "back_to_collection": "コレクションに戻る",
+      "badge_restock": "再入荷通知受付中",
+      "badge_new": "新着",
+      "badge_low_stock": "残りわずか",
+      "badge_in_stock": "在庫あり",
+      "reviews": "件のレビュー",
+      "size_chart": "サイズ表",
+      "size_chart_heading": "サイズ表",
+      "size_chart_close": "閉じる",
+      "member_title_guest": "ゲスト表示中",
+      "member_title_member": "あなたは会員価格対象です",
+      "member_desc_guest": "タップで会員価格をプレビュー（ゴールド会員 10% OFF）",
+      "member_desc_member": "ゴールド会員 — 10% OFF 適用中 / 保有クーポン利用可",
+      "stock_available": "在庫あり — お届け可能",
+      "stock_unavailable": "選択中のサイズは在庫切れです",
+      "stock_low": "残りわずか — 残り{qty}点",
+      "restock_notify_heading": "再入荷通知を受け取る",
+      "restock_email_placeholder": "メールアドレス",
+      "restock_submit": "送信",
+      "restock_done": "入荷次第メールでお知らせします。",
+      "details_fit": "Details & Fit",
+      "materials_care": "Materials & Care",
+      "materials_care_default": "Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme.",
+      "shipping_returns": "Shipping & Returns",
+      "shipping_returns_default": "Free express shipping on orders over ¥30,000. 30-day returns on unworn pieces with tags attached.",
+      "details_fit_default": "アーカイブ品質の素材を用い、日常使いしやすいリラックスフィットに仕立てました。",
+      "fbt_heading": "よく一緒に購入されています",
+      "related_heading": "こちらもおすすめ",
+      "no_image": "画像がありません"
     }
+  },
+  "collection": {
+    "eyebrow": "コレクション",
+    "items": "点",
+    "sort": {
+      "label": "並び替え"
+    },
+    "filters": {
+      "price_from": "価格（下限）",
+      "price_to": "価格（上限）",
+      "apply": "適用",
+      "clear_all": "フィルターを解除",
+      "no_results": "該当する商品が見つかりませんでした。"
+    },
+    "pagination": {
+      "label": "ページ送り"
+    }
+  },
+  "list_collections": {
+    "eyebrow": "コレクション",
+    "heading": "すべてのコレクション"
   }
 }

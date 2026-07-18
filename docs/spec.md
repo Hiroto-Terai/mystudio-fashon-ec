@@ -61,6 +61,11 @@ Claude Design「Archives Storefront.dc.html」を Shopify テーマ（Liquid, sk
 - デザイントークンのみ使用（ハードコード色/サイズを新規に増やさない）。
 - evaluator が Playwright でプレビューURLを操作し、当該スプリント機能の動作を確認。
 
+## 持ち越し課題（Known issues）
+- **[S4で対応] quick-add後のカートドロワーがサーバー初期描画のまま**: `archives.js` の `bindQuickAdd()` は `/cart/add.js` 後にバッジ更新＋ドロワー開のみで、ドロワー本文（明細/小計/送料バー）を再描画しない。S4で cart-drawer をセクション化し Section Rendering API（`?sections=`）で再取得・差し替える。
+- チップリンク先コレクション（`/collections/apparel` 等）は未作成のため404。実コレクション作成はマーチャンダイジング側タスク（S10 or 手動）。
+- ストアには Shopify サンプル商品13点が存在（スノーボード等）。S3 PDP はこの実商品で検証可能。最終的なブランド商材への差し替えはS10/手動。
+
 ## 反映フロー
 - git: `main` へ直接コミットせず feature ブランチ→PR（CLAUDE.md準拠）。初回のみ scaffold を main に。
 - Shopify: `shopify theme push --unpublished`（未公開）。公開はユーザー手動。
