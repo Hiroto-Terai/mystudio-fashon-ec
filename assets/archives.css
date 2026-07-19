@@ -190,7 +190,7 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-styletile { flex: 0 0 64% !important; }
 }
 @media (max-width: 560px) {
-  .as-grid-4 { grid-template-columns: 1fr !important; }
+  .as-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
   .as-grid-3 { grid-template-columns: 1fr !important; }
   .as-footer-grid { grid-template-columns: 1fr !important; }
   .as-logo { font-size: var(--fs-sm) !important; letter-spacing: 0.14em !important; }
