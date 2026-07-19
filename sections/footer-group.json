@@ -5,7 +5,7 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "col-shop": {
+        "fcol-shop": {
           "type": "menu_column",
           "settings": {
             "heading": "Shop",
@@ -19,7 +19,7 @@
             "url_4": "/collections/hardware"
           }
         },
-        "col-studio": {
+        "fcol-studio": {
           "type": "menu_column",
           "settings": {
             "heading": "Studio",
@@ -31,7 +31,7 @@
             "url_3": "/blogs/journal"
           }
         },
-        "col-support": {
+        "fcol-support": {
           "type": "menu_column",
           "settings": {
             "heading": "Support",
@@ -46,9 +46,15 @@
           }
         }
       },
-      "block_order": ["col-shop", "col-studio", "col-support"],
+      "block_order": [
+        "fcol-shop",
+        "fcol-studio",
+        "fcol-support"
+      ],
       "settings": {}
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
