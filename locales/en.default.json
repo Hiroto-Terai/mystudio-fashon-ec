@@ -46,6 +46,22 @@
       "wishlist": "Wishlist",
       "account": "Account",
       "login": "Log in"
+    },
+    "countdown": {
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "ended": "This sale has ended"
+    },
+    "newsletter_popup": {
+      "eyebrow": "First order",
+      "heading": "10% off your first order",
+      "body": "Sign up with your email and we'll send you a 10% off coupon for your first order.",
+      "email_placeholder": "Email address",
+      "submit": "Sign up",
+      "close": "Close",
+      "success": "Thanks for signing up — check your email for the coupon."
     }
   },
   "products": {
@@ -93,7 +109,15 @@
       "details_fit_default": "A considered piece built from archive-grade materials, cut for a relaxed, everyday fit.",
       "fbt_heading": "Frequently bought together",
       "related_heading": "You may also like",
-      "no_image": "No image available"
+      "no_image": "No image available",
+      "badge_early_access": "Early access",
+      "badge_early_access_card": "Early",
+      "early_access_member_title": "Member early access is live",
+      "early_access_member_desc": "You can purchase this now",
+      "early_access_guest_title": "Early access is member-only",
+      "early_access_guest_desc": "Become a member to buy early",
+      "early_access_login": "Log in",
+      "early_access_register": "Create account"
     }
   },
   "collection": {

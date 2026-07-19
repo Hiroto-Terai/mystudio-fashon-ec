@@ -37,6 +37,23 @@
     ]
   },
   {
+    "name": "Newsletter popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "popup_enabled",
+        "label": "Show first-visit newsletter popup",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "popup_delay",
+        "label": "Delay before showing (seconds)",
+        "default": 5
+      }
+    ]
+  },
+  {
     "name": "Analytics",
     "settings": [
       {

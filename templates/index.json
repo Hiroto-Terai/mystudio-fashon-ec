@@ -10,6 +10,14 @@
         "fallback_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop"
       }
     },
+    "sale-countdown": {
+      "type": "sale-countdown",
+      "settings": {
+        "heading": "WINTER SALE — 会員限定 10% OFF",
+        "end_date": "2026-08-31T23:59:59",
+        "link_label": "セールを見る"
+      }
+    },
     "category-tiles": {
       "type": "category-tiles",
       "settings": {
@@ -63,6 +71,14 @@
         "eyebrow": "Featured / FW26",
         "heading": "コア セレクション",
         "collection": "fw26-core"
+      }
+    },
+    "early-access": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Members only",
+        "heading": "会員先行販売 / Early Access",
+        "collection": "early-access"
       }
     },
     "ranking": {
@@ -322,8 +338,10 @@
   },
   "order": [
     "hero",
+    "sale-countdown",
     "category-tiles",
     "featured-collection",
+    "early-access",
     "ranking",
     "staff-styling",
     "brand-intro",

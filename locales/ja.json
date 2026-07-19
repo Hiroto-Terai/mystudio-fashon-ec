@@ -46,6 +46,22 @@
       "wishlist": "ウィッシュリスト",
       "account": "マイページ",
       "login": "ログイン"
+    },
+    "countdown": {
+      "days": "日",
+      "hours": "時間",
+      "minutes": "分",
+      "seconds": "秒",
+      "ended": "セールは終了しました"
+    },
+    "newsletter_popup": {
+      "eyebrow": "初回限定",
+      "heading": "初回登録で10%OFF",
+      "body": "メールアドレスをご登録いただくと、初回のお買い物でお使いいただける10%OFFクーポンをお送りします。",
+      "email_placeholder": "メールアドレス",
+      "submit": "登録する",
+      "close": "閉じる",
+      "success": "ご登録ありがとうございます。クーポンをメールでお送りしました。"
     }
   },
   "products": {
@@ -93,7 +109,15 @@
       "details_fit_default": "アーカイブ品質の素材を用い、日常使いしやすいリラックスフィットに仕立てました。",
       "fbt_heading": "よく一緒に購入されています",
       "related_heading": "こちらもおすすめ",
-      "no_image": "画像がありません"
+      "no_image": "画像がありません",
+      "badge_early_access": "先行販売",
+      "badge_early_access_card": "先行",
+      "early_access_member_title": "会員先行販売中",
+      "early_access_member_desc": "今すぐご購入いただけます",
+      "early_access_guest_title": "会員限定の先行販売です",
+      "early_access_guest_desc": "会員になると先行購入できます",
+      "early_access_login": "ログイン",
+      "early_access_register": "会員登録"
     }
   },
   "collection": {

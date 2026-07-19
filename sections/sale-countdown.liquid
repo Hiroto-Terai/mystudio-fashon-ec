@@ -1,0 +1,65 @@
+{%- comment -%}
+  Sale countdown band: a full-width inverted (ink) bar with a live day/hour/
+  minute/second countdown to `end_date` (ISO string, e.g.
+  2026-08-31T23:59:59). JS (bindCountdown in assets/archives.js) reads
+  data-countdown-to and ticks every second; once it elapses the numbers hide
+  and the "sale has ended" message (data-countdown-ended) is shown instead.
+  Numbers use .as-countdown-num (tabular-nums + a fixed min-width) so the
+  layout doesn't shift as digits change.
+{%- endcomment -%}
+<section
+  class="as-countdown"
+  data-countdown
+  data-countdown-to="{{ section.settings.end_date }}"
+  style="border-bottom:1px solid var(--border-default); background:var(--surface-inverse); color:var(--color-white);"
+>
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); display:flex; align-items:center; justify-content:center; gap:var(--space-8); flex-wrap:wrap; text-align:center;">
+    {%- if section.settings.heading != blank -%}
+      <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);">{{ section.settings.heading }}</span>
+    {%- endif -%}
+
+    <div data-countdown-timer style="display:flex; align-items:baseline; gap:var(--space-4);">
+      <div class="as-countdown-cell">
+        <span class="as-countdown-num" data-countdown-days>00</span>
+        <span class="as-countdown-label">{{ 'general.countdown.days' | t }}</span>
+      </div>
+      <div class="as-countdown-cell">
+        <span class="as-countdown-num" data-countdown-hours>00</span>
+        <span class="as-countdown-label">{{ 'general.countdown.hours' | t }}</span>
+      </div>
+      <div class="as-countdown-cell">
+        <span class="as-countdown-num" data-countdown-minutes>00</span>
+        <span class="as-countdown-label">{{ 'general.countdown.minutes' | t }}</span>
+      </div>
+      <div class="as-countdown-cell">
+        <span class="as-countdown-num" data-countdown-seconds>00</span>
+        <span class="as-countdown-label">{{ 'general.countdown.seconds' | t }}</span>
+      </div>
+    </div>
+
+    <p data-countdown-ended hidden style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white); margin:0;">{{ 'general.countdown.ended' | t }}</p>
+
+    {%- if section.settings.link_label != blank -%}
+      <a
+        href="{{ section.settings.link_url | default: routes.all_products_collection_url }}"
+        class="as-fillbtn as-inv"
+        style="border:1px solid var(--color-white); padding:12px var(--space-6); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-white);"
+      >{{ section.settings.link_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sale countdown",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "WINTER SALE — 会員限定 10% OFF" },
+    { "type": "text", "id": "end_date", "label": "End date (ISO)", "info": "例: 2026-08-31T23:59:59", "default": "2026-08-31T23:59:59" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "セールを見る" },
+    { "type": "url", "id": "link_url", "label": "Link URL" }
+  ],
+  "presets": [
+    { "name": "Sale countdown" }
+  ]
+}
+{% endschema %}

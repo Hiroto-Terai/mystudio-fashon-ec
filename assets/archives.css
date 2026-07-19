@@ -297,3 +297,43 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 .as-article-body ul, .as-article-body ol { padding-left: var(--space-6); }
 .as-article-body li + li { margin-top: var(--space-2); }
 
+/* --- Feature pack 3: early access, FAQ accordion reuses .as-pdp-accordion --- */
+.as-early-access-banner.is-member { border-color: var(--color-ink); }
+
+/* --- Sale countdown --- */
+.as-countdown-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 34px; }
+.as-countdown-num { font: var(--text-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-lg); line-height: var(--lh-none); }
+.as-countdown-label { font: var(--text-mono); font-size: 10px; text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--border-inverse); }
+
+/* --- Newsletter / first-order popup --- */
+.as-popup-scrim {
+  position: fixed; inset: 0; z-index: 140; display: flex; align-items: center; justify-content: center;
+  background: var(--surface-scrim); padding: var(--page-gutter-sm); opacity: 0; cursor: pointer;
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+.as-popup-scrim.is-open { opacity: 1; }
+.as-popup {
+  position: relative; cursor: auto; background: var(--color-white); border: 1px solid var(--border-default);
+  max-width: 440px; width: 100%; transform: translateY(12px); transition: transform var(--dur-base) var(--ease-standard);
+}
+.as-popup-scrim.is-open .as-popup { transform: none; }
+.as-popup-close { position: absolute; top: var(--space-4); right: var(--space-4); background: var(--color-white); }
+@media (prefers-reduced-motion: reduce) {
+  .as-popup-scrim, .as-popup { transition: none; }
+}
+
+/* --- Skeleton loading rows (predictive search suggest panel) --- */
+.as-skeleton { position: relative; overflow: hidden; background: var(--surface-hover); }
+.as-skeleton::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: asShimmer 1.4s ease-in-out infinite;
+}
+@keyframes asShimmer { to { transform: translateX(100%); } }
+.as-skeleton-row { pointer-events: none; }
+.as-skeleton-line { display: block; height: 10px; border-radius: var(--radius-sm); margin-top: 6px; }
+.as-skeleton-line:first-child { margin-top: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .as-skeleton::after { animation: none; }
+}
+

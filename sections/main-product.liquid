@@ -43,6 +43,12 @@
   if customer and customer.tags contains settings.member_tag
     assign is_member = true
   endif
+
+  assign is_early_access = false
+  assign early_access_mf = product.metafields.custom.early_access.value
+  if early_access_mf or product.tags contains 'early-access'
+    assign is_early_access = true
+  endif
   assign member_price_amount = current_variant.price | times: 0.9 | round
   assign member_mf = product.metafields.custom.member_price
   assign is_on_sale = false
@@ -99,6 +105,7 @@
 
       {%- comment -%} Badges (★ inventory-aware) {%- endcomment -%}
       <div style="display:flex; gap:var(--space-2); flex-wrap:wrap; min-height:24px;">
+        {%- if is_early_access -%}<span class="as-badge as-badge-ink">{{ 'products.product.badge_early_access' | t }}</span>{%- endif -%}
         {%- if is_available == false -%}
           <span class="as-badge as-badge-ghost">{{ 'products.product.badge_restock' | t }}</span>
         {%- else -%}
@@ -133,6 +140,24 @@
           <span data-pdp-price class="{% if is_member %}is-strike{% endif %}" style="font-size:var(--fs-xl);">{{ current_variant.price | money }}</span>
           <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{% if member_mf != blank %}{{ member_mf.value | money }}{% else %}{{ member_price_amount | money }}{% endif %}</span>
         </div>
+
+        {%- comment -%} Early access banner (★ member vs guest CTA) {%- endcomment -%}
+        {%- if is_early_access -%}
+          <div class="as-early-access-banner {% if is_member %}is-member{% endif %}" style="border:1px solid var(--border-default); background:var(--surface-subtle); padding:var(--space-4); display:flex; flex-direction:column; gap:var(--space-2);">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">
+              {%- if is_member -%}{{ 'products.product.early_access_member_title' | t }}{%- else -%}{{ 'products.product.early_access_guest_title' | t }}{%- endif -%}
+            </span>
+            <span style="font:var(--text-body-sm); color:var(--text-secondary);">
+              {%- if is_member -%}{{ 'products.product.early_access_member_desc' | t }}{%- else -%}{{ 'products.product.early_access_guest_desc' | t }}{%- endif -%}
+            </span>
+            {%- unless is_member -%}
+              <div style="display:flex; gap:var(--space-4); margin-top:var(--space-1);">
+                <a href="{{ routes.account_login_url }}" class="as-navlink" style="font:var(--text-mono); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'products.product.early_access_login' | t }}</a>
+                <a href="{{ routes.account_register_url }}" class="as-navlink" style="font:var(--text-mono); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'products.product.early_access_register' | t }}</a>
+              </div>
+            {%- endunless -%}
+          </div>
+        {%- endif -%}
 
         {%- comment -%} SNS share (★ X / Facebook / LINE / copy link) {%- endcomment -%}
         {%- assign share_url = shop.url | append: product.url -%}

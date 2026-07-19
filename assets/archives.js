@@ -17,6 +17,9 @@
    restock contact form, cart cross-sell, and coupon codes now redirect
    through Shopify's /discount/<code> URL (real discount, applied server-side)
    instead of a client-computed demo — see bindCoupon below.
+   Feature pack 3: sale countdown (bindCountdown), first-visit newsletter
+   popup (bindNewsletterPopup), and skeleton rows for the predictive search
+   suggest panel while its fetch is in flight (renderSearchSkeleton).
    ============================================================ */
 (function () {
   'use strict';
@@ -134,6 +137,31 @@
     suggest.innerHTML = '';
   }
 
+  /* Skeleton rows shown the instant a fetch starts, so the panel never sits
+     empty/blank while waiting on the network - replaced in-place by
+     renderSearchSuggest() once the response lands. Sized to match the real
+     .as-suggest-product markup (48x48 thumb + two text lines) so there's no
+     layout shift when the skeleton is swapped for real results. */
+  var SEARCH_SKELETON_ROWS = 3;
+  function renderSearchSkeleton(suggest) {
+    var row =
+      '<div class="as-suggest-product as-skeleton-row">' +
+        '<span class="as-suggest-thumb as-skeleton"></span>' +
+        '<span class="as-suggest-info">' +
+          '<span class="as-skeleton as-skeleton-line" style="width:75%;"></span>' +
+          '<span class="as-skeleton as-skeleton-line" style="width:40%;"></span>' +
+        '</span>' +
+      '</div>';
+    var rows = '';
+    for (var i = 0; i < SEARCH_SKELETON_ROWS; i++) { rows += row; }
+    suggest.innerHTML =
+      '<div class="as-suggest-panel">' +
+        '<p class="visually-hidden" role="status" aria-live="polite">' + escapeHtml(suggest.getAttribute('data-loading-text') || '検索中…') + '</p>' +
+        '<div class="as-suggest-group as-suggest-products">' + rows + '</div>' +
+      '</div>';
+    suggest.removeAttribute('hidden');
+  }
+
   function escapeHtml(value) {
     return String(value == null ? '' : value)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -216,9 +244,7 @@
     function fetchSuggestions(query) {
       if (activeController && activeController.abort) activeController.abort();
       activeController = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var loadingText = suggest.getAttribute('data-loading-text') || '検索中…';
-      suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(loadingText) + '</p>';
-      suggest.removeAttribute('hidden');
+      renderSearchSkeleton(suggest);
 
       var url = '/search/suggest.json?q=' + encodeURIComponent(query) +
         '&resources[type]=product,collection,article,page,query' +
@@ -1061,6 +1087,107 @@
     renderAll();
   }
 
+  /* ---------- Sale countdown (sections/sale-countdown.liquid) ----------
+     Reads the ISO end date off data-countdown-to and ticks every second.
+     Purely client-side (no server round trip needed once the page has
+     loaded), so it keeps counting correctly even if the visitor's clock
+     drifts slightly - only the initial target date matters. */
+  function bindCountdown() {
+    qsa('[data-countdown]').forEach(function (root) {
+      if (root.__countdownBound) return;
+      root.__countdownBound = true;
+
+      var target = new Date(root.getAttribute('data-countdown-to')).getTime();
+      if (!target || isNaN(target)) return;
+
+      var timer = qs('[data-countdown-timer]', root);
+      var endedEl = qs('[data-countdown-ended]', root);
+      var daysEl = qs('[data-countdown-days]', root);
+      var hoursEl = qs('[data-countdown-hours]', root);
+      var minutesEl = qs('[data-countdown-minutes]', root);
+      var secondsEl = qs('[data-countdown-seconds]', root);
+      var intervalId = null;
+
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+      function tick() {
+        var diff = target - Date.now();
+        if (diff <= 0) {
+          if (timer) timer.hidden = true;
+          if (endedEl) endedEl.hidden = false;
+          if (intervalId) window.clearInterval(intervalId);
+          return;
+        }
+        var totalSeconds = Math.floor(diff / 1000);
+        var days = Math.floor(totalSeconds / 86400);
+        var hours = Math.floor((totalSeconds % 86400) / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+        if (daysEl) daysEl.textContent = pad(days);
+        if (hoursEl) hoursEl.textContent = pad(hours);
+        if (minutesEl) minutesEl.textContent = pad(minutes);
+        if (secondsEl) secondsEl.textContent = pad(seconds);
+      }
+
+      tick();
+      intervalId = window.setInterval(tick, 1000);
+    });
+  }
+
+  /* ---------- Newsletter / first-order-discount popup (snippets/newsletter-popup.liquid) ----------
+     Shown once, a few seconds after first load, then suppressed forever via
+     a localStorage flag - set as soon as the visitor dismisses it OR submits
+     the form (no need to wait for the redirect back). prefers-reduced-motion
+     is handled in CSS (the .as-popup-scrim/.as-popup transitions are
+     disabled there), so no branching is needed here. */
+  var NEWSLETTER_POPUP_STORAGE_KEY = 'archives:newsletter-popup:dismissed';
+
+  function bindNewsletterPopup() {
+    var popup = qs('[data-newsletter-popup]');
+    if (!popup || popup.__asBound) return;
+    popup.__asBound = true;
+
+    function markDismissed() {
+      try { window.localStorage.setItem(NEWSLETTER_POPUP_STORAGE_KEY, '1'); } catch (e) { /* private mode / storage disabled */ }
+    }
+
+    function close() {
+      popup.classList.remove('is-open');
+      document.body.classList.remove('as-drawer-open');
+      window.setTimeout(function () { popup.setAttribute('hidden', ''); }, DRAWER_CLOSE_DELAY_MS);
+    }
+
+    function open() {
+      popup.removeAttribute('hidden');
+      requestAnimationFrame(function () { popup.classList.add('is-open'); });
+      document.body.classList.add('as-drawer-open');
+    }
+
+    on(popup, 'click', function (e) {
+      if (e.target === popup || e.target.closest('[data-popup-close]')) {
+        markDismissed();
+        close();
+      }
+    });
+    on(document, 'keydown', function (e) {
+      if (e.key === 'Escape' && popup.classList.contains('is-open')) { markDismissed(); close(); }
+    });
+
+    var form = qs('form', popup);
+    if (form) on(form, 'submit', markDismissed);
+
+    /* A server-rendered success state means the form was just submitted
+       (page reloaded after redirect) - don't pop it open again. */
+    if (qs('[data-popup-success]', popup)) { markDismissed(); return; }
+
+    var dismissed = false;
+    try { dismissed = window.localStorage.getItem(NEWSLETTER_POPUP_STORAGE_KEY) === '1'; } catch (e) { /* private mode / storage disabled */ }
+    if (dismissed) return;
+
+    var delaySeconds = parseFloat(popup.getAttribute('data-popup-delay')) || 5;
+    window.setTimeout(open, delaySeconds * 1000);
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -1078,6 +1205,8 @@
     bindSizeChart();
     bindLightbox();
     bindShare();
+    bindCountdown();
+    bindNewsletterPopup();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }
