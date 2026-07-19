@@ -188,6 +188,20 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-pdp-info { padding: var(--space-8) var(--page-gutter) !important; }
   .as-hero > div:last-child { padding: var(--space-10) var(--page-gutter) !important; }
   .as-styletile { flex: 0 0 64% !important; }
+  /* PDP gallery becomes a peek carousel on phones: the next image's left edge
+     stays visible so it reads as "swipe for more". */
+  .as-pdp-gallery {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-right: none !important;
+  }
+  .as-pdp-gallery::-webkit-scrollbar { display: none; }
+  .as-pdp-gallery > * { flex: 0 0 92%; scroll-snap-align: start; }
+  .as-pdp-gallery > :only-child { flex-basis: 100%; }
 }
 @media (max-width: 560px) {
   .as-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
