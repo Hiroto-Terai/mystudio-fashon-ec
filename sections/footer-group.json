@@ -5,9 +5,46 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "col-shop": { "type": "menu_column", "settings": { "title": "Shop" } },
-        "col-studio": { "type": "menu_column", "settings": { "title": "Studio" } },
-        "col-support": { "type": "menu_column", "settings": { "title": "Support" } }
+        "col-shop": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Shop",
+            "label_1": "All Products",
+            "url_1": "/collections/all",
+            "label_2": "Apparel",
+            "url_2": "/collections/apparel",
+            "label_3": "Outerwear",
+            "url_3": "/collections/outerwear",
+            "label_4": "Hardware",
+            "url_4": "/collections/hardware"
+          }
+        },
+        "col-studio": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Studio",
+            "label_1": "About",
+            "url_1": "/pages/about",
+            "label_2": "Styling",
+            "url_2": "/pages/styling",
+            "label_3": "Journal",
+            "url_3": "/blogs/journal"
+          }
+        },
+        "col-support": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Support",
+            "label_1": "Search",
+            "url_1": "/search",
+            "label_2": "Wishlist",
+            "url_2": "/pages/wishlist",
+            "label_3": "Contact",
+            "url_3": "/pages/contact",
+            "label_4": "Shipping & Returns",
+            "url_4": "/pages/shipping-returns"
+          }
+        }
       },
       "block_order": ["col-shop", "col-studio", "col-support"],
       "settings": {}

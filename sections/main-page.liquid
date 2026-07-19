@@ -1,0 +1,39 @@
+{%- comment -%}
+  Generic content page (templates/page.json): page.title + page.content set
+  in the design's readable width (--page-narrow), same treatment as the
+  article body (.as-article-body). Used for simple pages that don't need a
+  dedicated section, e.g. Shipping & Returns.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ page.title }}</h1>
+    </div>
+  </section>
+
+  {%- if page.content != blank -%}
+    <section>
+      <div class="as-article-body" style="max-width:var(--page-narrow); margin:0 auto; padding:0 var(--page-gutter) var(--section-y);">
+        {{ page.content }}
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" }
+  ],
+  "presets": [
+    { "name": "Main page" }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

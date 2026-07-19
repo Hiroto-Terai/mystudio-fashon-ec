@@ -34,6 +34,12 @@
       "coupon_apply": "Apply",
       "coupon_invalid": "Invalid code",
       "coupon_applied": "{{ code }} applied — {{ percent }}% off"
+    },
+    "nav": {
+      "menu": "Menu",
+      "close": "Close menu",
+      "search": "Search",
+      "wishlist": "Wishlist"
     }
   },
   "products": {
@@ -137,5 +143,12 @@
     "comment_submit": "Post comment",
     "comment_pending": "Your comment has been submitted and is awaiting approval.",
     "comment_posted": "Your comment has been posted."
+  },
+  "contact": {
+    "name_label": "Name",
+    "email_label": "Email",
+    "message_label": "Message",
+    "submit": "Send message",
+    "success": "Thanks — we'll get back to you shortly."
   }
 }

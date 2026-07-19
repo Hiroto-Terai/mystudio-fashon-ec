@@ -11,6 +11,9 @@
    Sprint 9: Predictive search — debounced as-you-type fetch against
    /search/suggest.json rendered into the header's search-panel suggest
    dropdown.
+   Follow-up (header redesign): hamburger is now always visible and opens a
+   left-sliding nav drawer (block-driven) instead of toggling an inline
+   mobile menu — see NavDrawer / bindNavDrawer below.
    ============================================================ */
 (function () {
   'use strict';
@@ -20,6 +23,7 @@
     stylings: 'archives:wishlist:stylings'
   };
   var COUPON_KEY = 'archives:coupon';
+  var DRAWER_CLOSE_DELAY_MS = 480; /* matches --dur-drawer, so hidden is set only after the slide-out transition finishes */
   /* Client-side discount demo only: Shopify has no public API to apply a
      real discount code from the storefront without redirecting through
      checkout, so this recalculates and displays the discount locally.
@@ -97,10 +101,8 @@
     });
   }
 
-  /* ---------- Header: search + mobile menu ---------- */
+  /* ---------- Header: search toggle ---------- */
   function bindHeader() {
-    var body = document.body;
-
     qsa('[data-search-toggle]').forEach(function (btn) {
       on(btn, 'click', function () {
         var panel = qs('[data-search-panel]');
@@ -114,16 +116,6 @@
           panel.setAttribute('hidden', '');
           closeSearchSuggest(panel);
         }
-      });
-    });
-
-    qsa('[data-menu-toggle]').forEach(function (btn) {
-      on(btn, 'click', function () {
-        var menu = qs('[data-mobile-menu]');
-        if (!menu) return;
-        var open = menu.hasAttribute('hidden');
-        if (open) { menu.removeAttribute('hidden'); body.classList.add('as-menu-open'); }
-        else { menu.setAttribute('hidden', ''); body.classList.remove('as-menu-open'); }
       });
     });
   }
@@ -294,7 +286,7 @@
       window.setTimeout(function () {
         d.setAttribute('hidden', '');
         if (s) s.setAttribute('hidden', '');
-      }, 480);
+      }, DRAWER_CLOSE_DELAY_MS);
     }
   };
   window.ArchivesCart = window.ArchivesCart || {};
@@ -308,6 +300,43 @@
       else if (e.target.closest('[data-cart-scrim]')) { CartDrawer.close(); }
     });
     on(document, 'keydown', function (e) { if (e.key === 'Escape') CartDrawer.close(); });
+  }
+
+  /* ---------- Nav drawer open/close (header redesign: hamburger -> left-sliding
+     menu drawer, section-block driven). Same open/close mechanics as the cart
+     drawer above (delegated clicks so it survives nothing special here, but
+     kept consistent) — slides from the left instead of the right. ---------- */
+  var NavDrawer = {
+    el: function () { return qs('[data-nav-drawer]'); },
+    scrim: function () { return qs('[data-nav-scrim]'); },
+    open: function () {
+      var d = this.el(), s = this.scrim();
+      if (!d) return;
+      if (s) s.removeAttribute('hidden');
+      d.removeAttribute('hidden');
+      requestAnimationFrame(function () { d.classList.add('is-open'); if (s) s.classList.add('is-open'); });
+      document.body.classList.add('as-drawer-open');
+    },
+    close: function () {
+      var d = this.el(), s = this.scrim();
+      if (!d) return;
+      d.classList.remove('is-open');
+      if (s) s.classList.remove('is-open');
+      document.body.classList.remove('as-drawer-open');
+      window.setTimeout(function () {
+        d.setAttribute('hidden', '');
+        if (s) s.setAttribute('hidden', '');
+      }, DRAWER_CLOSE_DELAY_MS);
+    }
+  };
+
+  function bindNavDrawer() {
+    on(document, 'click', function (e) {
+      if (e.target.closest('[data-nav-open]')) { e.preventDefault(); NavDrawer.open(); }
+      else if (e.target.closest('[data-nav-close]')) { e.preventDefault(); NavDrawer.close(); }
+      else if (e.target.closest('[data-nav-scrim]')) { NavDrawer.close(); }
+    });
+    on(document, 'keydown', function (e) { if (e.key === 'Escape') NavDrawer.close(); });
   }
 
   /* ---------- Quick add (product cards -> /cart/add.js) ---------- */
@@ -981,6 +1010,7 @@
     bindHeader();
     bindPredictiveSearch();
     bindCartDrawer();
+    bindNavDrawer();
     bindWishlistToggles();
     bindQuickAdd();
     bindCartLineControls();

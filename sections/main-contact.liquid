@@ -1,0 +1,63 @@
+{%- comment -%}
+  Contact page (templates/page.contact.json): name/email/message via
+  Shopify's built-in `contact` form. `form.email` and `form.body` are
+  re-populated on error (the contact form doesn't expose a `form.name`
+  property, so that field is left blank on re-render). Success state via
+  form.posted_successfully?.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ page.title }}</h1>
+      {%- if page.content != blank -%}
+        <div class="as-article-body" style="margin-top:var(--space-6);">{{ page.content }}</div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:0 var(--page-gutter) var(--section-y);">
+      {%- form 'contact' -%}
+        {%- if form.posted_successfully? -%}
+          <p style="font:var(--text-body-sm); color:var(--text-primary); border:1px solid var(--border-default); padding:var(--space-4); margin-bottom:var(--space-6);">{{ 'contact.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-4); max-width:480px;">
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'contact.name_label' | t }}
+            <input type="text" name="contact[name]" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'contact.email_label' | t }}
+            <input type="email" name="contact[email]" value="{{ form.email }}" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'contact.message_label' | t }}
+            <textarea name="contact[body]" rows="6" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal; resize:vertical;">{{ form.body }}</textarea>
+          </label>
+          <button type="submit" style="align-self:flex-start; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'contact.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main contact",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Contact" }
+  ],
+  "presets": [
+    { "name": "Main contact" }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

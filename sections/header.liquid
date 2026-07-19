@@ -1,30 +1,22 @@
-{%- liquid
-  assign menu = linklists[section.settings.menu]
--%}
+{%- comment -%}
+  Header redesign (follow-up sprint): 3-col grid (auto logo-center auto) with
+  the hamburger ALWAYS shown (left) — no more center desktop nav / linklist.
+  All navigation lives in a left-sliding drawer built from section blocks
+  (`link` + `group`), opened via [data-nav-open] and driven by the NavDrawer
+  object in assets/archives.js (delegated clicks, same pattern as the cart
+  drawer). Search panel / predictive suggest and the wishlist+cart badges are
+  untouched from the previous sprint.
+{%- endcomment -%}
 <header class="as-header" style="border-bottom:1px solid var(--border-default); position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.9); backdrop-filter:blur(12px);">
-  <div class="as-headrow" style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter); height:76px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;">
+  <div class="as-headrow" style="max-width:var(--page-max); margin:0 auto; padding:0 var(--page-gutter); height:76px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; column-gap:var(--space-4);">
 
-    <a href="{{ routes.root_url }}" class="as-clickable as-logo" style="font-weight:var(--fw-black); font-size:var(--fs-lg); letter-spacing:var(--tracking-widest); text-transform:uppercase; justify-self:start; color:var(--color-ink);">{{ section.settings.logo_text | default: 'A R C H I V E S' }}</a>
+    <button data-nav-open class="as-iconbtn as-burger" aria-label="{{ 'general.nav.menu' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; justify-self:start;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
 
-    <nav class="as-nav-center" style="display:flex; gap:var(--space-10); justify-self:center;" aria-label="Primary">
-      {%- for link in menu.links -%}
-        <div class="as-navitem">
-          <a href="{{ link.url }}" class="as-navlink{% if link.active or link.child_active %} is-active{% endif %}" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">{{ link.title }}</a>
-          {%- if link.links.size > 0 -%}
-            <div class="as-dropdown" style="position:absolute; top:100%; left:50%; min-width:210px; background:var(--surface-page); border:1px solid var(--border-default); padding:var(--space-4); display:flex; flex-direction:column; gap:2px; box-shadow:var(--shadow-drawer);">
-              {%- for child in link.links -%}
-                <a href="{{ child.url }}" class="as-clickable as-dropitem" style="font:var(--text-body-sm); color:var(--text-secondary); padding:var(--space-2); white-space:nowrap; transition:color var(--dur-base) var(--ease-standard);">{{ child.title }}</a>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
-    </nav>
+    <a href="{{ routes.root_url }}" class="as-clickable as-logo" style="font-weight:var(--fw-black); font-size:var(--fs-lg); letter-spacing:var(--tracking-widest); text-transform:uppercase; justify-self:center; color:var(--color-ink);">{{ section.settings.logo_text | default: 'A R C H I V E S' }}</a>
 
     <div class="as-headicons" style="display:flex; gap:var(--space-5); justify-self:end; align-items:center;">
-      <button data-menu-toggle class="as-iconbtn as-burger" aria-label="Menu" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0;">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      </button>
       <button data-search-toggle class="as-iconbtn" aria-label="Search" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
@@ -61,24 +53,60 @@
     ></div>
   </div>
 
-  {%- comment -%} Mobile menu {%- endcomment -%}
-  <div data-mobile-menu hidden class="as-mobmenu" style="border-top:1px solid var(--border-default); background:var(--surface-page);">
-    <div style="padding:var(--space-2) var(--page-gutter) var(--space-6);">
-      {%- for link in menu.links -%}
-        <div style="border-bottom:1px solid var(--border-default); padding:var(--space-5) 0;">
-          <a href="{{ link.url }}" class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm); color:var(--color-ink);">{{ link.title }}</a>
-          {%- if link.links.size > 0 -%}
-            <div style="display:flex; flex-wrap:wrap; gap:var(--space-3) var(--space-5); margin-top:var(--space-4);">
-              {%- for child in link.links -%}
-                <a href="{{ child.url }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary);">{{ child.title }}</a>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
+  {%- comment -%} Nav drawer: scrim + left-sliding aside, mirrors sections/cart-drawer.liquid's mechanics (shares body.as-drawer-open) but slides in from the left and is built from section blocks instead of a linklist. {%- endcomment -%}
+  <div data-nav-scrim hidden class="as-nav-scrim" style="position:fixed; inset:0; background:var(--surface-scrim); z-index:90; opacity:0; transition:opacity var(--dur-base) var(--ease-standard);"></div>
+
+  <aside data-nav-drawer hidden class="as-nav-drawer" aria-label="{{ 'general.nav.menu' | t }}" style="position:fixed; top:0; left:0; height:100vh; width:min(400px, 90vw); background:var(--surface-page); z-index:95; display:flex; flex-direction:column; transform:translateX(-100%); transition:transform var(--dur-drawer) var(--ease-standard); box-shadow:24px 0 60px rgba(17,17,17,0.12);">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-6); border-bottom:1px solid var(--border-default);">
+      <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'general.nav.menu' | t }}</span>
+      <button data-nav-close class="as-iconbtn" aria-label="{{ 'general.nav.close' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
-  </div>
+
+    <nav style="flex:1; overflow-y:auto; padding:var(--space-2) var(--page-gutter) var(--space-8);" aria-label="Primary">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'link' -%}
+            <div style="border-bottom:1px solid var(--border-default); padding:var(--space-5) 0;" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.url }}" class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm); color:var(--color-ink);">{{ block.settings.label }}</a>
+            </div>
+          {%- when 'group' -%}
+            <div style="border-bottom:1px solid var(--border-default); padding:var(--space-5) 0;" {{ block.shopify_attributes }}>
+              {%- if block.settings.url != blank -%}
+                <a href="{{ block.settings.url }}" class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm); color:var(--color-ink);">{{ block.settings.heading }}</a>
+              {%- else -%}
+                <span style="display:block; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm); color:var(--color-ink);">{{ block.settings.heading }}</span>
+              {%- endif -%}
+              <div style="display:flex; flex-direction:column; gap:var(--space-3); margin-top:var(--space-4); padding-left:var(--space-4);">
+                {%- for i in (1..6) -%}
+                  {%- liquid
+                    assign label_key = 'label_' | append: i
+                    assign url_key = 'url_' | append: i
+                    assign child_label = block.settings[label_key]
+                    assign child_url = block.settings[url_key]
+                  -%}
+                  {%- if child_label != blank -%}
+                    <a href="{{ child_url }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary);">{{ child_label }}</a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </nav>
+
+    <div style="border-top:1px solid var(--border-default); padding:var(--space-6) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-4);">
+      <button type="button" data-search-toggle data-nav-close class="as-clickable" style="background:none; border:none; cursor:pointer; text-align:left; padding:0; font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.search' | t }}</button>
+      <a href="{{ routes.root_url }}pages/{{ section.settings.wishlist_handle | default: 'wishlist' }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.wishlist' | t }}</a>
+    </div>
+  </aside>
 </header>
+
+<style>
+  .as-nav-drawer.is-open { transform: translateX(0) !important; }
+  .as-nav-scrim.is-open { opacity: 1 !important; }
+</style>
 
 {% schema %}
 {
@@ -91,16 +119,52 @@
       "default": "A R C H I V E S"
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu",
-      "default": "main-menu"
-    },
-    {
       "type": "text",
       "id": "wishlist_handle",
       "label": "Wishlist page handle",
       "default": "wishlist"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "Group",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "url", "id": "url", "label": "Heading link", "info": "Optional — makes the heading itself clickable." },
+        { "type": "text", "id": "label_1", "label": "Link 1 label" },
+        { "type": "url", "id": "url_1", "label": "Link 1 URL" },
+        { "type": "text", "id": "label_2", "label": "Link 2 label" },
+        { "type": "url", "id": "url_2", "label": "Link 2 URL" },
+        { "type": "text", "id": "label_3", "label": "Link 3 label" },
+        { "type": "url", "id": "url_3", "label": "Link 3 URL" },
+        { "type": "text", "id": "label_4", "label": "Link 4 label" },
+        { "type": "url", "id": "url_4", "label": "Link 4 URL" },
+        { "type": "text", "id": "label_5", "label": "Link 5 label" },
+        { "type": "url", "id": "url_5", "label": "Link 5 URL" },
+        { "type": "text", "id": "label_6", "label": "Link 6 label" },
+        { "type": "url", "id": "url_6", "label": "Link 6 URL" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Header",
+      "blocks": [
+        { "type": "group", "settings": { "heading": "Shop", "label_1": "All", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
+        { "type": "link", "settings": { "label": "Styling", "url": "/pages/styling" } },
+        { "type": "link", "settings": { "label": "Journal", "url": "/blogs/journal" } },
+        { "type": "link", "settings": { "label": "About", "url": "/pages/about" } }
+      ]
     }
   ]
 }

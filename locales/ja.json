@@ -34,6 +34,12 @@
       "coupon_apply": "適用",
       "coupon_invalid": "無効なコードです",
       "coupon_applied": "{{ code }} 適用中 — {{ percent }}% OFF"
+    },
+    "nav": {
+      "menu": "メニュー",
+      "close": "メニューを閉じる",
+      "search": "検索",
+      "wishlist": "ウィッシュリスト"
     }
   },
   "products": {
@@ -136,5 +142,12 @@
     "comment_submit": "コメントを投稿",
     "comment_pending": "コメントを受け付けました。承認後に公開されます。",
     "comment_posted": "コメントを投稿しました。"
+  },
+  "contact": {
+    "name_label": "お名前",
+    "email_label": "メールアドレス",
+    "message_label": "メッセージ",
+    "submit": "送信する",
+    "success": "お問い合わせありがとうございます。追ってご連絡いたします。"
   }
 }
