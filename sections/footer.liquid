@@ -8,11 +8,11 @@
       {%- endif -%}
       {%- if section.settings.show_newsletter -%}
         <div style="margin-top:var(--space-4);">
-          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ section.settings.newsletter_title | default: 'Newsletter' }}</span>
+          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ section.settings.newsletter_title | default: 'ニュースレター' }}</span>
           {%- form 'customer', style: 'display:flex; align-items:center; border-bottom:1px solid var(--color-ink); margin-top:var(--space-3); max-width:320px;' -%}
             <input type="hidden" name="contact[tags]" value="newsletter">
-            <input type="email" name="contact[email]" required placeholder="EMAIL ADDRESS" style="flex:1; border:none; outline:none; background:none; padding:var(--space-3) 0; font:var(--text-body-sm); letter-spacing:var(--tracking-wide); text-transform:uppercase;">
-            <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="Subscribe" style="background:none; border:none; cursor:pointer; padding:var(--space-2); color:var(--color-ink); display:flex;">
+            <input type="email" name="contact[email]" required placeholder="メールアドレス" style="flex:1; border:none; outline:none; background:none; padding:var(--space-3) 0; font:var(--text-body-sm); letter-spacing:var(--tracking-wide); text-transform:uppercase;">
+            <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="登録する" style="background:none; border:none; cursor:pointer; padding:var(--space-2); color:var(--color-ink); display:flex;">
               <svg class="as-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
           {%- endform -%}
@@ -44,8 +44,8 @@
     <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); display:flex; align-items:center; justify-content:space-between;">
       <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">{{ section.settings.copyright | default: '© 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.' }}</span>
       <div style="display:flex; gap:var(--space-6);">
-        <a href="{{ routes.root_url }}policies/privacy-policy" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">PRIVACY</a>
-        <a href="{{ routes.root_url }}policies/terms-of-service" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">TERMS</a>
+        <a href="{{ routes.root_url }}policies/privacy-policy" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">プライバシー</a>
+        <a href="{{ routes.root_url }}policies/terms-of-service" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">利用規約</a>
       </div>
     </div>
   </div>
@@ -56,9 +56,9 @@
   "name": "Footer",
   "settings": [
     { "type": "text", "id": "logo_text", "label": "Logo text", "default": "A R C H I V E S" },
-    { "type": "textarea", "id": "blurb", "label": "Brand blurb", "default": "Considered garments and objects, archived for the long term. Tokyo — Worldwide." },
+    { "type": "textarea", "id": "blurb", "label": "Brand blurb", "default": "長く着られる服とモノを。東京から、世界へ。" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter", "default": true },
-    { "type": "text", "id": "newsletter_title", "label": "Newsletter title", "default": "Newsletter" },
+    { "type": "text", "id": "newsletter_title", "label": "Newsletter title", "default": "ニュースレター" },
     { "type": "text", "id": "copyright", "label": "Copyright text", "default": "© 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED." }
   ],
   "blocks": [
@@ -87,9 +87,9 @@
     {
       "name": "Footer",
       "blocks": [
-        { "type": "menu_column", "settings": { "heading": "Shop", "label_1": "All Products", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
-        { "type": "menu_column", "settings": { "heading": "Studio", "label_1": "About", "url_1": "/pages/about", "label_2": "Styling", "url_2": "/pages/styling", "label_3": "Journal", "url_3": "/blogs/journal" } },
-        { "type": "menu_column", "settings": { "heading": "Support", "label_1": "Search", "url_1": "/search", "label_2": "Wishlist", "url_2": "/pages/wishlist", "label_3": "Contact", "url_3": "/pages/contact", "label_4": "Shipping & Returns", "url_4": "/pages/shipping-returns" } }
+        { "type": "menu_column", "settings": { "heading": "ショップ", "label_1": "すべての商品", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
+        { "type": "menu_column", "settings": { "heading": "スタジオ", "label_1": "ブランドについて", "url_1": "/pages/about", "label_2": "スタイリング", "url_2": "/pages/styling", "label_3": "ジャーナル", "url_3": "/blogs/journal" } },
+        { "type": "menu_column", "settings": { "heading": "サポート", "label_1": "検索", "url_1": "/search", "label_2": "ウィッシュリスト", "url_2": "/pages/wishlist", "label_3": "お問い合わせ", "url_3": "/pages/contact", "label_4": "配送・返品", "url_4": "/pages/shipping-returns" } }
       ]
     }
   ]

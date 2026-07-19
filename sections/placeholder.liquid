@@ -6,7 +6,7 @@
     {%- if section.settings.eyebrow != blank -%}
       <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
     {%- endif -%}
-    <h1 style="font-weight:var(--fw-black); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading | default: 'Coming soon' }}</h1>
+    <h1 style="font-weight:var(--fw-black); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading | default: '準備中' }}</h1>
     {%- if section.settings.body != blank -%}
       <p style="font:var(--text-body); color:var(--text-secondary); max-width:520px; line-height:var(--lh-relaxed);">{{ section.settings.body }}</p>
     {%- endif -%}
@@ -18,7 +18,7 @@
   "name": "Placeholder",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Coming soon" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "準備中" },
     { "type": "textarea", "id": "body", "label": "Body" }
   ],
   "presets": [{ "name": "Placeholder" }]

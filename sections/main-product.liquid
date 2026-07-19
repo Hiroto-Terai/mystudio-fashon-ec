@@ -182,10 +182,12 @@
             {%- if option_name_down contains 'size' -%}
               {%- assign is_size_option = true -%}
             {%- endif -%}
+            {%- assign option_display_name = product_option.name -%}
+            {%- if is_color_option -%}{%- assign option_display_name = 'カラー' -%}{%- elsif is_size_option -%}{%- assign option_display_name = 'サイズ' -%}{%- endif -%}
             <div style="display:flex; flex-direction:column; gap:var(--space-3);">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">
-                  {{ product_option.name }}{% if is_color_option %} — <span data-option-selected-label="{{ opt_index }}">{{ product_option.selected_value }}</span>{% endif %}
+                  {{ option_display_name }}{% if is_color_option %} — <span data-option-selected-label="{{ opt_index }}">{{ product_option.selected_value }}</span>{% endif %}
                 </span>
                 {%- if is_size_option -%}
                   <span class="as-navlink as-clickable" data-size-chart-open style="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ 'products.product.size_chart' | t }}</span>
@@ -273,9 +275,9 @@
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
         <div data-pdp-purchase {% unless is_available %}hidden{% endunless %} style="display:flex; gap:var(--space-3); align-items:stretch;">
           <div style="display:flex; align-items:center; border:1px solid var(--border-default);">
-            <button type="button" data-qty-dec aria-label="Decrease quantity" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">−</button>
+            <button type="button" data-qty-dec aria-label="数量を減らす" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">−</button>
             <input type="number" name="quantity" value="1" min="1" data-qty-input style="width:36px; text-align:center; border:none; background:none; font:inherit; color:inherit;">
-            <button type="button" data-qty-inc aria-label="Increase quantity" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">+</button>
+            <button type="button" data-qty-inc aria-label="数量を増やす" style="width:44px; background:none; border:none; cursor:pointer; font-size:var(--fs-md); color:var(--color-ink);">+</button>
           </div>
           <button
             type="submit"
@@ -351,9 +353,9 @@
     <table style="width:100%; border-collapse:collapse; font:var(--text-body-sm);">
       <thead>
         <tr>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Size</th>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Chest (cm)</th>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">Length (cm)</th>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">サイズ</th>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">胸囲 (cm)</th>
+          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">着丈 (cm)</th>
         </tr>
       </thead>
       <tbody>

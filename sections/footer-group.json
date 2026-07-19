@@ -8,8 +8,8 @@
         "fcol-shop": {
           "type": "menu_column",
           "settings": {
-            "heading": "Shop",
-            "label_1": "All Products",
+            "heading": "ショップ",
+            "label_1": "すべての商品",
             "url_1": "/collections/all",
             "label_2": "Apparel",
             "url_2": "/collections/apparel",
@@ -22,26 +22,26 @@
         "fcol-studio": {
           "type": "menu_column",
           "settings": {
-            "heading": "Studio",
-            "label_1": "About",
+            "heading": "スタジオ",
+            "label_1": "ブランドについて",
             "url_1": "/pages/about",
-            "label_2": "Styling",
+            "label_2": "スタイリング",
             "url_2": "/pages/styling",
-            "label_3": "Journal",
+            "label_3": "ジャーナル",
             "url_3": "/blogs/journal"
           }
         },
         "fcol-support": {
           "type": "menu_column",
           "settings": {
-            "heading": "Support",
-            "label_1": "Search",
+            "heading": "サポート",
+            "label_1": "検索",
             "url_1": "/search",
-            "label_2": "Wishlist",
+            "label_2": "ウィッシュリスト",
             "url_2": "/pages/wishlist",
-            "label_3": "Contact",
+            "label_3": "お問い合わせ",
             "url_3": "/pages/contact",
-            "label_4": "Shipping & Returns",
+            "label_4": "配送・返品",
             "url_4": "/pages/shipping-returns"
           }
         }

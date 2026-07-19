@@ -61,7 +61,7 @@
           {%- endfor -%}
         {%- else -%}
           {%- comment -%} Default demo chips shown until a "Category chips menu" is assigned. {%- endcomment -%}
-          {%- assign default_chip_labels = 'All,Apparel,Outerwear,Hardware' | split: ',' -%}
+          {%- assign default_chip_labels = 'すべて,Apparel,Outerwear,Hardware' | split: ',' -%}
           {%- assign default_chip_handles = 'all,apparel,outerwear,hardware' | split: ',' -%}
           {%- for chip_label in default_chip_labels -%}
             {%- assign chip_handle = default_chip_handles[forloop.index0] -%}
@@ -95,8 +95,16 @@
       <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-4) var(--page-gutter); border-top:1px solid var(--border-default);">
         <form method="get" data-collection-filter-form style="display:flex; align-items:flex-start; gap:var(--space-3); flex-wrap:wrap;">
           {%- for filter in collection.filters -%}
+            {%- assign filter_label_down = filter.label | downcase -%}
+            {%- assign filter_label = filter.label -%}
+            {%- if filter_label_down contains 'availab' -%}{%- assign filter_label = '在庫状況' -%}
+            {%- elsif filter_label_down contains 'price' -%}{%- assign filter_label = '価格' -%}
+            {%- elsif filter_label_down contains 'color' or filter_label_down contains 'colour' -%}{%- assign filter_label = 'カラー' -%}
+            {%- elsif filter_label_down contains 'size' -%}{%- assign filter_label = 'サイズ' -%}
+            {%- elsif filter_label_down contains 'type' -%}{%- assign filter_label = 'カテゴリー' -%}
+            {%- endif -%}
             <details class="as-filter-group" style="position:relative; border:1px solid var(--border-default);">
-              <summary class="as-clickable" style="padding:var(--space-2) var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); cursor:pointer;">{{ filter.label }}</summary>
+              <summary class="as-clickable" style="padding:var(--space-2) var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); cursor:pointer;">{{ filter_label }}</summary>
               <div style="position:absolute; top:100%; left:0; margin-top:var(--space-1); background:var(--color-white); border:1px solid var(--border-default); padding:var(--space-4); min-width:220px; z-index:10; display:flex; flex-direction:column; gap:var(--space-3);">
                 {%- case filter.type -%}
                   {%- when 'price_range' -%}
@@ -210,11 +218,11 @@
           <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
             <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
               <img class="as-img" src="{{ demo_image }}" alt="{{ demo_name }}" width="800" height="1067" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
-              <button type="button" data-wishlist-toggle="demo-collection-{{ i }}" data-wishlist-ns="products" class="as-wish as-iconbtn" aria-label="Wishlist" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
+              <button type="button" data-wishlist-toggle="demo-collection-{{ i }}" data-wishlist-ns="products" class="as-wish as-iconbtn" aria-label="ウィッシュリストに追加" style="position:absolute; top:var(--space-3); right:var(--space-3); background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
               </button>
               <div class="as-quickadd">
-                <button type="button" disabled title="Connect a collection to enable quick add" style="width:100%; background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add' | t }}</button>
+                <button type="button" disabled title="コレクションを設定するとクイック追加が有効になります" style="width:100%; background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add' | t }}</button>
               </div>
             </div>
             <div style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
@@ -239,8 +247,8 @@
       "label": "Category chips menu",
       "info": "Optional. When set, replaces the default All / Apparel / Outerwear / Hardware demo chips with this menu's links."
     },
-    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Collection" },
-    { "type": "textarea", "id": "fallback_description", "label": "Fallback description", "default": "A curated edit of outerwear, apparel and hardware for the current season." }
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "コレクション" },
+    { "type": "textarea", "id": "fallback_description", "label": "Fallback description", "default": "今シーズンのアウター、アパレル、ハードウェアをセレクトしました。" }
   ],
   "presets": [
     { "name": "Main collection" }

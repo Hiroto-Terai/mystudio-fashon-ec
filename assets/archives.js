@@ -152,7 +152,7 @@
     var hasAny = queries.length || products.length || collections.length || articles.length || pages.length;
 
     if (!hasAny) {
-      var emptyText = suggest.getAttribute('data-empty-text') || 'No matches';
+      var emptyText = suggest.getAttribute('data-empty-text') || '一致する候補がありません';
       suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(emptyText) + '</p>';
       suggest.removeAttribute('hidden');
       return;
@@ -191,13 +191,13 @@
     }
 
     if (collections.length) {
-      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-collections-label') || 'Collections') + '</span>' + linkGroup(collections) + '</div>';
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-collections-label') || 'コレクション') + '</span>' + linkGroup(collections) + '</div>';
     }
     if (articles.length) {
-      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-articles-label') || 'Journal') + '</span>' + linkGroup(articles) + '</div>';
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-articles-label') || 'ジャーナル') + '</span>' + linkGroup(articles) + '</div>';
     }
     if (pages.length) {
-      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-pages-label') || 'Pages') + '</span>' + linkGroup(pages) + '</div>';
+      html += '<div class="as-suggest-group"><span class="as-suggest-eyebrow">' + escapeHtml(suggest.getAttribute('data-pages-label') || 'ページ') + '</span>' + linkGroup(pages) + '</div>';
     }
 
     html += '</div>';
@@ -219,7 +219,7 @@
     function fetchSuggestions(query) {
       if (activeController && activeController.abort) activeController.abort();
       activeController = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var loadingText = suggest.getAttribute('data-loading-text') || 'Searching…';
+      var loadingText = suggest.getAttribute('data-loading-text') || '検索中…';
       suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(loadingText) + '</p>';
       suggest.removeAttribute('hidden');
 
@@ -433,7 +433,7 @@
       .then(function (res) {
         if (!res.ok) {
           return res.json().then(function (err) {
-            throw new Error((err && err.description) || 'Could not add to cart');
+            throw new Error((err && err.description) || 'カートに追加できませんでした');
           });
         }
         return res.json();
@@ -454,7 +454,7 @@
         CartDrawer.open();
       })
       .catch(function (err) {
-        window.alert(err.message || 'Could not add to cart');
+        window.alert(err.message || 'カートに追加できませんでした');
       })
       .then(function () {
         if (button) {
@@ -496,7 +496,7 @@
       .then(function (res) {
         if (!res.ok) {
           return res.json().then(function (err) {
-            throw new Error((err && err.description) || 'Could not update cart');
+            throw new Error((err && err.description) || 'カートを更新できませんでした');
           });
         }
         return res.json();
@@ -528,7 +528,7 @@
       else if (isInc) quantity = quantity + 1;
       lineChangeBusy = true;
       changeLine(key, quantity)
-        .catch(function (err) { window.alert(err.message || 'Could not update cart'); })
+        .catch(function (err) { window.alert(err.message || 'カートを更新できませんでした'); })
         .then(function () { lineChangeBusy = false; });
     });
   }
@@ -570,10 +570,10 @@
     if (!msgEl) return;
     if (showInvalid) {
       msgEl.hidden = false;
-      msgEl.textContent = msgEl.getAttribute('data-invalid-text') || 'Invalid code';
+      msgEl.textContent = msgEl.getAttribute('data-invalid-text') || '無効なコードです';
     } else if (code) {
       msgEl.hidden = false;
-      var template = msgEl.getAttribute('data-applied-template') || '__CODE__ — __PERCENT__% off';
+      var template = msgEl.getAttribute('data-applied-template') || '__CODE__ 適用中 — __PERCENT__% OFF';
       msgEl.textContent = template.replace('__CODE__', code).replace('__PERCENT__', Math.round(COUPONS[code] * 100));
     } else {
       msgEl.hidden = true;

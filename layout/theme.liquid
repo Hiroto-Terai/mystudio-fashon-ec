@@ -10,7 +10,7 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+    <title>{{ page_title }}{% if current_tags %} &ndash; タグ: {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ current_page }}ページ目{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
 
     {%- if page_description -%}
       <meta name="description" content="{{ page_description | escape }}">
@@ -24,7 +24,7 @@
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
-    <a class="visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_content' | t | default: 'Skip to content' }}</a>
+    <a class="visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_content' | t | default: 'コンテンツへスキップ' }}</a>
 
     {% sections 'header-group' %}
 

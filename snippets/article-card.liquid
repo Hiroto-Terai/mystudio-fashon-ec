@@ -19,7 +19,7 @@
     {%- endif -%}
   </div>
   <div style="padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-3);">
-    <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ article.tags.first | default: 'Journal' }} — {{ article.published_at | date: '%b %d, %Y' }}</span>
+    <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ article.tags.first | default: 'ジャーナル' }} — {{ article.published_at | date: '%b %d, %Y' }}</span>
     <h3 style="font-weight:var(--fw-semibold); font-size:var(--fs-lg); line-height:var(--lh-snug);">{{ article.title }}</h3>
     <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ article.excerpt_or_content | strip_html | truncatewords: 20 }}</p>
   </div>

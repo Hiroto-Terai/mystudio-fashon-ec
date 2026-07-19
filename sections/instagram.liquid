@@ -5,7 +5,7 @@
 <section style="border-bottom:1px solid var(--border-default);">
   <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10); display:flex; align-items:center; justify-content:space-between;">
     <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); text-transform:uppercase; letter-spacing:var(--tracking-tight);">{{ section.settings.heading }}</h2>
-    <a href="{{ section.settings.follow_link | default: '#' }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--text-secondary);">Follow</a>
+    <a href="{{ section.settings.follow_link | default: '#' }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--text-secondary);">フォローする</a>
   </div>
   <div class="as-grid-6" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(6,1fr);">
     {%- for block in section.blocks -%}

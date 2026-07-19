@@ -17,14 +17,14 @@
     <a href="{{ routes.root_url }}" class="as-clickable as-logo" style="font-weight:var(--fw-black); font-size:var(--fs-lg); letter-spacing:var(--tracking-widest); text-transform:uppercase; justify-self:center; color:var(--color-ink);">{{ section.settings.logo_text | default: 'A R C H I V E S' }}</a>
 
     <div class="as-headicons" style="display:flex; gap:var(--space-5); justify-self:end; align-items:center;">
-      <button data-search-toggle class="as-iconbtn" aria-label="Search" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex;">
+      <button data-search-toggle class="as-iconbtn" aria-label="検索" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
-      <a href="{{ routes.root_url }}pages/{{ section.settings.wishlist_handle | default: 'wishlist' }}" class="as-iconbtn" aria-label="Wishlist" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;">
+      <a href="{{ routes.root_url }}pages/{{ section.settings.wishlist_handle | default: 'wishlist' }}" class="as-iconbtn" aria-label="ウィッシュリスト" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
         <span data-wishlist-badge hidden style="position:absolute; top:-7px; right:-9px; background:var(--color-ink); color:var(--color-white); font-size:9px; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">0</span>
       </a>
-      <button data-cart-open class="as-iconbtn" aria-label="Cart" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;">
+      <button data-cart-open class="as-iconbtn" aria-label="カート" style="background:none; border:none; cursor:pointer; color:var(--color-ink); padding:0; display:flex; position:relative;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
         <span data-cart-badge{% if cart.item_count == 0 %} hidden{% endif %} style="position:absolute; top:-7px; right:-9px; background:var(--color-ink); color:var(--color-white); font-size:9px; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">{{ cart.item_count }}</span>
       </button>
@@ -64,7 +64,7 @@
       </button>
     </div>
 
-    <nav style="flex:1; overflow-y:auto; padding:var(--space-2) var(--page-gutter) var(--space-8);" aria-label="Primary">
+    <nav style="flex:1; overflow-y:auto; padding:var(--space-2) var(--page-gutter) var(--space-8);" aria-label="メインナビゲーション">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'link' -%}
@@ -160,10 +160,10 @@
     {
       "name": "Header",
       "blocks": [
-        { "type": "group", "settings": { "heading": "Shop", "label_1": "All", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
-        { "type": "link", "settings": { "label": "Styling", "url": "/pages/styling" } },
-        { "type": "link", "settings": { "label": "Journal", "url": "/blogs/journal" } },
-        { "type": "link", "settings": { "label": "About", "url": "/pages/about" } }
+        { "type": "group", "settings": { "heading": "ショップ", "label_1": "すべて", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
+        { "type": "link", "settings": { "label": "スタイリング", "url": "/pages/styling" } },
+        { "type": "link", "settings": { "label": "ジャーナル", "url": "/blogs/journal" } },
+        { "type": "link", "settings": { "label": "ブランドについて", "url": "/pages/about" } }
       ]
     }
   ]
