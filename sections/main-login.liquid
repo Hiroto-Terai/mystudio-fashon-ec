@@ -1,0 +1,84 @@
+{%- comment -%}
+  Customer login (templates/customers/login.json): {% form 'customer_login' %}
+  for email/password sign-in. The "forgot password" panel is a <details>
+  element wrapping {% form 'recover_customer_password' %} so the toggle needs
+  no JS — `form.posted_successfully?` swaps in the "check your email"
+  message once the recovery email has been sent. `form.errors` is rendered
+  via Shopify's `default_errors` filter, which is localized to the shop's
+  locale (Japanese here) without any theme-side translation work.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.login.heading' | t }}</h1>
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:480px; margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      {%- form 'customer_login' -%}
+        {%- if form.errors -%}
+          <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">
+            <p style="font-weight:var(--fw-semibold); margin-bottom:var(--space-2);">{{ 'customer.login.error_heading' | t }}</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.login.email_label' | t }}
+            <input type="email" name="customer[email]" value="{{ form.email }}" autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.login.password_label' | t }}
+            <input type="password" name="customer[password]" autocomplete="current-password" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <button type="submit" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.login.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      <details style="margin-top:var(--space-8); border-top:1px solid var(--border-default); padding-top:var(--space-6);">
+        <summary class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); cursor:pointer;">{{ 'customer.login.forgot_password' | t }}</summary>
+        <div style="margin-top:var(--space-5);">
+          {%- form 'recover_customer_password' -%}
+            {%- if form.posted_successfully? -%}
+              <p style="font:var(--text-body-sm); color:var(--text-primary); border:1px solid var(--border-default); padding:var(--space-4); margin-bottom:var(--space-5);">{{ 'customer.login.recover_success' | t }}</p>
+            {%- endif -%}
+            {%- if form.errors -%}
+              <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.login.recover_email_label' | t }}
+                <input type="email" name="email" autocomplete="email" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <button type="submit" style="align-self:flex-start; background:none; color:var(--color-ink); border:1px solid var(--color-ink); cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.login.recover_submit' | t }}</button>
+            </div>
+          {%- endform -%}
+        </div>
+      </details>
+
+      <p style="margin-top:var(--space-8); font:var(--text-body-sm); color:var(--text-secondary);">
+        {{ 'customer.login.no_account' | t }}
+        <a href="{{ routes.account_register_url }}" class="as-navlink" style="color:var(--color-ink);">{{ 'customer.login.register_link' | t }}</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main login",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main login" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/login"]
+  }
+}
+{% endschema %}

@@ -99,6 +99,11 @@
     <div style="border-top:1px solid var(--border-default); padding:var(--space-6) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-4);">
       <button type="button" data-search-toggle data-nav-close class="as-clickable" style="background:none; border:none; cursor:pointer; text-align:left; padding:0; font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.search' | t }}</button>
       <a href="{{ routes.root_url }}pages/{{ section.settings.wishlist_handle | default: 'wishlist' }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.wishlist' | t }}</a>
+      {%- if customer -%}
+        <a href="{{ routes.account_url }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.account' | t }}</a>
+      {%- else -%}
+        <a href="{{ routes.account_login_url }}" class="as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.nav.login' | t }}</a>
+      {%- endif -%}
     </div>
   </aside>
 </header>

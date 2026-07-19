@@ -1,0 +1,140 @@
+{%- comment -%}
+  Order detail (templates/customers/order.json): line items, totals,
+  shipping/billing addresses and fulfillment tracking for a single order.
+  order.fulfillments holds one entry per shipment; each may expose
+  tracking_company/tracking_number/tracking_url when the merchant has
+  fulfilled with tracking info attached.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      <a href="{{ routes.account_url }}" class="as-navlink" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); display:inline-block; margin-bottom:var(--space-5);">← {{ 'customer.order.back' | t }}</a>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs); display:block;">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.order.heading' | t }} {{ order.name }}</h1>
+      <p style="font:var(--text-body-sm); color:var(--text-secondary); margin-top:var(--space-3);">{{ 'customer.order.placed_on' | t }} {{ order.created_at | date: '%Y/%m/%d' }}</p>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-5);">{{ 'customer.order.items_heading' | t }}</h2>
+      <div style="border-top:1px solid var(--border-default);">
+        {%- for line in order.line_items -%}
+          <div style="display:grid; grid-template-columns:80px 1fr auto; gap:var(--space-5); padding:var(--space-5) 0; border-bottom:1px solid var(--border-subtle); align-items:start;">
+            <a href="{{ line.url }}" style="aspect-ratio:3/4; background:var(--surface-subtle); overflow:hidden; display:block;">
+              {%- if line.image -%}<img src="{{ line.image | image_url: width: 200 }}" alt="{{ line.title | escape }}" width="200" height="267" style="width:100%; height:100%; object-fit:cover;">{%- endif -%}
+            </a>
+            <div style="display:flex; flex-direction:column; gap:var(--space-2);">
+              <h3 style="font-weight:var(--fw-medium); font-size:var(--fs-base);">{{ line.title }}</h3>
+              {%- unless line.variant.title contains 'Default' -%}<span style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px;">{{ line.variant_title }}</span>{%- endunless -%}
+              <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; text-transform:uppercase;">{{ 'customer.order.quantity' | t }} {{ line.quantity }}</span>
+            </div>
+            <span style="font-weight:var(--fw-medium); white-space:nowrap;">{{ line.final_line_price | money }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div style="max-width:320px; margin-left:auto; margin-top:var(--space-8); display:flex; flex-direction:column; gap:var(--space-3);">
+        <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
+          <span>{{ 'customer.order.subtotal' | t }}</span>
+          <span>{{ order.line_items_subtotal_price | money }}</span>
+        </div>
+        {%- if order.total_discounts > 0 -%}
+          <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
+            <span>{{ 'customer.order.discount' | t }}</span>
+            <span>−{{ order.total_discounts | money }}</span>
+          </div>
+        {%- endif -%}
+        <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
+          <span>{{ 'customer.order.shipping' | t }}</span>
+          <span>{{ order.shipping_price | money }}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
+          <span>{{ 'customer.order.tax' | t }}</span>
+          <span>{{ order.tax_price | money }}</span>
+        </div>
+        <div style="height:1px; background:var(--border-default);"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:var(--fw-semibold); font-size:var(--fs-md);">
+          <span>{{ 'customer.order.total' | t }}</span>
+          <span>{{ order.total_price | money }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-10);">
+      <div>
+        <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-4);">{{ 'customer.order.shipping_address_heading' | t }}</h2>
+        {%- if order.shipping_address -%}
+          <address style="font:var(--text-body-sm); color:var(--text-primary); font-style:normal; line-height:var(--lh-relaxed);">
+            {{ order.shipping_address.name }}<br>
+            {{ order.shipping_address.address1 }}{% if order.shipping_address.address2 != blank %} {{ order.shipping_address.address2 }}{% endif %}<br>
+            {{ order.shipping_address.city }}{% if order.shipping_address.province != blank %} {{ order.shipping_address.province }}{% endif %} {{ order.shipping_address.zip }}<br>
+            {{ order.shipping_address.country }}
+          </address>
+        {%- endif -%}
+      </div>
+      <div>
+        <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-4);">{{ 'customer.order.billing_address_heading' | t }}</h2>
+        {%- if order.billing_address -%}
+          <address style="font:var(--text-body-sm); color:var(--text-primary); font-style:normal; line-height:var(--lh-relaxed);">
+            {{ order.billing_address.name }}<br>
+            {{ order.billing_address.address1 }}{% if order.billing_address.address2 != blank %} {{ order.billing_address.address2 }}{% endif %}<br>
+            {{ order.billing_address.city }}{% if order.billing_address.province != blank %} {{ order.billing_address.province }}{% endif %} {{ order.billing_address.zip }}<br>
+            {{ order.billing_address.country }}
+          </address>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter) var(--section-y);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-4);">{{ 'customer.order.fulfillment_heading' | t }}</h2>
+      <p style="font:var(--text-body-sm); color:var(--text-secondary); margin-bottom:var(--space-4);">{{ order.fulfillment_status_label }}</p>
+      {%- if order.fulfillments.size > 0 -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+          {%- for fulfillment in order.fulfillments -%}
+            <div style="border:1px solid var(--border-default); padding:var(--space-5); display:flex; flex-wrap:wrap; gap:var(--space-6);">
+              {%- if fulfillment.tracking_company != blank -%}
+                <div>
+                  <span style="display:block; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); margin-bottom:var(--space-1);">{{ 'customer.order.tracking_company' | t }}</span>
+                  <span style="font:var(--text-body-sm);">{{ fulfillment.tracking_company }}</span>
+                </div>
+              {%- endif -%}
+              {%- if fulfillment.tracking_number != blank -%}
+                <div>
+                  <span style="display:block; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); margin-bottom:var(--space-1);">{{ 'customer.order.tracking_number' | t }}</span>
+                  <span style="font:var(--text-body-sm);">{{ fulfillment.tracking_number }}</span>
+                </div>
+              {%- endif -%}
+              {%- if fulfillment.tracking_url != blank -%}
+                <a href="{{ fulfillment.tracking_url }}" class="as-navlink" target="_blank" rel="noopener" style="align-self:center; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">{{ 'customer.order.tracking_link' | t }}</a>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p style="font:var(--text-body-sm); color:var(--text-tertiary);">{{ 'customer.order.no_tracking' | t }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main order",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main order" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/order"]
+  }
+}
+{% endschema %}

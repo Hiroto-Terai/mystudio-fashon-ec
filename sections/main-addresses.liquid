@@ -1,0 +1,202 @@
+{%- comment -%}
+  Address book (templates/customers/addresses.json). Each saved address is
+  edited via {% form 'customer_address', address %} inside a <details> panel
+  (no JS needed to reveal the edit form); "Add a new address" uses the same
+  form against `customer.new_address`. Country uses `form.country_option_tags`;
+  province is a free-text field since there is no companion JS file here to
+  drive a country → province cascade. Deletion is a plain HTML form posting
+  `_method=delete` to routes.account_addresses_url/{address.id} — Shopify's
+  documented no-JS delete pattern for the classic addresses template. Field
+  markup is intentionally duplicated between the edit and add-new forms
+  (snippets are outside this sprint's allowed file list).
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      <a href="{{ routes.account_url }}" class="as-navlink" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); display:inline-block; margin-bottom:var(--space-5);">← {{ 'customer.addresses.back' | t }}</a>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs); display:block;">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.addresses.heading' | t }}</h1>
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-8);">
+
+      {%- if customer.addresses.size > 0 -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-5);">
+          {%- for address in customer.addresses -%}
+            <div style="border:1px solid var(--border-default); padding:var(--space-6); display:flex; flex-direction:column; gap:var(--space-4);">
+              <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-4);">
+                <address style="font:var(--text-body-sm); color:var(--text-primary); font-style:normal; line-height:var(--lh-relaxed);">
+                  {{ address.name }}<br>
+                  {{ address.address1 }}{% if address.address2 != blank %} {{ address.address2 }}{% endif %}<br>
+                  {{ address.city }}{% if address.province != blank %} {{ address.province }}{% endif %} {{ address.zip }}<br>
+                  {{ address.country }}
+                  {%- if address.phone != blank -%}<br>{{ address.phone }}{%- endif -%}
+                </address>
+                {%- if customer.default_address.id == address.id -%}
+                  <span style="align-self:flex-start; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); border:1px solid var(--border-default); padding:var(--space-2) var(--space-3);">{{ 'customer.addresses.default_badge' | t }}</span>
+                {%- endif -%}
+              </div>
+
+              <details>
+                <summary class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink); cursor:pointer; display:inline-block;">{{ 'customer.addresses.edit' | t }}</summary>
+                <div style="margin-top:var(--space-5); padding-top:var(--space-5); border-top:1px solid var(--border-subtle);">
+                  {%- form 'customer_address', address -%}
+                    {%- if form.errors -%}
+                      <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">
+                        <p style="font-weight:var(--fw-semibold); margin-bottom:var(--space-2);">{{ 'customer.addresses.error_heading' | t }}</p>
+                        {{ form.errors | default_errors }}
+                      </div>
+                    {%- endif -%}
+                    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.first_name_label' | t }}
+                        <input type="text" name="address[first_name]" value="{{ address.first_name }}" autocomplete="given-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.last_name_label' | t }}
+                        <input type="text" name="address[last_name]" value="{{ address.last_name }}" autocomplete="family-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.company_label' | t }}
+                        <input type="text" name="address[company]" value="{{ address.company }}" autocomplete="organization" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.address1_label' | t }}
+                        <input type="text" name="address[address1]" value="{{ address.address1 }}" autocomplete="address-line1" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.address2_label' | t }}
+                        <input type="text" name="address[address2]" value="{{ address.address2 }}" autocomplete="address-line2" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.city_label' | t }}
+                        <input type="text" name="address[city]" value="{{ address.city }}" autocomplete="address-level2" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.country_label' | t }}
+                        <select name="address[country]" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal; background:var(--color-white); cursor:pointer;">
+                          {{ form.country_option_tags }}
+                        </select>
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.province_label' | t }}
+                        <input type="text" name="address[province]" value="{{ address.province }}" autocomplete="address-level1" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.zip_label' | t }}
+                        <input type="text" name="address[zip]" value="{{ address.zip }}" autocomplete="postal-code" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                        {{ 'customer.addresses.phone_label' | t }}
+                        <input type="tel" name="address[phone]" value="{{ address.phone }}" autocomplete="tel" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+                      </label>
+                      <label style="display:flex; align-items:center; gap:var(--space-2); font:var(--text-body-sm); color:var(--text-secondary);">
+                        <input type="checkbox" name="address[default]" value="1" {% if address.id != blank and customer.default_address.id == address.id %}checked{% endif %}>
+                        {{ 'customer.addresses.set_default' | t }}
+                      </label>
+                    </div>
+                    <div style="display:flex; gap:var(--space-3); margin-top:var(--space-5);">
+                      <button type="submit" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.addresses.save' | t }}</button>
+                    </div>
+                  {%- endform -%}
+
+                  <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" style="margin-top:var(--space-4);">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="as-navlink" style="background:none; border:none; cursor:pointer; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">{{ 'customer.addresses.delete' | t }}</button>
+                  </form>
+                </div>
+              </details>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p style="font:var(--text-body-sm); color:var(--text-secondary);">{{ 'customer.addresses.empty' | t }}</p>
+      {%- endif -%}
+
+      {%- assign address = customer.new_address -%}
+      <details style="border:1px solid var(--border-default); padding:var(--space-6);">
+        <summary class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink); cursor:pointer;">{{ 'customer.addresses.add_new' | t }}</summary>
+        <div style="margin-top:var(--space-5); padding-top:var(--space-5); border-top:1px solid var(--border-subtle);">
+          {%- form 'customer_address', address -%}
+            {%- if form.errors -%}
+              <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">
+                <p style="font-weight:var(--fw-semibold); margin-bottom:var(--space-2);">{{ 'customer.addresses.error_heading' | t }}</p>
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+            <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.first_name_label' | t }}
+                <input type="text" name="address[first_name]" value="{{ address.first_name }}" autocomplete="given-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.last_name_label' | t }}
+                <input type="text" name="address[last_name]" value="{{ address.last_name }}" autocomplete="family-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.company_label' | t }}
+                <input type="text" name="address[company]" value="{{ address.company }}" autocomplete="organization" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.address1_label' | t }}
+                <input type="text" name="address[address1]" value="{{ address.address1 }}" autocomplete="address-line1" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.address2_label' | t }}
+                <input type="text" name="address[address2]" value="{{ address.address2 }}" autocomplete="address-line2" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.city_label' | t }}
+                <input type="text" name="address[city]" value="{{ address.city }}" autocomplete="address-level2" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.country_label' | t }}
+                <select name="address[country]" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal; background:var(--color-white); cursor:pointer;">
+                  {{ form.country_option_tags }}
+                </select>
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.province_label' | t }}
+                <input type="text" name="address[province]" value="{{ address.province }}" autocomplete="address-level1" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.zip_label' | t }}
+                <input type="text" name="address[zip]" value="{{ address.zip }}" autocomplete="postal-code" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+                {{ 'customer.addresses.phone_label' | t }}
+                <input type="tel" name="address[phone]" value="{{ address.phone }}" autocomplete="tel" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+              </label>
+              <label style="display:flex; align-items:center; gap:var(--space-2); font:var(--text-body-sm); color:var(--text-secondary);">
+                <input type="checkbox" name="address[default]" value="1" {% if customer.addresses.size == 0 %}checked{% endif %}>
+                {{ 'customer.addresses.set_default' | t }}
+              </label>
+            </div>
+            <div style="display:flex; gap:var(--space-3); margin-top:var(--space-5);">
+              <button type="submit" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.addresses.save' | t }}</button>
+            </div>
+          {%- endform -%}
+        </div>
+      </details>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main addresses",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main addresses" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/addresses"]
+  }
+}
+{% endschema %}

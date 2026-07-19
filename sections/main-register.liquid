@@ -1,0 +1,72 @@
+{%- comment -%}
+  Customer registration (templates/customers/register.json): {% form
+  'create_customer' %} with first/last name, email, and password (plus a
+  confirmation field). `form.errors` is rendered via `default_errors`, which
+  is localized to the shop's locale automatically.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.register.heading' | t }}</h1>
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:480px; margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      {%- form 'create_customer' -%}
+        {%- if form.errors -%}
+          <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">
+            <p style="font-weight:var(--fw-semibold); margin-bottom:var(--space-2);">{{ 'customer.register.error_heading' | t }}</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.register.first_name_label' | t }}
+            <input type="text" name="customer[first_name]" value="{{ form.first_name }}" autocomplete="given-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.register.last_name_label' | t }}
+            <input type="text" name="customer[last_name]" value="{{ form.last_name }}" autocomplete="family-name" class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.register.email_label' | t }}
+            <input type="email" name="customer[email]" value="{{ form.email }}" autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.register.password_label' | t }}
+            <input type="password" name="customer[password]" autocomplete="new-password" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.register.password_confirm_label' | t }}
+            <input type="password" name="customer[password_confirmation]" autocomplete="new-password" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <button type="submit" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.register.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      <p style="margin-top:var(--space-8); font:var(--text-body-sm); color:var(--text-secondary);">
+        {{ 'customer.register.have_account' | t }}
+        <a href="{{ routes.account_login_url }}" class="as-navlink" style="color:var(--color-ink);">{{ 'customer.register.login_link' | t }}</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main register",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main register" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/register"]
+  }
+}
+{% endschema %}
