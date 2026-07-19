@@ -71,7 +71,7 @@
 
   <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
     {%- comment -%} Gallery (★ each tile opens the full-screen lightbox; data-lightbox-gallery groups them for prev/next) {%- endcomment -%}
-    <div data-lightbox-gallery style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
+    <div data-lightbox-gallery class="as-pdp-gallery" style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
       {%- if product.images.size == 0 -%}
         <div class="as-card" style="aspect-ratio:3/4; grid-column:1/-1; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
       {%- else -%}
