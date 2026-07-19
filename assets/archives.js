@@ -255,8 +255,11 @@
         headers: { 'Accept': 'application/json' },
         signal: activeController ? activeController.signal : undefined
       })
-        .then(function (res) { return res.json(); })
-        .then(function (data) { renderSearchSuggest(suggest, data); })
+        .then(function (res) {
+          if (!res.ok) { closeSearchSuggest(panel); return null; }
+          return res.json();
+        })
+        .then(function (data) { if (data) renderSearchSuggest(suggest, data); })
         .catch(function (err) {
           if (err && err.name === 'AbortError') return;
           closeSearchSuggest(panel);
