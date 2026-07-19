@@ -192,7 +192,7 @@
       products.forEach(function (p) {
         html += '<a href="' + p.url + '" class="as-suggest-product as-clickable">' +
           '<span class="as-suggest-thumb">' + (p.image ? '<img src="' + imageUrlWithWidth(p.image, 120) + '" alt="" width="60" height="60" loading="lazy">' : '') + '</span>' +
-          '<span class="as-suggest-info"><span class="as-suggest-title">' + escapeHtml(p.title) + '</span><span class="as-suggest-price">' + formatMoney(p.price) + '</span></span>' +
+          '<span class="as-suggest-info"><span class="as-suggest-title">' + escapeHtml(p.title) + '</span><span class="as-suggest-price">' + formatMoney(Math.round(parseFloat(p.price) * 100)) + '</span></span>' +
           '</a>';
       });
       html += '</div>';

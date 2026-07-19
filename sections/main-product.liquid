@@ -45,9 +45,6 @@
   endif
   assign member_price_amount = current_variant.price | times: 0.9 | round
   assign member_mf = product.metafields.custom.member_price
-  if member_mf != blank
-    assign member_price_amount = member_mf.value.amount | times: 100
-  endif
   assign is_on_sale = false
   if current_variant.compare_at_price > current_variant.price
     assign is_on_sale = true
@@ -111,7 +108,7 @@
         <div style="display:flex; align-items:baseline; gap:var(--space-3);">
           <span data-pdp-compare style="font-size:var(--fs-xl); text-decoration:line-through; color:var(--text-tertiary);"{% if is_member or is_on_sale == false %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</span>
           <span data-pdp-price class="{% if is_member %}is-strike{% endif %}" style="font-size:var(--fs-xl);">{{ current_variant.price | money }}</span>
-          <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{{ member_price_amount | money }}</span>
+          <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{% if member_mf != blank %}{{ member_mf.value | money }}{% else %}{{ member_price_amount | money }}{% endif %}</span>
         </div>
       </div>
 
