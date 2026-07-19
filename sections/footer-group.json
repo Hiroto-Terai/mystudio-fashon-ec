@@ -5,7 +5,7 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "fcol-shop": {
+        "fc2-shop": {
           "type": "menu_column",
           "settings": {
             "heading": "ショップ",
@@ -19,7 +19,7 @@
             "url_4": "/collections/hardware"
           }
         },
-        "fcol-studio": {
+        "fc2-studio": {
           "type": "menu_column",
           "settings": {
             "heading": "スタジオ",
@@ -31,7 +31,7 @@
             "url_3": "/blogs/journal"
           }
         },
-        "fcol-support": {
+        "fc2-support": {
           "type": "menu_column",
           "settings": {
             "heading": "サポート",
@@ -42,14 +42,16 @@
             "label_3": "お問い合わせ",
             "url_3": "/pages/contact",
             "label_4": "配送・返品",
-            "url_4": "/pages/shipping-returns"
+            "url_4": "/pages/shipping-returns",
+            "label_5": "サイズガイド",
+            "url_5": "/pages/size-guide"
           }
         }
       },
       "block_order": [
-        "fcol-shop",
-        "fcol-studio",
-        "fcol-support"
+        "fc2-shop",
+        "fc2-studio",
+        "fc2-support"
       ],
       "settings": {}
     }

@@ -1,0 +1,73 @@
+{%- liquid
+  assign th_style = 'text-align:left; padding:var(--space-3); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);'
+  assign td_style = 'padding:var(--space-3); border-bottom:1px solid var(--border-subtle);'
+-%}
+<section style="border-bottom:1px solid var(--border-default);">
+  <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-12);">
+
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow | default: 'Size guide' }}</span>
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ page.title | default: 'サイズガイド' }}</h1>
+      {%- if page.content != blank -%}
+        <div class="as-article-body" style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ page.content }}</div>
+      {%- else -%}
+        <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); max-width:560px;">下記はアイテムの平置き実寸（cm）です。お手持ちの近いアイテムと比較してお選びください。測り方により2〜3cmの誤差が生じる場合があります。</p>
+      {%- endif -%}
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide);">トップス / アウター</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; min-width:420px; border-collapse:collapse; font:var(--text-body-sm);">
+          <thead><tr>
+            <th style="{{ th_style }}">サイズ</th><th style="{{ th_style }}">着丈</th><th style="{{ th_style }}">身幅</th><th style="{{ th_style }}">肩幅</th><th style="{{ th_style }}">袖丈</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="{{ td_style }}">S</td><td style="{{ td_style }}">66</td><td style="{{ td_style }}">52</td><td style="{{ td_style }}">46</td><td style="{{ td_style }}">61</td></tr>
+            <tr><td style="{{ td_style }}">M</td><td style="{{ td_style }}">68</td><td style="{{ td_style }}">55</td><td style="{{ td_style }}">48</td><td style="{{ td_style }}">62</td></tr>
+            <tr><td style="{{ td_style }}">L</td><td style="{{ td_style }}">70</td><td style="{{ td_style }}">58</td><td style="{{ td_style }}">50</td><td style="{{ td_style }}">63</td></tr>
+            <tr><td style="padding:var(--space-3);">XL</td><td style="padding:var(--space-3);">72</td><td style="padding:var(--space-3);">61</td><td style="padding:var(--space-3);">52</td><td style="padding:var(--space-3);">64</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide);">ボトムス</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; min-width:480px; border-collapse:collapse; font:var(--text-body-sm);">
+          <thead><tr>
+            <th style="{{ th_style }}">サイズ</th><th style="{{ th_style }}">ウエスト</th><th style="{{ th_style }}">股上</th><th style="{{ th_style }}">股下</th><th style="{{ th_style }}">わたり</th><th style="{{ th_style }}">裾幅</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="{{ td_style }}">28</td><td style="{{ td_style }}">71</td><td style="{{ td_style }}">28</td><td style="{{ td_style }}">72</td><td style="{{ td_style }}">31</td><td style="{{ td_style }}">20</td></tr>
+            <tr><td style="{{ td_style }}">30</td><td style="{{ td_style }}">76</td><td style="{{ td_style }}">28.5</td><td style="{{ td_style }}">73</td><td style="{{ td_style }}">32</td><td style="{{ td_style }}">21</td></tr>
+            <tr><td style="{{ td_style }}">32</td><td style="{{ td_style }}">81</td><td style="{{ td_style }}">29</td><td style="{{ td_style }}">74</td><td style="{{ td_style }}">33</td><td style="{{ td_style }}">22</td></tr>
+            <tr><td style="{{ td_style }}">34</td><td style="{{ td_style }}">86</td><td style="{{ td_style }}">29.5</td><td style="{{ td_style }}">75</td><td style="{{ td_style }}">34</td><td style="{{ td_style }}">23</td></tr>
+            <tr><td style="padding:var(--space-3);">36</td><td style="padding:var(--space-3);">91</td><td style="padding:var(--space-3);">30</td><td style="padding:var(--space-3);">76</td><td style="padding:var(--space-3);">35</td><td style="padding:var(--space-3);">24</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:var(--space-3); border-top:1px solid var(--border-default); padding-top:var(--space-8);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-lg); text-transform:uppercase; letter-spacing:var(--tracking-wide);">測り方</h2>
+      <ul style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-left:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
+        <li>着丈: 肩の縫い目から裾まで。</li>
+        <li>身幅: 両脇下を結んだ直線。</li>
+        <li>肩幅: 左右の肩の縫い目間。</li>
+        <li>ウエスト: 平置きで一周の半分×2。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Size guide",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Size guide" }
+  ],
+  "presets": [{ "name": "Size guide" }]
+}
+{% endschema %}

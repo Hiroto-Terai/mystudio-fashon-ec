@@ -1,0 +1,81 @@
+{% doc %}
+  Renders a size chart for a product, chosen by its size option format:
+  numeric sizes (28,30,...) -> bottoms measurements; S/M/L -> tops/outerwear;
+  otherwise a one-size note. A product `custom.size_chart` rich-text metafield,
+  when present, overrides the built-in tables.
+
+  @param {object} product - The product to render the size guide for.
+  @param {boolean} [headless] - When true, omit the outer heading (for modals).
+
+  @example
+  {% render 'size-guide', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign size_option = null
+  for opt in product.options_with_values
+    assign name_down = opt.name | downcase
+    if name_down contains 'size' or name_down contains 'サイズ'
+      assign size_option = opt
+    endif
+  endfor
+
+  assign is_numeric = false
+  if size_option != null
+    assign first_val = size_option.values.first.name | default: size_option.values.first
+    assign as_int = first_val | plus: 0
+    if as_int > 0
+      assign is_numeric = true
+    endif
+  endif
+
+  assign mf = product.metafields.custom.size_chart
+-%}
+
+<div class="as-size-guide" style="display:flex; flex-direction:column; gap:var(--space-5);">
+  {%- unless headless -%}
+    <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.size_chart_heading' | t }}</span>
+  {%- endunless -%}
+
+  {%- if mf != blank -%}
+    <div class="as-article-body" style="font:var(--text-body-sm);">{{ mf.value | metafield_tag }}</div>
+  {%- elsif is_numeric -%}
+    {%- comment -%} Bottoms (numeric waist) {%- endcomment -%}
+    <table class="as-size-table" style="width:100%; border-collapse:collapse; font:var(--text-body-sm);">
+      <thead><tr>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">サイズ</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">ウエスト</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">股上</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">股下</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">わたり</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">裾幅</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">28</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">71</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">28</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">72</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">31</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">20</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">30</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">76</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">28.5</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">73</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">32</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">21</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">32</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">81</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">29</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">74</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">33</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">22</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">34</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">86</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">29.5</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">75</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">34</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">23</td></tr>
+        <tr><td style="padding:var(--space-2);">36</td><td style="padding:var(--space-2);">91</td><td style="padding:var(--space-2);">30</td><td style="padding:var(--space-2);">76</td><td style="padding:var(--space-2);">35</td><td style="padding:var(--space-2);">24</td></tr>
+      </tbody>
+    </table>
+  {%- else -%}
+    {%- comment -%} Tops / outerwear (alpha sizes) {%- endcomment -%}
+    <table class="as-size-table" style="width:100%; border-collapse:collapse; font:var(--text-body-sm);">
+      <thead><tr>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">サイズ</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">着丈</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">身幅</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">肩幅</th>
+        <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase;">袖丈</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">S</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">66</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">52</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">46</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">61</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">M</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">68</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">55</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">48</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">62</td></tr>
+        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">L</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">70</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">58</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">50</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">63</td></tr>
+        <tr><td style="padding:var(--space-2);">XL</td><td style="padding:var(--space-2);">72</td><td style="padding:var(--space-2);">61</td><td style="padding:var(--space-2);">52</td><td style="padding:var(--space-2);">64</td></tr>
+      </tbody>
+    </table>
+  {%- endif -%}
+
+  <p style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; line-height:var(--lh-normal);">単位: cm ／ 平置き実寸。測り方により2〜3cmの誤差が生じる場合があります。</p>
+</div>
