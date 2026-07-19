@@ -21,11 +21,20 @@
     </div>
 
     {%- for block in section.blocks -%}
-      {%- assign col_menu = linklists[block.settings.menu] -%}
       <div style="display:flex; flex-direction:column; gap:var(--space-4);" {{ block.shopify_attributes }}>
-        <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-2xs); margin-bottom:var(--space-2);">{{ block.settings.title | default: col_menu.title }}</span>
-        {%- for l in col_menu.links -%}
-          <a href="{{ l.url }}" class="as-navlink as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); align-self:flex-start;">{{ l.title }}</a>
+        {%- if block.settings.heading != blank -%}
+          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-2xs); margin-bottom:var(--space-2);">{{ block.settings.heading }}</span>
+        {%- endif -%}
+        {%- for i in (1..6) -%}
+          {%- liquid
+            assign label_key = 'label_' | append: i
+            assign url_key = 'url_' | append: i
+            assign link_label = block.settings[label_key]
+            assign link_url = block.settings[url_key]
+          -%}
+          {%- if link_label != blank -%}
+            <a href="{{ link_url }}" class="as-navlink as-clickable" style="font:var(--text-body-sm); color:var(--text-secondary); align-self:flex-start;">{{ link_label }}</a>
+          {%- endif -%}
         {%- endfor -%}
       </div>
     {%- endfor -%}
@@ -57,19 +66,30 @@
       "type": "menu_column",
       "name": "Menu column",
       "settings": [
-        { "type": "text", "id": "title", "label": "Column title" },
-        { "type": "link_list", "id": "menu", "label": "Menu" }
+        { "type": "text", "id": "heading", "label": "Column heading" },
+        { "type": "text", "id": "label_1", "label": "Link 1 label" },
+        { "type": "url", "id": "url_1", "label": "Link 1 URL" },
+        { "type": "text", "id": "label_2", "label": "Link 2 label" },
+        { "type": "url", "id": "url_2", "label": "Link 2 URL" },
+        { "type": "text", "id": "label_3", "label": "Link 3 label" },
+        { "type": "url", "id": "url_3", "label": "Link 3 URL" },
+        { "type": "text", "id": "label_4", "label": "Link 4 label" },
+        { "type": "url", "id": "url_4", "label": "Link 4 URL" },
+        { "type": "text", "id": "label_5", "label": "Link 5 label" },
+        { "type": "url", "id": "url_5", "label": "Link 5 URL" },
+        { "type": "text", "id": "label_6", "label": "Link 6 label" },
+        { "type": "url", "id": "url_6", "label": "Link 6 URL" }
       ]
     }
   ],
-  "max_blocks": 3,
+  "max_blocks": 4,
   "presets": [
     {
       "name": "Footer",
       "blocks": [
-        { "type": "menu_column", "settings": { "title": "Shop" } },
-        { "type": "menu_column", "settings": { "title": "Studio" } },
-        { "type": "menu_column", "settings": { "title": "Support" } }
+        { "type": "menu_column", "settings": { "heading": "Shop", "label_1": "All Products", "url_1": "/collections/all", "label_2": "Apparel", "url_2": "/collections/apparel", "label_3": "Outerwear", "url_3": "/collections/outerwear", "label_4": "Hardware", "url_4": "/collections/hardware" } },
+        { "type": "menu_column", "settings": { "heading": "Studio", "label_1": "About", "url_1": "/pages/about", "label_2": "Styling", "url_2": "/pages/styling", "label_3": "Journal", "url_3": "/blogs/journal" } },
+        { "type": "menu_column", "settings": { "heading": "Support", "label_1": "Search", "url_1": "/search", "label_2": "Wishlist", "url_2": "/pages/wishlist", "label_3": "Contact", "url_3": "/pages/contact", "label_4": "Shipping & Returns", "url_4": "/pages/shipping-returns" } }
       ]
     }
   ]

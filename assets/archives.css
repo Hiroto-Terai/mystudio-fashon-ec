@@ -118,10 +118,8 @@ button { font-family: inherit; }
 .as-navlink:hover::after { transform: scaleX(1); }
 .as-navlink:hover { opacity: 1; }
 .as-navlink.is-active::after { transform: scaleX(1); }
-.as-navitem { position: relative; display: flex; align-items: center; padding: 27px 0; }
-.as-dropdown { opacity: 0; visibility: hidden; transform: translateX(-50%) translateY(10px); transition: opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard); z-index: 50; }
-.as-navitem:hover .as-dropdown { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-.as-dropitem:hover { color: var(--color-ink) !important; }
+/* Hamburger is always visible now (header redesign): left-slot trigger for the nav drawer, at every breakpoint. */
+.as-burger { display: flex; align-items: center; justify-content: center; }
 .as-styletile { flex: 1 1 0; min-width: 0; }
 .as-styletile:hover .as-stovl { opacity: 1 !important; }
 .as-card { position: relative; }
@@ -179,15 +177,9 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-2col { grid-template-columns: 1fr !important; }
   .as-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
   .as-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
-  .as-nav-center { display: none !important; }
   .as-pdp { grid-template-columns: 1fr !important; }
   .as-pdp-info { position: static !important; }
-  .as-burger { display: flex !important; align-items: center; justify-content: center; }
-  .as-mobmenu { display: block; }
   .as-grid-6 { grid-template-columns: repeat(3, 1fr) !important; }
-  .as-headrow { display: flex !important; justify-content: space-between; }
-  .as-logo { justify-self: auto !important; }
-  .as-headicons { justify-self: auto !important; }
 }
 @media (max-width: 760px) {
   h1 { font-size: clamp(30px, 9vw, 54px) !important; line-height: 1.03 !important; }
@@ -211,11 +203,10 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-eyebrow { font-size: 10px !important; }
 }
 
-@media (min-width: 1001px) {
-  .as-burger { display: none; }
-  .as-mobmenu { display: none; }
-}
 .as-logo { white-space: nowrap; }
+
+/* --- Nav drawer (follow-up header redesign) --- */
+.as-nav-scrim { cursor: pointer; }
 
 /* --- PDP (Sprint 3) --- */
 .as-badge { font: var(--text-mono); font-size: 10px; text-transform: uppercase; letter-spacing: var(--tracking-wide); padding: 5px 10px; white-space: nowrap; }

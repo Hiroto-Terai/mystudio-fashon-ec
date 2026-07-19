@@ -8,6 +8,35 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "shop": {
+          "type": "group",
+          "settings": {
+            "heading": "Shop",
+            "label_1": "All",
+            "url_1": "/collections/all",
+            "label_2": "Apparel",
+            "url_2": "/collections/apparel",
+            "label_3": "Outerwear",
+            "url_3": "/collections/outerwear",
+            "label_4": "Hardware",
+            "url_4": "/collections/hardware"
+          }
+        },
+        "styling": {
+          "type": "link",
+          "settings": { "label": "Styling", "url": "/pages/styling" }
+        },
+        "journal": {
+          "type": "link",
+          "settings": { "label": "Journal", "url": "/blogs/journal" }
+        },
+        "about": {
+          "type": "link",
+          "settings": { "label": "About", "url": "/pages/about" }
+        }
+      },
+      "block_order": ["shop", "styling", "journal", "about"],
       "settings": {}
     }
   },
