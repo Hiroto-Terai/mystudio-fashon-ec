@@ -4,8 +4,8 @@
       "type": "placeholder",
       "settings": {
         "eyebrow": "404",
-        "heading": "Not found",
-        "body": "The page you were looking for could not be found."
+        "heading": "ページが見つかりません",
+        "body": "お探しのページが見つかりませんでした。"
       }
     }
   },

@@ -5,16 +5,16 @@
       "settings": {
         "eyebrow": "01 / Seasonal",
         "heading": "Raw\nStructure\nNo. 01",
-        "body": "A study in restraint — heavyweight organic cottons, technical outerwear, and quiet hardware. Made to be kept.",
-        "button_label": "Explore the collection",
+        "body": "上質なオーガニックコットン、テクニカルなアウター、控えめな金具。削ぎ落とされた一着を、ずっと着るために。",
+        "button_label": "コレクションを見る",
         "fallback_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop"
       }
     },
     "category-tiles": {
       "type": "category-tiles",
       "settings": {
-        "eyebrow": "Shop by category",
-        "heading": "Find your archive"
+        "eyebrow": "カテゴリーから探す",
+        "heading": "アーカイブを探す"
       },
       "blocks": {
         "cat-1": {
@@ -61,7 +61,7 @@
       "type": "featured-collection",
       "settings": {
         "eyebrow": "Featured / FW26",
-        "heading": "The Core Selection",
+        "heading": "コア セレクション",
         "collection": "fw26-core"
       }
     },
@@ -69,7 +69,7 @@
       "type": "ranking",
       "settings": {
         "eyebrow": "Weekly ranking",
-        "heading": "Most saved this week",
+        "heading": "今週の人気アイテム",
         "collection": "fw26-core"
       }
     },
@@ -77,7 +77,7 @@
       "type": "staff-styling",
       "settings": {
         "eyebrow": "Staff styling",
-        "heading": "Worn by the floor"
+        "heading": "スタッフのスタイリング"
       },
       "blocks": {
         "staff-1": {
@@ -131,17 +131,17 @@
     "brand-intro": {
       "type": "brand-intro",
       "settings": {
-        "eyebrow": "The Studio",
-        "heading": "Considered,\nnot seasonal",
-        "body": "ARCHIVES is a Tokyo studio making garments and objects designed to be kept, repaired, and archived — never replaced. Every release is small, documented, and numbered.",
-        "button_label": "About the studio",
+        "eyebrow": "スタジオ",
+        "heading": "季節ではなく、\n意思でつくる。",
+        "body": "ARCHIVESは、買い替えるのではなく、長く着て、直して、しまっておける服やモノをつくる東京のスタジオです。リリースはすべて小ロットで、記録され、ナンバリングされています。",
+        "button_label": "ブランドについて",
         "fallback_image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1400&auto=format&fit=crop"
       }
     },
     "styling-hints": {
       "type": "styling-hints",
       "settings": {
-        "eyebrow": "Styling Hints",
+        "eyebrow": "スタイリングヒント",
         "heading": "みんなの着こなしを見る",
         "body": "気になるアイテムのコーデ実例をチェック。サムネイルをタップすると、使用アイテムがそのまま見られて買えます。",
         "button_label": "すべてのコーディネートを見る"
@@ -230,7 +230,7 @@
     "journal": {
       "type": "journal",
       "settings": {
-        "heading": "From the Journal"
+        "heading": "ジャーナルより"
       }
     },
     "instagram": {
@@ -292,24 +292,24 @@
           "type": "pillar",
           "settings": {
             "no": "01",
-            "title": "Materials first",
-            "body": "Heavyweight organic cottons, technical outerwear fabrics, and quiet hardware — chosen to last, not to trend."
+            "title": "素材へのこだわり",
+            "body": "上質なコットン、テクニカルなアウター素材、控えめな金具——流行ではなく、長く使えることを選びました。"
           }
         },
         "pillar-2": {
           "type": "pillar",
           "settings": {
             "no": "02",
-            "title": "Made to repair",
-            "body": "Every piece ships with a repair guide. We would rather mend a seam than sell you a replacement."
+            "title": "修理して使う",
+            "body": "すべての製品に修理ガイドを同梱しています。買い替えるより、繕うことを大切にしています。"
           }
         },
         "pillar-3": {
           "type": "pillar",
           "settings": {
             "no": "03",
-            "title": "Small, numbered runs",
-            "body": "Releases are produced in limited batches and archived once sold — nothing is restocked indefinitely."
+            "title": "少量・ナンバリング生産",
+            "body": "各リリースは限定バッチで生産し、完売後は再入荷しません。"
           }
         }
       },

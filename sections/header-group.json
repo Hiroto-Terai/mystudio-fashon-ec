@@ -12,8 +12,8 @@
         "shop": {
           "type": "group",
           "settings": {
-            "heading": "Shop",
-            "label_1": "All",
+            "heading": "ショップ",
+            "label_1": "すべて",
             "url_1": "/collections/all",
             "label_2": "Apparel",
             "url_2": "/collections/apparel",
@@ -25,15 +25,15 @@
         },
         "styling": {
           "type": "link",
-          "settings": { "label": "Styling", "url": "/pages/styling" }
+          "settings": { "label": "スタイリング", "url": "/pages/styling" }
         },
         "journal": {
           "type": "link",
-          "settings": { "label": "Journal", "url": "/blogs/journal" }
+          "settings": { "label": "ジャーナル", "url": "/blogs/journal" }
         },
         "about": {
           "type": "link",
-          "settings": { "label": "About", "url": "/pages/about" }
+          "settings": { "label": "ブランドについて", "url": "/pages/about" }
         }
       },
       "block_order": ["shop", "styling", "journal", "about"],

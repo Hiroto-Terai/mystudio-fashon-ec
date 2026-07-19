@@ -3,9 +3,9 @@
     "main": {
       "type": "placeholder",
       "settings": {
-        "eyebrow": "Account",
-        "heading": "Activate Account",
-        "body": "Account UI lands in a later sprint."
+        "eyebrow": "アカウント",
+        "heading": "アカウントの有効化",
+        "body": "アカウント機能は準備中です。"
       }
     }
   },
