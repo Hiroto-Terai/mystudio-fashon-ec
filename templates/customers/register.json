@@ -1,11 +1,9 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
+      "type": "main-register",
       "settings": {
-        "eyebrow": "アカウント",
-        "heading": "新規登録",
-        "body": "アカウント機能は準備中です。"
+        "eyebrow": "アカウント"
       }
     }
   },

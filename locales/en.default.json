@@ -2,6 +2,11 @@
   "accessibility": {
     "skip_to_content": "Skip to content"
   },
+  "breadcrumbs": {
+    "label": "Breadcrumb",
+    "home": "Home",
+    "search": "Search results"
+  },
   "general": {
     "search": {
       "search": "Search",
@@ -32,14 +37,31 @@
       "increase": "Increase quantity",
       "coupon_placeholder": "COUPON — TRY WINTER10",
       "coupon_apply": "Apply",
-      "coupon_invalid": "Invalid code",
-      "coupon_applied": "{{ code }} applied — {{ percent }}% off"
+      "cross_sell_heading": "You may also like"
     },
     "nav": {
       "menu": "Menu",
       "close": "Close menu",
       "search": "Search",
-      "wishlist": "Wishlist"
+      "wishlist": "Wishlist",
+      "account": "Account",
+      "login": "Log in"
+    },
+    "countdown": {
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "ended": "This sale has ended"
+    },
+    "newsletter_popup": {
+      "eyebrow": "First order",
+      "heading": "10% off your first order",
+      "body": "Sign up with your email and we'll send you a 10% off coupon for your first order.",
+      "email_placeholder": "Email address",
+      "submit": "Sign up",
+      "close": "Close",
+      "success": "Thanks for signing up — check your email for the coupon."
     }
   },
   "products": {
@@ -66,7 +88,19 @@
       "restock_notify_heading": "Get notified when back in stock",
       "restock_email_placeholder": "Email address",
       "restock_submit": "Submit",
-      "restock_done": "We'll email you as soon as it's back in stock.",
+      "restock_done": "You're signed up — we'll email you as soon as it's back in stock.",
+      "wishlist_add": "Add to wishlist",
+      "share_heading": "Share",
+      "share_x": "Share on X",
+      "share_facebook": "Share on Facebook",
+      "share_line": "Share on LINE",
+      "share_copy": "Copy link",
+      "share_copied": "Link copied",
+      "zoom_image": "Zoom image",
+      "lightbox_label": "Image viewer",
+      "lightbox_close": "Close",
+      "lightbox_prev": "Previous image",
+      "lightbox_next": "Next image",
       "details_fit": "Details & Fit",
       "materials_care": "Materials & Care",
       "materials_care_default": "Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme.",
@@ -75,7 +109,15 @@
       "details_fit_default": "A considered piece built from archive-grade materials, cut for a relaxed, everyday fit.",
       "fbt_heading": "Frequently bought together",
       "related_heading": "You may also like",
-      "no_image": "No image available"
+      "no_image": "No image available",
+      "badge_early_access": "Early access",
+      "badge_early_access_card": "Early",
+      "early_access_member_title": "Member early access is live",
+      "early_access_member_desc": "You can purchase this now",
+      "early_access_guest_title": "Early access is member-only",
+      "early_access_guest_desc": "Become a member to buy early",
+      "early_access_login": "Log in",
+      "early_access_register": "Create account"
     }
   },
   "collection": {
@@ -150,5 +192,120 @@
     "message_label": "Message",
     "submit": "Send message",
     "success": "Thanks — we'll get back to you shortly."
+  },
+  "customer": {
+    "login": {
+      "eyebrow": "Account",
+      "heading": "Log in",
+      "email_label": "Email",
+      "password_label": "Password",
+      "submit": "Log in",
+      "forgot_password": "Forgot your password?",
+      "recover_email_label": "Email",
+      "recover_submit": "Send reset email",
+      "recover_success": "We've sent you an email with a link to reset your password.",
+      "no_account": "Don't have an account?",
+      "register_link": "Create account",
+      "error_heading": "Please check the following"
+    },
+    "register": {
+      "eyebrow": "Account",
+      "heading": "Create account",
+      "first_name_label": "First name",
+      "last_name_label": "Last name",
+      "email_label": "Email",
+      "password_label": "Password",
+      "password_confirm_label": "Confirm password",
+      "submit": "Create account",
+      "have_account": "Already have an account?",
+      "login_link": "Log in",
+      "error_heading": "Please check the following"
+    },
+    "account": {
+      "eyebrow": "Account",
+      "heading": "My account",
+      "greeting": "Hello, {{ name }}",
+      "logout": "Log out",
+      "points_heading": "Points & rank",
+      "points_label": "Points balance",
+      "points_unit": "pt",
+      "rank_label": "Membership rank",
+      "rank_fallback": "Standard",
+      "points_fallback": "—",
+      "points_note": "Points are automatically added when you make a purchase.",
+      "orders_heading": "Order history",
+      "orders_empty": "You haven't placed any orders yet.",
+      "order_number": "Order",
+      "order_date": "Date",
+      "order_status": "Payment status",
+      "order_fulfillment": "Fulfillment",
+      "order_total": "Total",
+      "order_detail": "View order",
+      "address_heading": "Default address",
+      "address_empty": "No address on file.",
+      "address_manage": "Manage addresses"
+    },
+    "order": {
+      "eyebrow": "Account",
+      "heading": "Order details",
+      "back": "Back to account",
+      "placed_on": "Placed on",
+      "items_heading": "Items",
+      "quantity": "Quantity",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "total": "Total",
+      "discount": "Discount",
+      "shipping_address_heading": "Shipping address",
+      "billing_address_heading": "Billing address",
+      "fulfillment_heading": "Fulfillment status",
+      "tracking_company": "Carrier",
+      "tracking_number": "Tracking number",
+      "tracking_link": "Track shipment",
+      "no_tracking": "No tracking information yet."
+    },
+    "addresses": {
+      "eyebrow": "Account",
+      "heading": "Addresses",
+      "back": "Back to account",
+      "add_new": "Add a new address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "default_badge": "Default address",
+      "set_default": "Set as default address",
+      "empty": "No address on file.",
+      "first_name_label": "First name",
+      "last_name_label": "Last name",
+      "company_label": "Company (optional)",
+      "address1_label": "Address 1",
+      "address2_label": "Address 2 (apartment, suite, etc.)",
+      "city_label": "City",
+      "country_label": "Country/Region",
+      "province_label": "State/Province",
+      "zip_label": "Postal/ZIP code",
+      "phone_label": "Phone",
+      "save": "Save",
+      "cancel": "Cancel",
+      "error_heading": "Please check the following"
+    },
+    "reset_password": {
+      "eyebrow": "Account",
+      "heading": "Reset password",
+      "body": "Enter a new password below.",
+      "password_label": "New password",
+      "password_confirm_label": "Confirm password",
+      "submit": "Update password",
+      "error_heading": "Please check the following"
+    },
+    "activate_account": {
+      "eyebrow": "Account",
+      "heading": "Activate account",
+      "body": "Set a password to activate your account.",
+      "password_label": "Password",
+      "password_confirm_label": "Confirm password",
+      "submit": "Activate account",
+      "error_heading": "Please check the following"
+    }
   }
 }

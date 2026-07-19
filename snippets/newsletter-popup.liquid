@@ -1,0 +1,39 @@
+{%- comment -%}
+  First-visit newsletter / first-order-discount popup. Rendered once from
+  layout/theme.liquid, gated by the "popup_enabled" theme setting. Shown a
+  few seconds after first load (settings.popup_delay) via bindNewsletterPopup
+  in assets/archives.js, then suppressed on every later visit via
+  localStorage once the visitor closes it or signs up.
+{%- endcomment -%}
+{%- if settings.popup_enabled -%}
+  <div data-newsletter-popup hidden data-popup-delay="{{ settings.popup_delay | default: 5 }}" class="as-popup-scrim">
+    <div class="as-popup" role="dialog" aria-modal="true" aria-labelledby="NewsletterPopupHeading">
+      <button type="button" data-popup-close class="as-iconbtn as-popup-close" aria-label="{{ 'general.newsletter_popup.close' | t }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div style="display:flex; flex-direction:column; gap:var(--space-5); padding:var(--space-10);">
+        <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ 'general.newsletter_popup.eyebrow' | t }}</span>
+        <h2 id="NewsletterPopupHeading" style="font-weight:var(--fw-bold); font-size:var(--fs-2xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ 'general.newsletter_popup.heading' | t }}</h2>
+        <p style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed);">{{ 'general.newsletter_popup.body' | t }}</p>
+
+        {%- form 'customer', id: 'NewsletterPopupForm' -%}
+          {%- if form.posted_successfully? -%}
+            <p data-popup-success style="font:var(--text-body-sm); color:var(--text-primary); border:1px solid var(--border-default); padding:var(--space-4); margin:0;">{{ 'general.newsletter_popup.success' | t }}</p>
+          {%- else -%}
+            <input type="hidden" name="contact[tags]" value="newsletter,popup-signup">
+            {%- if form.errors -%}
+              <div style="font:var(--text-body-sm); color:var(--text-sale);">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <div style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink);">
+              <label class="visually-hidden" for="NewsletterPopupEmail">{{ 'general.newsletter_popup.email_placeholder' | t }}</label>
+              <input type="email" id="NewsletterPopupEmail" name="contact[email]" required placeholder="{{ 'general.newsletter_popup.email_placeholder' | t | upcase }}" class="as-input" style="flex:1; padding:var(--space-3) 0; text-transform:uppercase; letter-spacing:var(--tracking-wide);">
+              <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="{{ 'general.newsletter_popup.submit' | t }}" style="background:none; border:none; padding:var(--space-2); cursor:pointer; color:var(--color-ink);">
+                <svg class="as-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

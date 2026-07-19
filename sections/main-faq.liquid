@@ -1,0 +1,70 @@
+{%- comment -%}
+  FAQ page (templates/page.faq.json): Q&A blocks rendered as native
+  <details>/<summary> accordions, same +/- sign convention as the PDP
+  details accordion (.as-pdp-accordion in assets/archives.css).
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ section.settings.heading }}</h1>
+      {%- if section.settings.body != blank -%}
+        <p style="font:var(--text-body); color:var(--text-secondary); line-height:var(--lh-relaxed); margin-top:var(--space-4); max-width:560px;">{{ section.settings.body }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:0 var(--page-gutter) var(--section-y); border-top:1px solid var(--border-default);">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.question != blank -%}
+          <details class="as-filter-group as-pdp-accordion" style="border-bottom:1px solid var(--border-default);" {{ block.shopify_attributes }}>
+            <summary style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-5) 0; gap:var(--space-4);">
+              <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ block.settings.question }}</span>
+              <span class="as-accordion-sign" style="font-size:var(--fs-md); color:var(--text-secondary); flex:none;"></span>
+            </summary>
+            <div style="font:var(--text-body-sm); color:var(--text-secondary); line-height:var(--lh-relaxed); padding-bottom:var(--space-5);">{{ block.settings.answer }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "サポート" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "よくある質問" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "配送・返品・サイズ・会員登録・お支払いについて、よくいただくご質問をまとめました。" }
+  ],
+  "blocks": [
+    {
+      "type": "qa",
+      "name": "Q&A",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        { "type": "qa", "settings": { "question": "配送にはどれくらい時間がかかりますか？", "answer": "<p>ご注文確定後、通常2〜5営業日でお届けします。¥30,000以上のご注文は送料無料です。</p>" } },
+        { "type": "qa", "settings": { "question": "返品・交換はできますか？", "answer": "<p>未使用でタグ付きの商品に限り、お届けから30日以内であれば返品を承ります。詳しくは配送・返品ページをご覧ください。</p>" } },
+        { "type": "qa", "settings": { "question": "サイズ選びに迷ったときは？", "answer": "<p>各商品ページの「サイズ表」から実寸をご確認いただけます。それでも不明な場合はお問い合わせフォームからご連絡ください。</p>" } },
+        { "type": "qa", "settings": { "question": "会員登録のメリットは何ですか？", "answer": "<p>会員登録いただくと、会員限定価格・先行販売への参加・修理サービスの優先案内などの特典がございます。</p>" } },
+        { "type": "qa", "settings": { "question": "お支払い方法を教えてください。", "answer": "<p>クレジットカード、Shop Pay、その他ご利用のストアが対応する決済方法がご利用いただけます。</p>" } }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

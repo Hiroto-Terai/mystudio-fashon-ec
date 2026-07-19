@@ -1,0 +1,56 @@
+{%- comment -%}
+  Account activation (templates/customers/activate_account.json), reached
+  from the invite email Shopify sends when an account is created by the
+  merchant. {% form 'activate_customer_password' %} sets the customer's
+  initial password.
+{%- endcomment -%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.activate_account.heading' | t }}</h1>
+      <p style="font:var(--text-body-sm); color:var(--text-secondary); margin-top:var(--space-3);">{{ 'customer.activate_account.body' | t }}</p>
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:480px; margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      {%- form 'activate_customer_password' -%}
+        {%- if form.errors -%}
+          <div style="font:var(--text-body-sm); color:var(--text-sale); margin-bottom:var(--space-5);">
+            <p style="font-weight:var(--fw-semibold); margin-bottom:var(--space-2);">{{ 'customer.activate_account.error_heading' | t }}</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+        <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.activate_account.password_label' | t }}
+            <input type="password" name="customer[password]" autocomplete="new-password" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:var(--space-2); font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+            {{ 'customer.activate_account.password_confirm_label' | t }}
+            <input type="password" name="customer[password_confirmation]" autocomplete="new-password" required class="as-input" style="border:1px solid var(--border-default); padding:var(--space-3); font:var(--text-body-sm); color:var(--text-primary); text-transform:none; letter-spacing:normal;">
+          </label>
+          <button type="submit" style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:14px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'customer.activate_account.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main activate account",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main activate account" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/activate_account"]
+  }
+}
+{% endschema %}

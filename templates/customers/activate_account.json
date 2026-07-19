@@ -1,11 +1,9 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
+      "type": "main-activate-account",
       "settings": {
-        "eyebrow": "アカウント",
-        "heading": "アカウントの有効化",
-        "body": "アカウント機能は準備中です。"
+        "eyebrow": "アカウント"
       }
     }
   },

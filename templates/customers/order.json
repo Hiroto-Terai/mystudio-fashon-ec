@@ -1,11 +1,9 @@
 {
   "sections": {
     "main": {
-      "type": "placeholder",
+      "type": "main-order",
       "settings": {
-        "eyebrow": "アカウント",
-        "heading": "注文",
-        "body": "アカウント機能は準備中です。"
+        "eyebrow": "アカウント"
       }
     }
   },

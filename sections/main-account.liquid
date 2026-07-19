@@ -1,0 +1,124 @@
+{%- comment -%}
+  Account overview (templates/customers/account.json). Reads two optional
+  metafields set on the customer resource: metafields.custom.points
+  (number_integer) and metafields.custom.rank (single_line_text) — falling
+  back to "—" / "Standard" when unset, since Flow/an app is what actually
+  awards points (this page only ever displays the balance). Order history
+  uses {% paginate customer.orders by 10 %}; the default address card links
+  out to full address management (templates/customers/addresses.json).
+{%- endcomment -%}
+{%- liquid
+  assign points_value = customer.metafields.custom.points.value
+  assign rank_value = customer.metafields.custom.rank.value
+  assign th_style = 'text-align:left; padding:var(--space-3); border-bottom:1px solid var(--border-default); font:var(--text-label); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide); white-space:nowrap;'
+  assign td_style = 'padding:var(--space-3); border-bottom:1px solid var(--border-subtle); font:var(--text-body-sm);'
+-%}
+<div>
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10); display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:var(--space-6);">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow" style="font-size:var(--fs-xs);">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-top:var(--space-4);">{{ 'customer.account.heading' | t }}</h1>
+        <p style="font:var(--text-body-sm); color:var(--text-secondary); margin-top:var(--space-3);">{{ 'customer.account.greeting' | t: name: customer.first_name }}</p>
+      </div>
+      <a href="{{ routes.account_logout_url }}" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">{{ 'customer.account.logout' | t }}</a>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-5);">{{ 'customer.account.points_heading' | t }}</h2>
+      <div style="border:1px solid var(--border-default); padding:var(--space-8); display:flex; flex-wrap:wrap; gap:var(--space-10);">
+        <div>
+          <span style="display:block; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); margin-bottom:var(--space-2);">{{ 'customer.account.points_label' | t }}</span>
+          <span style="font-weight:var(--fw-black); font-size:var(--fs-3xl);">{% if points_value != blank %}{{ points_value }}{{ 'customer.account.points_unit' | t }}{% else %}{{ 'customer.account.points_fallback' | t }}{% endif %}</span>
+        </div>
+        <div>
+          <span style="display:block; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary); margin-bottom:var(--space-2);">{{ 'customer.account.rank_label' | t }}</span>
+          <span style="font-weight:var(--fw-black); font-size:var(--fs-3xl);">{% if rank_value != blank %}{{ rank_value }}{% else %}{{ 'customer.account.rank_fallback' | t }}{% endif %}</span>
+        </div>
+      </div>
+      <p style="font:var(--text-body-sm); color:var(--text-tertiary); margin-top:var(--space-4);">{{ 'customer.account.points_note' | t }}</p>
+    </div>
+  </section>
+
+  <section style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-5);">{{ 'customer.account.orders_heading' | t }}</h2>
+
+      {%- paginate customer.orders by 10 -%}
+        {%- if customer.orders.size > 0 -%}
+          <div style="overflow-x:auto;">
+            <table style="width:100%; min-width:560px; border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="{{ th_style }}">{{ 'customer.account.order_number' | t }}</th>
+                  <th style="{{ th_style }}">{{ 'customer.account.order_date' | t }}</th>
+                  <th style="{{ th_style }}">{{ 'customer.account.order_status' | t }}</th>
+                  <th style="{{ th_style }}">{{ 'customer.account.order_fulfillment' | t }}</th>
+                  <th style="{{ th_style }}">{{ 'customer.account.order_total' | t }}</th>
+                  <th style="{{ th_style }}"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for order in customer.orders -%}
+                  <tr>
+                    <td style="{{ td_style }}">{{ order.name }}</td>
+                    <td style="{{ td_style }}">{{ order.created_at | date: '%Y/%m/%d' }}</td>
+                    <td style="{{ td_style }}">{{ order.financial_status_label }}</td>
+                    <td style="{{ td_style }}">{{ order.fulfillment_status_label }}</td>
+                    <td style="{{ td_style }}">{{ order.total_price | money }}</td>
+                    <td style="{{ td_style }} text-align:right;"><a href="{{ order.customer_url }}" class="as-navlink" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--color-ink);">{{ 'customer.account.order_detail' | t }}</a></td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <nav class="as-pagination" role="navigation" aria-label="{{ 'collection.pagination.label' | t }}" style="padding:var(--space-8) 0 0; display:flex; justify-content:center;">
+              {{ paginate | default_pagination }}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <p style="font:var(--text-body-sm); color:var(--text-secondary);">{{ 'customer.account.orders_empty' | t }}</p>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </section>
+
+  <section>
+    <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--space-10) var(--page-gutter) var(--section-y);">
+      <h2 style="font-weight:var(--fw-bold); font-size:var(--fs-xl); text-transform:uppercase; letter-spacing:var(--tracking-wide); margin-bottom:var(--space-5);">{{ 'customer.account.address_heading' | t }}</h2>
+      <div style="border:1px solid var(--border-default); padding:var(--space-8); display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-6);">
+        {%- if customer.default_address -%}
+          <address style="font:var(--text-body-sm); color:var(--text-primary); font-style:normal; line-height:var(--lh-relaxed);">
+            {{ customer.default_address.name }}<br>
+            {{ customer.default_address.address1 }}{% if customer.default_address.address2 != blank %} {{ customer.default_address.address2 }}{% endif %}<br>
+            {{ customer.default_address.city }}{% if customer.default_address.province != blank %} {{ customer.default_address.province }}{% endif %} {{ customer.default_address.zip }}<br>
+            {{ customer.default_address.country }}
+          </address>
+        {%- else -%}
+          <p style="font:var(--text-body-sm); color:var(--text-secondary);">{{ 'customer.account.address_empty' | t }}</p>
+        {%- endif -%}
+        <a href="{{ routes.account_addresses_url }}" class="as-navlink" style="align-self:flex-start; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); color:var(--color-ink);">{{ 'customer.account.address_manage' | t }}</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Main account",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "アカウント" }
+  ],
+  "presets": [
+    { "name": "Main account" }
+  ],
+  "enabled_on": {
+    "templates": ["customers/account"]
+  }
+}
+{% endschema %}

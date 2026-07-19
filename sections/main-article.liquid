@@ -12,6 +12,7 @@
   assign related_max = 6
 -%}
 <div>
+  {%- render 'breadcrumbs' -%}
   <div style="border-bottom:1px solid var(--border-default);">
     <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);">
       <a href="{{ blog.url }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'blog.back_to_journal' | t }}</a>

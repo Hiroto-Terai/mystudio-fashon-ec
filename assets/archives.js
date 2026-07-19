@@ -3,8 +3,7 @@
    Sprint 0: header (search toggle, mobile menu), cart drawer open/close,
    wishlist (localStorage) + header badges.
    Sprint 4: Ajax cart — add/change re-renders the cart drawer (and the
-   cart page, when open) via the Section Rendering API, plus a
-   client-side coupon demo.
+   cart page, when open) via the Section Rendering API.
    Sprint 5: Wishlist page (Products/Stylings tabs) — Products are fetched
    from /products/{handle}.js and rendered client-side; Stylings are
    defensive (Sprint 6 hasn't shipped real styling data yet).
@@ -14,6 +13,13 @@
    Follow-up (header redesign): hamburger is now always visible and opens a
    left-sliding nav drawer (block-driven) instead of toggling an inline
    mobile menu — see NavDrawer / bindNavDrawer below.
+   Feature pack 1: PDP lightbox + SNS share + real wishlist toggle + real
+   restock contact form, cart cross-sell, and coupon codes now redirect
+   through Shopify's /discount/<code> URL (real discount, applied server-side)
+   instead of a client-computed demo — see bindCoupon below.
+   Feature pack 3: sale countdown (bindCountdown), first-visit newsletter
+   popup (bindNewsletterPopup), and skeleton rows for the predictive search
+   suggest panel while its fetch is in flight (renderSearchSkeleton).
    ============================================================ */
 (function () {
   'use strict';
@@ -22,13 +28,7 @@
     products: 'archives:wishlist:products',
     stylings: 'archives:wishlist:stylings'
   };
-  var COUPON_KEY = 'archives:coupon';
   var DRAWER_CLOSE_DELAY_MS = 480; /* matches --dur-drawer, so hidden is set only after the slide-out transition finishes */
-  /* Client-side discount demo only: Shopify has no public API to apply a
-     real discount code from the storefront without redirecting through
-     checkout, so this recalculates and displays the discount locally.
-     The actual order total is whatever applies at checkout. */
-  var COUPONS = { WINTER10: 0.10, ARCHIVE5: 0.05 };
   var CART_SECTION_ID = 'cart-drawer';
   var MAIN_CART_SECTION_ID = 'main-cart';
 
@@ -137,6 +137,31 @@
     suggest.innerHTML = '';
   }
 
+  /* Skeleton rows shown the instant a fetch starts, so the panel never sits
+     empty/blank while waiting on the network - replaced in-place by
+     renderSearchSuggest() once the response lands. Sized to match the real
+     .as-suggest-product markup (48x48 thumb + two text lines) so there's no
+     layout shift when the skeleton is swapped for real results. */
+  var SEARCH_SKELETON_ROWS = 3;
+  function renderSearchSkeleton(suggest) {
+    var row =
+      '<div class="as-suggest-product as-skeleton-row">' +
+        '<span class="as-suggest-thumb as-skeleton"></span>' +
+        '<span class="as-suggest-info">' +
+          '<span class="as-skeleton as-skeleton-line" style="width:75%;"></span>' +
+          '<span class="as-skeleton as-skeleton-line" style="width:40%;"></span>' +
+        '</span>' +
+      '</div>';
+    var rows = '';
+    for (var i = 0; i < SEARCH_SKELETON_ROWS; i++) { rows += row; }
+    suggest.innerHTML =
+      '<div class="as-suggest-panel">' +
+        '<p class="visually-hidden" role="status" aria-live="polite">' + escapeHtml(suggest.getAttribute('data-loading-text') || '検索中…') + '</p>' +
+        '<div class="as-suggest-group as-suggest-products">' + rows + '</div>' +
+      '</div>';
+    suggest.removeAttribute('hidden');
+  }
+
   function escapeHtml(value) {
     return String(value == null ? '' : value)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -219,9 +244,7 @@
     function fetchSuggestions(query) {
       if (activeController && activeController.abort) activeController.abort();
       activeController = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var loadingText = suggest.getAttribute('data-loading-text') || '検索中…';
-      suggest.innerHTML = '<p class="as-suggest-status">' + escapeHtml(loadingText) + '</p>';
-      suggest.removeAttribute('hidden');
+      renderSearchSkeleton(suggest);
 
       var url = '/search/suggest.json?q=' + encodeURIComponent(query) +
         '&resources[type]=product,collection,article,page,query' +
@@ -232,8 +255,11 @@
         headers: { 'Accept': 'application/json' },
         signal: activeController ? activeController.signal : undefined
       })
-        .then(function (res) { return res.json(); })
-        .then(function (data) { renderSearchSuggest(suggest, data); })
+        .then(function (res) {
+          if (!res.ok) { closeSearchSuggest(panel); return null; }
+          return res.json();
+        })
+        .then(function (data) { if (data) renderSearchSuggest(suggest, data); })
         .catch(function (err) {
           if (err && err.name === 'AbortError') return;
           closeSearchSuggest(panel);
@@ -395,8 +421,6 @@
     var fresh = parseSectionFragment(html, selector);
     if (!fresh) return;
     current.innerHTML = fresh.innerHTML;
-    var cents = fresh.getAttribute('data-cart-subtotal-cents');
-    if (cents !== null) current.setAttribute('data-cart-subtotal-cents', cents);
   }
 
   function requestedSectionIds() {
@@ -405,11 +429,14 @@
     return ids;
   }
 
+  /* Discount/subtotal/cross-sell numbers are all rendered server-side from
+     the cart object (see sections/cart-drawer.liquid + main-cart.liquid), so
+     swapping in the fresh section HTML is enough to keep them correct after
+     every add/change - no client-side recompute needed. */
   function applySectionsResponse(sections) {
     if (!sections) return;
     if (sections[CART_SECTION_ID]) swapContents(cartDrawerContents(), sections[CART_SECTION_ID], '[data-cart-drawer-contents]');
     if (sections[MAIN_CART_SECTION_ID]) swapContents(mainCartContents(), sections[MAIN_CART_SECTION_ID], '[data-main-cart-contents]');
-    syncCouponUI();
   }
 
   /* addToCart() is shared by product-card quick-add and the PDP form so
@@ -533,68 +560,21 @@
     });
   }
 
-  /* ---------- Coupon demo (client-side subtotal discount) ---------- */
-  function readCoupon() {
-    try { return sessionStorage.getItem(COUPON_KEY); } catch (e) { return null; }
-  }
-  function writeCoupon(code) {
-    try {
-      if (code) sessionStorage.setItem(COUPON_KEY, code);
-      else sessionStorage.removeItem(COUPON_KEY);
-    } catch (e) { /* sessionStorage unavailable (private mode etc.) - coupon just won't persist across renders */ }
-  }
-  function activeCoupon() {
-    var code = readCoupon();
-    if (code && !COUPONS.hasOwnProperty(code)) { writeCoupon(null); code = null; }
-    return code;
-  }
-
-  function renderDiscountInto(root, code) {
-    if (!root) return;
-    var subtotalCents = parseInt(root.getAttribute('data-cart-subtotal-cents'), 10) || 0;
-    var rate = code ? COUPONS[code] : 0;
-    var discountCents = code ? Math.round(subtotalCents * rate) : 0;
-    var row = qs('[data-cart-discount-row]', root);
-    var amountEl = qs('[data-cart-discount]', root);
-    if (row) row.hidden = !code;
-    if (amountEl) amountEl.textContent = code ? ('−' + formatMoney(discountCents)) : '';
-    var totalEl = qs('[data-cart-total]', root);
-    if (totalEl) totalEl.textContent = formatMoney(Math.max(0, subtotalCents - discountCents));
-  }
-
-  function syncCouponUI(showInvalid) {
-    var code = activeCoupon();
-    renderDiscountInto(cartDrawerContents(), code);
-    renderDiscountInto(mainCartContents(), code);
-    var msgEl = qs('[data-coupon-msg]', cartDrawerContents());
-    if (!msgEl) return;
-    if (showInvalid) {
-      msgEl.hidden = false;
-      msgEl.textContent = msgEl.getAttribute('data-invalid-text') || '無効なコードです';
-    } else if (code) {
-      msgEl.hidden = false;
-      var template = msgEl.getAttribute('data-applied-template') || '__CODE__ 適用中 — __PERCENT__% OFF';
-      msgEl.textContent = template.replace('__CODE__', code).replace('__PERCENT__', Math.round(COUPONS[code] * 100));
-    } else {
-      msgEl.hidden = true;
-      msgEl.textContent = '';
-    }
-  }
-
+  /* ---------- Coupon (real Shopify discount) ----------
+     Shopify has no storefront API to validate/apply a discount code without
+     a request round-trip, so this hands the code straight to Shopify's own
+     /discount/<code> redemption URL - it applies the discount to the cart
+     session server-side (or silently no-ops on an invalid code, which is
+     Shopify's own behaviour) and lands back on /cart, where the discount
+     row below is rendered from the real cart.total_discount. */
   function bindCoupon() {
     if (document.__couponBound) return;
     document.__couponBound = true;
     function apply() {
       var input = qs('[data-coupon-input]', cartDrawerContents());
-      var raw = input ? input.value.trim().toUpperCase() : '';
-      if (!raw) return;
-      if (COUPONS.hasOwnProperty(raw)) {
-        writeCoupon(raw);
-        syncCouponUI(false);
-      } else {
-        writeCoupon(null);
-        syncCouponUI(true);
-      }
+      var code = input ? input.value.trim() : '';
+      if (!code) return;
+      window.location.href = '/discount/' + encodeURIComponent(code) + '?redirect=/cart';
     }
     on(document, 'click', function (e) {
       if (e.target.closest('[data-coupon-apply]')) { e.preventDefault(); apply(); }
@@ -783,17 +763,6 @@
         });
       }
 
-      var restockForm = qs('[data-restock-form]', root);
-      if (restockForm) {
-        on(restockForm, 'submit', function (e) {
-          e.preventDefault();
-          var idle = qs('[data-restock-idle]', root);
-          var done = qs('[data-restock-done]', root);
-          if (idle) idle.hidden = true;
-          if (done) done.hidden = false;
-        });
-      }
-
       refreshAddLabel();
       updateOptionAvailability();
     });
@@ -816,6 +785,122 @@
         var modal = qs('[data-size-chart-modal]');
         if (modal) modal.setAttribute('hidden', '');
       });
+    });
+  }
+
+  /* ---------- PDP: image lightbox (gallery zoom) ----------
+     Event-delegated so it works regardless of how many gallery tiles the
+     product has. Clicking a tile collects every [data-lightbox-open] inside
+     its [data-lightbox-gallery] ancestor (DOM order == gallery order) so
+     prev/next can step through the full set. */
+  var LIGHTBOX_FADE_MS = 320; /* matches --dur-base, so [hidden] is only re-applied after the fade-out transition finishes */
+  var Lightbox = {
+    images: [],
+    index: 0,
+    trigger: null,
+    el: function () { return qs('[data-lightbox]'); },
+    imageEl: function () { var d = this.el(); return d ? qs('[data-lightbox-image]', d) : null; },
+    render: function () {
+      var img = this.imageEl();
+      var current = this.images[this.index];
+      if (!img || !current) return;
+      img.src = current.src;
+      img.alt = current.alt;
+    },
+    open: function (images, index, trigger) {
+      var d = this.el();
+      if (!d || !images.length) return;
+      this.images = images;
+      this.index = index;
+      this.trigger = trigger || null;
+      this.render();
+      d.removeAttribute('hidden');
+      requestAnimationFrame(function () { d.classList.add('is-open'); });
+      document.body.classList.add('as-drawer-open');
+      var closeBtn = qs('[data-lightbox-close]', d);
+      if (closeBtn) closeBtn.focus();
+    },
+    close: function () {
+      var d = this.el();
+      if (!d || d.hasAttribute('hidden')) return;
+      d.classList.remove('is-open');
+      document.body.classList.remove('as-drawer-open');
+      window.setTimeout(function () { d.setAttribute('hidden', ''); }, LIGHTBOX_FADE_MS);
+      if (this.trigger && this.trigger.focus) this.trigger.focus();
+      this.trigger = null;
+    },
+    next: function () { if (!this.images.length) return; this.index = (this.index + 1) % this.images.length; this.render(); },
+    prev: function () { if (!this.images.length) return; this.index = (this.index - 1 + this.images.length) % this.images.length; this.render(); }
+  };
+
+  function bindLightbox() {
+    if (document.__lightboxBound) return;
+    document.__lightboxBound = true;
+
+    on(document, 'click', function (e) {
+      var opener = e.target.closest('[data-lightbox-open]');
+      if (opener) {
+        e.preventDefault();
+        var gallery = opener.closest('[data-lightbox-gallery]');
+        var openers = gallery ? qsa('[data-lightbox-open]', gallery) : [opener];
+        var images = openers.map(function (node) {
+          return { src: node.getAttribute('data-lightbox-src'), alt: node.getAttribute('data-lightbox-alt') || '' };
+        });
+        var index = openers.indexOf(opener);
+        Lightbox.open(images, index === -1 ? 0 : index, opener);
+        return;
+      }
+      if (e.target.closest('[data-lightbox-close]') || e.target.closest('[data-lightbox-scrim]')) { Lightbox.close(); return; }
+      if (e.target.closest('[data-lightbox-next]')) { Lightbox.next(); return; }
+      if (e.target.closest('[data-lightbox-prev]')) { Lightbox.prev(); return; }
+    });
+
+    on(document, 'keydown', function (e) {
+      /* Gallery tiles are role="button" divs - Enter/Space should activate them like a real button. */
+      var opener = e.target.closest && e.target.closest('[data-lightbox-open]');
+      if (opener && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); opener.click(); return; }
+
+      var d = Lightbox.el();
+      if (!d || d.hasAttribute('hidden')) return;
+      if (e.key === 'Escape') { Lightbox.close(); }
+      else if (e.key === 'ArrowRight') { Lightbox.next(); }
+      else if (e.key === 'ArrowLeft') { Lightbox.prev(); }
+    });
+  }
+
+  /* ---------- PDP: SNS share (X / Facebook / LINE / copy link) ---------- */
+  function bindShare() {
+    if (document.__shareBound) return;
+    document.__shareBound = true;
+
+    function openShareWindow(url) {
+      window.open(url, '_blank', 'noopener,noreferrer,width=600,height=480');
+    }
+
+    on(document, 'click', function (e) {
+      var xBtn = e.target.closest('[data-share-x]');
+      var fbBtn = e.target.closest('[data-share-facebook]');
+      var lineBtn = e.target.closest('[data-share-line]');
+      var copyBtn = e.target.closest('[data-share-copy]');
+      if (!xBtn && !fbBtn && !lineBtn && !copyBtn) return;
+      e.preventDefault();
+
+      if (xBtn) {
+        var text = xBtn.getAttribute('data-share-text') || '';
+        openShareWindow('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(xBtn.getAttribute('data-share-url')));
+      } else if (fbBtn) {
+        openShareWindow('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(fbBtn.getAttribute('data-share-url')));
+      } else if (lineBtn) {
+        openShareWindow('https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(lineBtn.getAttribute('data-share-url')));
+      } else if (copyBtn) {
+        var url = copyBtn.getAttribute('data-share-url');
+        var status = qs('[data-share-status]', copyBtn.parentNode);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function () {
+            if (status) status.textContent = status.getAttribute('data-copied-text') || '';
+          });
+        }
+      }
     });
   }
 
@@ -1005,6 +1090,107 @@
     renderAll();
   }
 
+  /* ---------- Sale countdown (sections/sale-countdown.liquid) ----------
+     Reads the ISO end date off data-countdown-to and ticks every second.
+     Purely client-side (no server round trip needed once the page has
+     loaded), so it keeps counting correctly even if the visitor's clock
+     drifts slightly - only the initial target date matters. */
+  function bindCountdown() {
+    qsa('[data-countdown]').forEach(function (root) {
+      if (root.__countdownBound) return;
+      root.__countdownBound = true;
+
+      var target = new Date(root.getAttribute('data-countdown-to')).getTime();
+      if (!target || isNaN(target)) return;
+
+      var timer = qs('[data-countdown-timer]', root);
+      var endedEl = qs('[data-countdown-ended]', root);
+      var daysEl = qs('[data-countdown-days]', root);
+      var hoursEl = qs('[data-countdown-hours]', root);
+      var minutesEl = qs('[data-countdown-minutes]', root);
+      var secondsEl = qs('[data-countdown-seconds]', root);
+      var intervalId = null;
+
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+      function tick() {
+        var diff = target - Date.now();
+        if (diff <= 0) {
+          if (timer) timer.hidden = true;
+          if (endedEl) endedEl.hidden = false;
+          if (intervalId) window.clearInterval(intervalId);
+          return;
+        }
+        var totalSeconds = Math.floor(diff / 1000);
+        var days = Math.floor(totalSeconds / 86400);
+        var hours = Math.floor((totalSeconds % 86400) / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+        if (daysEl) daysEl.textContent = pad(days);
+        if (hoursEl) hoursEl.textContent = pad(hours);
+        if (minutesEl) minutesEl.textContent = pad(minutes);
+        if (secondsEl) secondsEl.textContent = pad(seconds);
+      }
+
+      tick();
+      intervalId = window.setInterval(tick, 1000);
+    });
+  }
+
+  /* ---------- Newsletter / first-order-discount popup (snippets/newsletter-popup.liquid) ----------
+     Shown once, a few seconds after first load, then suppressed forever via
+     a localStorage flag - set as soon as the visitor dismisses it OR submits
+     the form (no need to wait for the redirect back). prefers-reduced-motion
+     is handled in CSS (the .as-popup-scrim/.as-popup transitions are
+     disabled there), so no branching is needed here. */
+  var NEWSLETTER_POPUP_STORAGE_KEY = 'archives:newsletter-popup:dismissed';
+
+  function bindNewsletterPopup() {
+    var popup = qs('[data-newsletter-popup]');
+    if (!popup || popup.__asBound) return;
+    popup.__asBound = true;
+
+    function markDismissed() {
+      try { window.localStorage.setItem(NEWSLETTER_POPUP_STORAGE_KEY, '1'); } catch (e) { /* private mode / storage disabled */ }
+    }
+
+    function close() {
+      popup.classList.remove('is-open');
+      document.body.classList.remove('as-drawer-open');
+      window.setTimeout(function () { popup.setAttribute('hidden', ''); }, DRAWER_CLOSE_DELAY_MS);
+    }
+
+    function open() {
+      popup.removeAttribute('hidden');
+      requestAnimationFrame(function () { popup.classList.add('is-open'); });
+      document.body.classList.add('as-drawer-open');
+    }
+
+    on(popup, 'click', function (e) {
+      if (e.target === popup || e.target.closest('[data-popup-close]')) {
+        markDismissed();
+        close();
+      }
+    });
+    on(document, 'keydown', function (e) {
+      if (e.key === 'Escape' && popup.classList.contains('is-open')) { markDismissed(); close(); }
+    });
+
+    var form = qs('form', popup);
+    if (form) on(form, 'submit', markDismissed);
+
+    /* A server-rendered success state means the form was just submitted
+       (page reloaded after redirect) - don't pop it open again. */
+    if (qs('[data-popup-success]', popup)) { markDismissed(); return; }
+
+    var dismissed = false;
+    try { dismissed = window.localStorage.getItem(NEWSLETTER_POPUP_STORAGE_KEY) === '1'; } catch (e) { /* private mode / storage disabled */ }
+    if (dismissed) return;
+
+    var delaySeconds = parseFloat(popup.getAttribute('data-popup-delay')) || 5;
+    window.setTimeout(open, delaySeconds * 1000);
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -1015,12 +1201,15 @@
     bindQuickAdd();
     bindCartLineControls();
     bindCoupon();
-    syncCouponUI();
     bindCollectionFilters();
     bindWishlistPage();
     bindMemberToggle();
     bindProductVariantPicker();
     bindSizeChart();
+    bindLightbox();
+    bindShare();
+    bindCountdown();
+    bindNewsletterPopup();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }
