@@ -95,8 +95,16 @@
       <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-4) var(--page-gutter); border-top:1px solid var(--border-default);">
         <form method="get" data-collection-filter-form style="display:flex; align-items:flex-start; gap:var(--space-3); flex-wrap:wrap;">
           {%- for filter in collection.filters -%}
+            {%- assign filter_label_down = filter.label | downcase -%}
+            {%- assign filter_label = filter.label -%}
+            {%- if filter_label_down contains 'availab' -%}{%- assign filter_label = '在庫状況' -%}
+            {%- elsif filter_label_down contains 'price' -%}{%- assign filter_label = '価格' -%}
+            {%- elsif filter_label_down contains 'color' or filter_label_down contains 'colour' -%}{%- assign filter_label = 'カラー' -%}
+            {%- elsif filter_label_down contains 'size' -%}{%- assign filter_label = 'サイズ' -%}
+            {%- elsif filter_label_down contains 'type' -%}{%- assign filter_label = 'カテゴリー' -%}
+            {%- endif -%}
             <details class="as-filter-group" style="position:relative; border:1px solid var(--border-default);">
-              <summary class="as-clickable" style="padding:var(--space-2) var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); cursor:pointer;">{{ filter.label }}</summary>
+              <summary class="as-clickable" style="padding:var(--space-2) var(--space-4); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs); cursor:pointer;">{{ filter_label }}</summary>
               <div style="position:absolute; top:100%; left:0; margin-top:var(--space-1); background:var(--color-white); border:1px solid var(--border-default); padding:var(--space-4); min-width:220px; z-index:10; display:flex; flex-direction:column; gap:var(--space-3);">
                 {%- case filter.type -%}
                   {%- when 'price_range' -%}

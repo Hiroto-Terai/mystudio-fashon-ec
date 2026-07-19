@@ -182,10 +182,12 @@
             {%- if option_name_down contains 'size' -%}
               {%- assign is_size_option = true -%}
             {%- endif -%}
+            {%- assign option_display_name = product_option.name -%}
+            {%- if is_color_option -%}{%- assign option_display_name = 'カラー' -%}{%- elsif is_size_option -%}{%- assign option_display_name = 'サイズ' -%}{%- endif -%}
             <div style="display:flex; flex-direction:column; gap:var(--space-3);">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-2xs);">
-                  {{ product_option.name }}{% if is_color_option %} — <span data-option-selected-label="{{ opt_index }}">{{ product_option.selected_value }}</span>{% endif %}
+                  {{ option_display_name }}{% if is_color_option %} — <span data-option-selected-label="{{ opt_index }}">{{ product_option.selected_value }}</span>{% endif %}
                 </span>
                 {%- if is_size_option -%}
                   <span class="as-navlink as-clickable" data-size-chart-open style="font:var(--text-mono); font-size:10px; text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-secondary);">{{ 'products.product.size_chart' | t }}</span>
