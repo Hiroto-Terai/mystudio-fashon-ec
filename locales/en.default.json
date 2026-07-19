@@ -2,6 +2,11 @@
   "accessibility": {
     "skip_to_content": "Skip to content"
   },
+  "breadcrumbs": {
+    "label": "Breadcrumb",
+    "home": "Home",
+    "search": "Search results"
+  },
   "general": {
     "search": {
       "search": "Search",
@@ -32,8 +37,7 @@
       "increase": "Increase quantity",
       "coupon_placeholder": "COUPON — TRY WINTER10",
       "coupon_apply": "Apply",
-      "coupon_invalid": "Invalid code",
-      "coupon_applied": "{{ code }} applied — {{ percent }}% off"
+      "cross_sell_heading": "You may also like"
     },
     "nav": {
       "menu": "Menu",
@@ -66,7 +70,19 @@
       "restock_notify_heading": "Get notified when back in stock",
       "restock_email_placeholder": "Email address",
       "restock_submit": "Submit",
-      "restock_done": "We'll email you as soon as it's back in stock.",
+      "restock_done": "You're signed up — we'll email you as soon as it's back in stock.",
+      "wishlist_add": "Add to wishlist",
+      "share_heading": "Share",
+      "share_x": "Share on X",
+      "share_facebook": "Share on Facebook",
+      "share_line": "Share on LINE",
+      "share_copy": "Copy link",
+      "share_copied": "Link copied",
+      "zoom_image": "Zoom image",
+      "lightbox_label": "Image viewer",
+      "lightbox_close": "Close",
+      "lightbox_prev": "Previous image",
+      "lightbox_next": "Next image",
       "details_fit": "Details & Fit",
       "materials_care": "Materials & Care",
       "materials_care_default": "Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme.",

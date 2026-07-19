@@ -264,6 +264,27 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-suggest-products { grid-template-columns: 1fr; }
 }
 
+/* --- PDP lightbox + breadcrumbs (feature pack 1) --- */
+.as-lightbox { position: fixed; inset: 0; z-index: 130; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--dur-base) var(--ease-standard); }
+.as-lightbox.is-open { opacity: 1; }
+.as-lightbox-scrim { position: absolute; inset: 0; background: var(--surface-scrim); cursor: pointer; }
+.as-lightbox-image { position: relative; max-width: min(90vw, 1200px); max-height: 86vh; width: auto; height: auto; object-fit: contain; background: var(--color-white); }
+.as-lightbox-close { position: absolute; top: var(--space-6); right: var(--space-6); z-index: 2; background: var(--color-white); border-radius: 999px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+.as-lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; background: var(--color-white); border-radius: 999px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+.as-lightbox-prev { left: var(--space-6); }
+.as-lightbox-next { right: var(--space-6); }
+@media (max-width: 560px) {
+  .as-lightbox-image { max-width: 94vw; }
+  .as-lightbox-nav { width: 36px; height: 36px; }
+  .as-lightbox-prev { left: var(--space-2); }
+  .as-lightbox-next { right: var(--space-2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .as-lightbox { transition: none; }
+}
+
+.as-breadcrumbs a:hover { color: var(--color-ink); }
+
 /* --- Journal / article rich text body (Sprint 7) --- */
 .as-article-body { font: var(--text-body); color: var(--text-primary); line-height: var(--lh-loose); font-size: var(--fs-md); }
 .as-article-body > * + * { margin-top: var(--space-6); }

@@ -58,18 +58,28 @@
   endif
 -%}
 <div>
+  {%- render 'breadcrumbs' -%}
   <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); border-bottom:1px solid var(--border-default);">
     <a href="{{ back_url }}" class="as-navlink" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs); text-transform:uppercase; letter-spacing:var(--tracking-wide);">← {{ 'products.product.back_to_collection' | t }}</a>
   </div>
 
   <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
-    {%- comment -%} Gallery {%- endcomment -%}
-    <div style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
+    {%- comment -%} Gallery (★ each tile opens the full-screen lightbox; data-lightbox-gallery groups them for prev/next) {%- endcomment -%}
+    <div data-lightbox-gallery style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
       {%- if product.images.size == 0 -%}
         <div class="as-card" style="aspect-ratio:3/4; grid-column:1/-1; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
       {%- else -%}
         {%- for image in product.images -%}
-          <div class="as-card" style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.images.size == 1 %}grid-column:1/-1;{% endif %}">
+          <div
+            class="as-card as-clickable"
+            data-lightbox-open
+            data-lightbox-src="{{ image | image_url: width: 1600 }}"
+            data-lightbox-alt="{{ image.alt | default: product.title | escape }}"
+            role="button"
+            tabindex="0"
+            aria-label="{{ 'products.product.zoom_image' | t }}"
+            style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.images.size == 1 %}grid-column:1/-1;{% endif %}"
+          >
             <img
               class="as-img"
               src="{{ image | image_url: width: 800 }}"
@@ -100,7 +110,20 @@
 
       <div style="display:flex; flex-direction:column; gap:var(--space-3);">
         <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-tertiary); font-size:var(--fs-xs);">{{ product.type }}{% if current_variant.sku != blank %} — {{ current_variant.sku }}{% endif %}</span>
-        <h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ product.title }}</h1>
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-4);">
+          <h1 style="font-weight:var(--fw-bold); font-size:var(--fs-3xl); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ product.title }}</h1>
+          <button
+            type="button"
+            data-wishlist-toggle="{{ product.handle }}"
+            data-wishlist-ns="products"
+            class="as-wish as-iconbtn"
+            aria-label="{{ 'products.product.wishlist_add' | t }}"
+            aria-pressed="false"
+            style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex; align-items:center; justify-content:center; flex:none; padding:var(--space-1);"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+          </button>
+        </div>
         <div style="display:flex; align-items:center; gap:var(--space-3);">
           <span style="color:var(--color-ink); letter-spacing:2px;">★★★★☆</span>
           <span style="font:var(--text-mono); color:var(--text-secondary); font-size:var(--fs-2xs);">{{ review_count }} {{ 'products.product.reviews' | t }}</span>
@@ -109,6 +132,27 @@
           <span data-pdp-compare style="font-size:var(--fs-xl); text-decoration:line-through; color:var(--text-tertiary);"{% if is_member or is_on_sale == false %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</span>
           <span data-pdp-price class="{% if is_member %}is-strike{% endif %}" style="font-size:var(--fs-xl);">{{ current_variant.price | money }}</span>
           <span data-pdp-member-price style="font-size:var(--fs-xl); font-weight:var(--fw-semibold);" {% unless is_member %}hidden{% endunless %}>{% if member_mf != blank %}{{ member_mf.value | money }}{% else %}{{ member_price_amount | money }}{% endif %}</span>
+        </div>
+
+        {%- comment -%} SNS share (★ X / Facebook / LINE / copy link) {%- endcomment -%}
+        {%- assign share_url = shop.url | append: product.url -%}
+        <div style="display:flex; align-items:center; gap:var(--space-4);">
+          <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ 'products.product.share_heading' | t }}</span>
+          <div style="display:flex; align-items:center; gap:var(--space-2);">
+            <button type="button" data-share-x data-share-url="{{ share_url }}" data-share-text="{{ product.title | escape }}" class="as-iconbtn" aria-label="{{ 'products.product.share_x' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex; padding:var(--space-1);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2h3.1l-7.6 8.7 8.9 11.3h-6.9l-5.2-6.8-6 6.8H2.1l8.2-9.3L1.5 2h7l4.7 6.3L18.9 2Zm-1.1 18h1.7L7.1 4H5.3l12.5 16Z"/></svg>
+            </button>
+            <button type="button" data-share-facebook data-share-url="{{ share_url }}" class="as-iconbtn" aria-label="{{ 'products.product.share_facebook' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex; padding:var(--space-1);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8.4h2.8l.4-3.3h-3.2V8.1c0-.95.27-1.6 1.63-1.6H16.8V3.5c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9v2.18H8v3.3h2.72V22h2.78Z"/></svg>
+            </button>
+            <button type="button" data-share-line data-share-url="{{ share_url }}" class="as-iconbtn" aria-label="{{ 'products.product.share_line' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex; padding:var(--space-1);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 10.3c0-4.3-4.3-7.8-9.5-7.8S1.5 6 1.5 10.3c0 3.9 3.4 7.1 8 7.7.9.2.8.6.6 1.9-.1.3-.2 1.2.4 1 2.2-1.4 5.7-3.4 7.5-6.4.9-1.3 1.5-2.7 1.5-4.2Z"/></svg>
+            </button>
+            <button type="button" data-share-copy data-share-url="{{ share_url }}" class="as-iconbtn" aria-label="{{ 'products.product.share_copy' | t }}" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex; padding:var(--space-1);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 15a4 4 0 0 0 5.7.3l2.5-2.5a4 4 0 0 0-5.6-5.6l-1.3 1.3"></path><path d="M15 9a4 4 0 0 0-5.7-.3L6.8 11.2a4 4 0 0 0 5.6 5.6l1.3-1.3"></path></svg>
+            </button>
+            <span data-share-status data-copied-text="{{ 'products.product.share_copied' | t }}" role="status" aria-live="polite" class="visually-hidden"></span>
+          </div>
         </div>
       </div>
 
@@ -290,19 +334,30 @@
         </div>
       </form>
       <div data-pdp-soldout {% if is_available %}hidden{% endif %} style="border:1px solid var(--border-default); background:var(--surface-subtle); padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-3);">
-        <div data-restock-idle style="display:flex; flex-direction:column; gap:var(--space-3);">
-          <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">{{ 'products.product.restock_notify_heading' | t }}</span>
-          <form data-restock-form style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink);">
-            <label class="visually-hidden" for="RestockEmail-{{ product.id }}">{{ 'products.product.restock_email_placeholder' | t }}</label>
-            <input type="email" id="RestockEmail-{{ product.id }}" required placeholder="{{ 'products.product.restock_email_placeholder' | t | upcase }}" class="as-input" style="flex:1; padding:var(--space-2) 0; text-transform:uppercase; letter-spacing:var(--tracking-wide);">
-            <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="{{ 'products.product.restock_submit' | t }}" style="background:none; border:none; padding:var(--space-2); cursor:pointer; color:var(--color-ink);">
-              <svg class="as-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </button>
-          </form>
-        </div>
-        <div data-restock-done hidden>
-          <span style="font:var(--text-body-sm);">✓ {{ 'products.product.restock_done' | t }}</span>
-        </div>
+        {%- form 'contact' -%}
+          {%- if form.posted_successfully? -%}
+            <div data-restock-done>
+              <span style="font:var(--text-body-sm);">✓ {{ 'products.product.restock_done' | t }}</span>
+            </div>
+          {%- else -%}
+            <div data-restock-idle style="display:flex; flex-direction:column; gap:var(--space-3);">
+              <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-2xs);">{{ 'products.product.restock_notify_heading' | t }}</span>
+              {%- if form.errors -%}
+                <div style="font:var(--text-body-sm); color:var(--text-sale);">{{ form.errors | default_errors }}</div>
+              {%- endif -%}
+              <input type="hidden" name="contact[Product]" value="{{ product.title | escape }}">
+              <input type="hidden" name="contact[Product URL]" value="{{ shop.url }}{{ product.url }}">
+              <input type="hidden" name="contact[body]" value="{{ 'products.product.restock_notify_heading' | t }} — {{ product.title | escape }} ({{ shop.url }}{{ product.url }})">
+              <div style="display:flex; align-items:center; border-bottom:1px solid var(--color-ink);">
+                <label class="visually-hidden" for="RestockEmail-{{ product.id }}">{{ 'products.product.restock_email_placeholder' | t }}</label>
+                <input type="email" id="RestockEmail-{{ product.id }}" name="contact[email]" required placeholder="{{ 'products.product.restock_email_placeholder' | t | upcase }}" class="as-input" style="flex:1; padding:var(--space-2) 0; text-transform:uppercase; letter-spacing:var(--tracking-wide);">
+                <button type="submit" class="as-arrowbtn as-iconbtn" aria-label="{{ 'products.product.restock_submit' | t }}" style="background:none; border:none; padding:var(--space-2); cursor:pointer; color:var(--color-ink);">
+                  <svg class="as-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
       </div>
 
       {%- comment -%} Details accordion {%- endcomment -%}
@@ -352,6 +407,21 @@
     </div>
     {% render 'size-guide', product: product, headless: true %}
   </div>
+</div>
+
+{%- comment -%} Image lightbox (★ opened by clicking any gallery tile above) {%- endcomment -%}
+<div data-lightbox hidden class="as-lightbox" role="dialog" aria-modal="true" aria-label="{{ 'products.product.lightbox_label' | t }}">
+  <div data-lightbox-scrim class="as-lightbox-scrim"></div>
+  <button type="button" data-lightbox-close class="as-iconbtn as-lightbox-close" aria-label="{{ 'products.product.lightbox_close' | t }}">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
+  <button type="button" data-lightbox-prev class="as-iconbtn as-lightbox-nav as-lightbox-prev" aria-label="{{ 'products.product.lightbox_prev' | t }}">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  </button>
+  <img data-lightbox-image class="as-lightbox-image" alt="" width="1600" height="2133" loading="lazy">
+  <button type="button" data-lightbox-next class="as-iconbtn as-lightbox-nav as-lightbox-next" aria-label="{{ 'products.product.lightbox_next' | t }}">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="9 6 15 12 9 18"></polyline></svg>
+  </button>
 </div>
 
 {% schema %}

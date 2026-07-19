@@ -35,5 +35,34 @@
         "info": "Logged-in customers with this tag see member pricing."
       }
     ]
+  },
+  {
+    "name": "Analytics",
+    "settings": [
+      {
+        "type": "text",
+        "id": "ga4_id",
+        "label": "GA4 measurement ID",
+        "info": "e.g. G-XXXXXXXXXX. Leave blank to disable Google Analytics 4."
+      },
+      {
+        "type": "text",
+        "id": "gtm_id",
+        "label": "GTM container ID",
+        "info": "e.g. GTM-XXXXXXX. Leave blank to disable Google Tag Manager."
+      },
+      {
+        "type": "textarea",
+        "id": "head_scripts",
+        "label": "Head scripts",
+        "info": "Pasted verbatim just before </head> (heatmap/pixel tags etc). Leave blank to disable."
+      },
+      {
+        "type": "textarea",
+        "id": "body_scripts",
+        "label": "Body scripts",
+        "info": "Pasted verbatim just after <body> opens. Leave blank to disable."
+      }
+    ]
   }
 ]

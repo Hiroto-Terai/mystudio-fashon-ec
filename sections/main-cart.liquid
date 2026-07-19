@@ -5,11 +5,25 @@
   /cart/change.js Section Rendering response (id: main-cart) without a full
   page reload.
 {%- endcomment -%}
+{%- liquid
+  assign cart_discount_app = cart.cart_level_discount_applications.first
+
+  assign cross_source = cart.items.first.product.collections.first
+  if cross_source == blank
+    assign cross_source = collections['all']
+  endif
+  assign cross_id_tokens = ','
+  for line in cart.items
+    assign cross_id_tokens = cross_id_tokens | append: line.product_id | append: ','
+  endfor
+  assign cross_shown = 0
+  assign cross_max = 4
+-%}
 <div style="border-bottom:1px solid var(--border-default); min-height:50vh;">
   <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
     <h1 style="font-weight:var(--fw-black); font-size:var(--fs-4xl); letter-spacing:var(--tracking-tight); text-transform:uppercase; margin-bottom:var(--space-10);">{{ 'general.cart.title' | t }}</h1>
 
-    <div data-main-cart-contents data-cart-subtotal-cents="{{ cart.total_price }}">
+    <div data-main-cart-contents>
       {%- if cart.item_count > 0 -%}
         <div class="as-2col" style="display:grid; grid-template-columns:1.6fr 0.8fr; gap:var(--space-16); align-items:start;">
           <div style="border-top:1px solid var(--border-default);">
@@ -41,11 +55,11 @@
             <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'general.cart.summary' | t }}</span>
             <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
               <span>{{ 'general.cart.subtotal' | t }}</span>
-              <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+              <span data-cart-subtotal>{{ cart.original_total_price | money }}</span>
             </div>
-            <div data-cart-discount-row hidden style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
-              <span>{{ 'general.cart.discount' | t }}</span>
-              <span data-cart-discount></span>
+            <div data-cart-discount-row {% if cart.total_discount <= 0 %}hidden{% endif %} style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
+              <span>{{ 'general.cart.discount' | t }}{% if cart_discount_app %} — {{ cart_discount_app.title }}{% endif %}</span>
+              <span data-cart-discount>{% if cart.total_discount > 0 %}−{{ cart.total_discount | money }}{% endif %}</span>
             </div>
             <div style="display:flex; justify-content:space-between; font:var(--text-body-sm); color:var(--text-secondary);">
               <span>{{ 'general.cart.shipping' | t }}</span>
@@ -61,6 +75,26 @@
             </form>
           </div>
         </div>
+
+        {%- comment -%} Cross-sell (★ up to 4 products from the cart's first item's collection, excluding items already in cart) - inside data-main-cart-contents so it refreshes on every Section Rendering re-render. {%- endcomment -%}
+        {%- if cross_source.products.size > 0 -%}
+          <div style="margin-top:var(--space-16); border-top:1px solid var(--border-default); padding-top:var(--space-10);">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-6);">{{ 'general.cart.cross_sell_heading' | t }}</span>
+            <div class="as-grid-4" style="border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+              {%- for rec in cross_source.products limit: 20 -%}
+                {%- assign cross_rec_token = ',' | append: rec.id | append: ',' -%}
+                {%- if cross_id_tokens contains cross_rec_token -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- if cross_shown >= cross_max -%}
+                  {%- break -%}
+                {%- endif -%}
+                {%- assign cross_shown = cross_shown | plus: 1 -%}
+                {%- render 'product-card', product: rec -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
       {%- else -%}
         <div style="padding:var(--space-24) 0; display:flex; flex-direction:column; gap:var(--space-6); align-items:flex-start;">
           <span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-sm);">{{ 'general.cart.empty' | t }}.</span>

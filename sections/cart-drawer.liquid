@@ -17,13 +17,26 @@
   if pct > 100
     assign pct = 100
   endif
+
+  assign cart_discount_app = cart.cart_level_discount_applications.first
+
+  assign cross_source = cart.items.first.product.collections.first
+  if cross_source == blank
+    assign cross_source = collections['all']
+  endif
+  assign cross_id_tokens = ','
+  for line in cart.items
+    assign cross_id_tokens = cross_id_tokens | append: line.product_id | append: ','
+  endfor
+  assign cross_shown = 0
+  assign cross_max = 4
 -%}
 <div data-cart-scrim hidden class="as-cart-scrim" style="position:fixed; inset:0; background:var(--surface-scrim); z-index:90; opacity:0; transition:opacity var(--dur-base) var(--ease-standard);"></div>
 
 <aside data-cart-drawer hidden class="as-cart-drawer" aria-label="{{ 'general.cart.title' | t }}" style="position:fixed; top:0; right:0; height:100vh; width:min(440px, 92vw); background:var(--surface-page); z-index:95; display:flex; flex-direction:column; transform:translateX(100%); transition:transform var(--dur-drawer) var(--ease-standard); box-shadow:var(--shadow-drawer);">
   <script>window.ArchivesMoneyFormat = window.ArchivesMoneyFormat || {{ shop.money_format | json }};</script>
 
-  <div data-cart-drawer-contents data-cart-subtotal-cents="{{ cart.total_price }}" style="display:flex; flex-direction:column; height:100%;">
+  <div data-cart-drawer-contents style="display:flex; flex-direction:column; height:100%;">
     <div style="display:flex; align-items:center; justify-content:space-between; padding:var(--space-6); border-bottom:1px solid var(--border-default);">
       <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'general.cart.title' | t }} — <span data-cart-count>{{ cart.item_count }}</span></span>
       <button data-cart-close class="as-iconbtn" aria-label="カートを閉じる" style="background:none; border:none; cursor:pointer; color:var(--color-ink); display:flex;">
@@ -56,6 +69,28 @@
             </div>
           {%- endfor -%}
         </div>
+
+        {%- comment -%} Cross-sell (★ up to 4 products from the cart's first item's collection, excluding items already in cart) - inside data-cart-drawer-contents so it refreshes on every Section Rendering re-render. {%- endcomment -%}
+        {%- if cross_source.products.size > 0 -%}
+          <div style="border-top:1px solid var(--border-default); padding:var(--space-6);">
+            <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-4);">{{ 'general.cart.cross_sell_heading' | t }}</span>
+            <div style="display:flex; gap:var(--space-4); overflow-x:auto; scroll-snap-type:x mandatory;">
+              {%- for rec in cross_source.products limit: 20 -%}
+                {%- assign cross_rec_token = ',' | append: rec.id | append: ',' -%}
+                {%- if cross_id_tokens contains cross_rec_token -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- if cross_shown >= cross_max -%}
+                  {%- break -%}
+                {%- endif -%}
+                {%- assign cross_shown = cross_shown | plus: 1 -%}
+                <div style="flex:0 0 148px; scroll-snap-align:start;">
+                  {%- render 'product-card', product: rec -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
       {%- else -%}
         <div data-cart-empty style="padding:var(--space-24) var(--space-6); text-align:center; display:flex; flex-direction:column; gap:var(--space-4); align-items:center;">
           <span style="font:var(--text-mono); color:var(--text-tertiary); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:var(--fs-xs);">{{ 'general.cart.empty' | t }}</span>
@@ -75,19 +110,18 @@
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; border:1px solid var(--border-default); margin-bottom:var(--space-2);">
+        <div style="display:flex; align-items:center; border:1px solid var(--border-default); margin-bottom:var(--space-3);">
           <input data-coupon-input placeholder="{{ 'general.cart.coupon_placeholder' | t }}" class="as-input" style="flex:1; padding:var(--space-3);">
           <button data-coupon-apply style="background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:0 var(--space-5); align-self:stretch; font:var(--text-label); text-transform:uppercase; font-size:10px; letter-spacing:var(--tracking-wide);">{{ 'general.cart.coupon_apply' | t }}</button>
         </div>
-        <span data-coupon-msg hidden data-invalid-text="{{ 'general.cart.coupon_invalid' | t }}" data-applied-template="{{ 'general.cart.coupon_applied' | t: code: '__CODE__', percent: '__PERCENT__' }}" style="font:var(--text-body-sm); color:var(--text-secondary); display:block; margin-bottom:var(--space-3);"></span>
 
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-2);">
           <span style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.cart.subtotal' | t }}</span>
-          <span data-cart-subtotal style="font-weight:var(--fw-semibold); font-size:var(--fs-md);">{{ cart.total_price | money }}</span>
+          <span data-cart-subtotal style="font-weight:var(--fw-semibold); font-size:var(--fs-md);">{{ cart.original_total_price | money }}</span>
         </div>
-        <div data-cart-discount-row hidden style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-2);">
-          <span style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.cart.discount' | t }}</span>
-          <span data-cart-discount style="font-weight:var(--fw-semibold); font-size:var(--fs-md);"></span>
+        <div data-cart-discount-row {% if cart.total_discount <= 0 %}hidden{% endif %} style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-2);">
+          <span style="font:var(--text-body-sm); color:var(--text-secondary); text-transform:uppercase; letter-spacing:var(--tracking-wide);">{{ 'general.cart.discount' | t }}{% if cart_discount_app %} — {{ cart_discount_app.title }}{% endif %}</span>
+          <span data-cart-discount style="font-weight:var(--fw-semibold); font-size:var(--fs-md);">{% if cart.total_discount > 0 %}−{{ cart.total_discount | money }}{% endif %}</span>
         </div>
         <p style="font:var(--text-mono); color:var(--text-tertiary); font-size:10px; margin-bottom:var(--space-4);">{{ 'general.cart.shipping_note' | t }}</p>
 

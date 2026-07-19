@@ -2,6 +2,11 @@
   "accessibility": {
     "skip_to_content": "コンテンツへスキップ"
   },
+  "breadcrumbs": {
+    "label": "パンくずリスト",
+    "home": "Home",
+    "search": "検索結果"
+  },
   "general": {
     "search": {
       "search": "検索",
@@ -32,8 +37,7 @@
       "increase": "数量を増やす",
       "coupon_placeholder": "クーポン — WINTER10 を試す",
       "coupon_apply": "適用",
-      "coupon_invalid": "無効なコードです",
-      "coupon_applied": "{{ code }} 適用中 — {{ percent }}% OFF"
+      "cross_sell_heading": "こちらもおすすめ"
     },
     "nav": {
       "menu": "メニュー",
@@ -66,7 +70,19 @@
       "restock_notify_heading": "再入荷通知を受け取る",
       "restock_email_placeholder": "メールアドレス",
       "restock_submit": "送信",
-      "restock_done": "入荷次第メールでお知らせします。",
+      "restock_done": "登録が完了しました。再入荷時にお知らせします。",
+      "wishlist_add": "ウィッシュリストに追加",
+      "share_heading": "シェア",
+      "share_x": "Xでシェア",
+      "share_facebook": "Facebookでシェア",
+      "share_line": "LINEでシェア",
+      "share_copy": "リンクをコピー",
+      "share_copied": "リンクをコピーしました",
+      "zoom_image": "画像を拡大表示",
+      "lightbox_label": "画像拡大表示",
+      "lightbox_close": "閉じる",
+      "lightbox_prev": "前の画像",
+      "lightbox_next": "次の画像",
       "details_fit": "詳細・サイズ感",
       "materials_care": "素材・お手入れ",
       "materials_care_default": "裏返しにして冷水で洗濯してください。タンブラー乾燥は避け、吊り干ししてください。生涯修理プログラム対象です。",

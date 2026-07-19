@@ -31,6 +31,7 @@
 {%- endfor -%}
 
 <div>
+  {%- render 'breadcrumbs' -%}
   <section style="border-bottom:1px solid var(--border-default);">
     <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
       <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">{{ 'collection.eyebrow' | t }}</span>

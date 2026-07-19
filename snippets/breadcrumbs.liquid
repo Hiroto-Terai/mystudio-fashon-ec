@@ -1,0 +1,50 @@
+{% doc %}
+  Renders a compact breadcrumb trail driven by request.page_type: Home /
+  Collection / Product on PDPs, Home / Blog / Article on article pages,
+  Home / Collection|Blog|Page on their index/detail pages, etc. Uppercase
+  mono styling to match the rest of the theme's utility text; the final
+  crumb is plain text (no link, aria-current="page").
+
+  @example
+  {% render 'breadcrumbs' %}
+{% enddoc %}
+<nav class="as-breadcrumbs" aria-label="{{ 'breadcrumbs.label' | t }}" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-4) var(--page-gutter) 0;">
+  <ol style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); list-style:none; margin:0; padding:0; font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); font-size:10px; color:var(--text-tertiary);">
+    <li><a href="{{ routes.root_url }}" class="as-navlink">{{ 'breadcrumbs.home' | t }}</a></li>
+
+    {%- case request.page_type -%}
+
+      {%- when 'product' -%}
+        {%- assign crumb_collection = product.collections.first -%}
+        {%- if crumb_collection != blank -%}
+          <li aria-hidden="true">/</li>
+          <li><a href="{{ crumb_collection.url }}" class="as-navlink">{{ crumb_collection.title }}</a></li>
+        {%- endif -%}
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ product.title }}</li>
+
+      {%- when 'collection' -%}
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ collection.title }}</li>
+
+      {%- when 'article' -%}
+        <li aria-hidden="true">/</li>
+        <li><a href="{{ blog.url }}" class="as-navlink">{{ blog.title }}</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ article.title }}</li>
+
+      {%- when 'blog' -%}
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ blog.title }}</li>
+
+      {%- when 'page' -%}
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ page.title }}</li>
+
+      {%- when 'search' -%}
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" style="color:var(--text-secondary);">{{ 'breadcrumbs.search' | t }}</li>
+
+    {%- endcase -%}
+  </ol>
+</nav>

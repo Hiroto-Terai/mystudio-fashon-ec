@@ -5,6 +5,7 @@
   dedicated section, e.g. Shipping & Returns.
 {%- endcomment -%}
 <div>
+  {%- render 'breadcrumbs' -%}
   <section style="border-bottom:1px solid var(--border-default);">
     <div style="max-width:var(--page-narrow); margin:0 auto; padding:var(--section-y) var(--page-gutter) var(--space-10);">
       {%- if section.settings.eyebrow != blank -%}
