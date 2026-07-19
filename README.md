@@ -43,4 +43,4 @@ Theme Check は Shopify MCP `validate_theme` で全ファイル検証済み。
 - [x] S7 ジャーナル / 記事（blog一覧＋記事詳細 / ホーム実接続 / 実記事3件）
 - [ ] S8 About
 - [x] S9 検索（予測サジェスト /search/suggest.json ＋ 検索結果ページ）
-- [ ] S10 実データ接続 & 会員価格 & QA
+- [x] S10 実データ接続（コレクション/チップ/ホーム実商品）& 会員価格metafield & QA
