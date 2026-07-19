@@ -5,8 +5,8 @@
 
   @param {product} product - The product to render. Products tagged
     "early-access" or with a truthy `metafields.custom.early_access` get a
-    small "先行" badge inset from the top-left corner (offset so it never
-    overlaps the flush-corner rank badge below).
+    small "先行" badge in the top-left corner. When a `rank` badge is also
+    present the two are stacked vertically so they never overlap.
   @param {number} [rank] - When present, shows a black rank badge in the
     top-left corner of the image (used by the "Weekly ranking" section).
 
@@ -25,11 +25,15 @@
 -%}
 <div class="as-card" style="border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default);">
   <div style="position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--surface-subtle);">
-    {%- if rank -%}
-      <span style="position:absolute; top:0; left:0; z-index:2; background:var(--color-ink); color:var(--color-white); font-weight:var(--fw-black); font-size:var(--fs-lg); padding:var(--space-2) var(--space-4);">{{ rank }}</span>
-    {%- endif -%}
-    {%- if is_early_access -%}
-      <span class="as-badge as-badge-ink" style="position:absolute; top:var(--space-3); left:var(--space-3); z-index:2;">{{ 'products.product.badge_early_access_card' | t }}</span>
+    {%- if rank or is_early_access -%}
+      <div style="position:absolute; top:0; left:0; z-index:2; display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3);">
+        {%- if rank -%}
+          <span style="background:var(--color-ink); color:var(--color-white); font-weight:var(--fw-black); font-size:var(--fs-lg); padding:var(--space-2) var(--space-4);">{{ rank }}</span>
+        {%- endif -%}
+        {%- if is_early_access -%}
+          <span class="as-badge as-badge-ink" style="margin-left:var(--space-3);{% unless rank %} margin-top:var(--space-3);{% endunless %}">{{ 'products.product.badge_early_access_card' | t }}</span>
+        {%- endif -%}
+      </div>
     {%- endif -%}
     <a href="{{ product.url }}" style="position:absolute; inset:0; display:block;">
       {%- if product.featured_image -%}
