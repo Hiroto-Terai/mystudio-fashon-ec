@@ -350,22 +350,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
-    <table style="width:100%; border-collapse:collapse; font:var(--text-body-sm);">
-      <thead>
-        <tr>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">サイズ</th>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">胸囲 (cm)</th>
-          <th style="text-align:left; padding:var(--space-2); border-bottom:1px solid var(--border-default); font:var(--text-label); text-transform:uppercase; font-size:var(--fs-2xs);">着丈 (cm)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">XS</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">86</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">64</td></tr>
-        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">S</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">92</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">66</td></tr>
-        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">M</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">98</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">68</td></tr>
-        <tr><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">L</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">104</td><td style="padding:var(--space-2); border-bottom:1px solid var(--border-subtle);">70</td></tr>
-        <tr><td style="padding:var(--space-2);">XL</td><td style="padding:var(--space-2);">110</td><td style="padding:var(--space-2);">72</td></tr>
-      </tbody>
-    </table>
+    {% render 'size-guide', product: product, headless: true %}
   </div>
 </div>
 
