@@ -419,6 +419,9 @@
   {%- assign related_heading = 'products.product.related_heading' | t -%}
   {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: fbt_heading, layout: 'scroll', max: 8 -%}
   {%- render 'pdp-recommendations', current_product: product, source_collection: rec_collection, heading: related_heading, layout: 'grid', max: 8 -%}
+
+  {%- render 'pdp-styling', product: product -%}
+  {%- render 'recently-viewed', product: product, current_handle: product.handle -%}
 </div>
 
 {%- comment -%} Size chart modal (dummy content, per spec) {%- endcomment -%}

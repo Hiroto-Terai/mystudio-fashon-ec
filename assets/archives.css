@@ -207,6 +207,9 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
   .as-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
   .as-grid-3 { grid-template-columns: 1fr !important; }
   .as-footer-grid { grid-template-columns: 1fr !important; }
+  .as-footer-bottom { flex-direction: column !important; align-items: flex-start !important; }
+  .as-footer-legal { row-gap: var(--space-3) !important; }
+  .as-footer-legal a { white-space: nowrap; }
   .as-logo { font-size: var(--fs-sm) !important; letter-spacing: 0.14em !important; }
   .as-headicons { gap: var(--space-4) !important; }
   .as-cart-item { grid-template-columns: 80px 1fr !important; }
@@ -281,7 +284,7 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 /* --- PDP lightbox + breadcrumbs (feature pack 1) --- */
 .as-lightbox { position: fixed; inset: 0; z-index: 130; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--dur-base) var(--ease-standard); }
 .as-lightbox.is-open { opacity: 1; }
-.as-lightbox-scrim { position: absolute; inset: 0; background: var(--surface-scrim); cursor: pointer; }
+.as-lightbox-scrim { position: absolute; inset: 0; background: rgba(17,17,17,0.9); cursor: pointer; }
 .as-lightbox-image { position: relative; max-width: min(90vw, 1200px); max-height: 86vh; width: auto; height: auto; object-fit: contain; background: var(--color-white); }
 .as-lightbox-close { position: absolute; top: var(--space-6); right: var(--space-6); z-index: 2; background: var(--color-white); border-radius: 999px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
 .as-lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; background: var(--color-white); border-radius: 999px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }

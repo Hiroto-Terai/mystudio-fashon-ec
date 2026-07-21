@@ -8,6 +8,9 @@
     "search": "Search results"
   },
   "general": {
+    "shipping": {
+      "free_shipping_announcement": "Free shipping on orders over {{ amount }}"
+    },
     "search": {
       "search": "Search",
       "placeholder": "Search the archive",
@@ -37,7 +40,12 @@
       "increase": "Increase quantity",
       "coupon_placeholder": "COUPON — TRY WINTER10",
       "coupon_apply": "Apply",
-      "cross_sell_heading": "You may also like"
+      "cross_sell_heading": "You may also like",
+      "gift_heading": "Gift options",
+      "gift_wrap": "Add gift wrapping",
+      "gift_message_label": "Message card (optional)",
+      "gift_message_placeholder": "Write a message to include with your gift",
+      "gift_saved": "Saved"
     },
     "nav": {
       "menu": "Menu",
@@ -105,10 +113,12 @@
       "materials_care": "Materials & Care",
       "materials_care_default": "Machine wash cold, inside out. Hang to dry. Do not tumble. Covered by our lifetime repair programme.",
       "shipping_returns": "Shipping & Returns",
-      "shipping_returns_default": "Free express shipping on orders over ¥30,000. 30-day returns on unworn pieces with tags attached.",
+      "shipping_returns_default": "Free express shipping on orders over $300. 30-day returns on unworn pieces with tags attached.",
       "details_fit_default": "A considered piece built from archive-grade materials, cut for a relaxed, everyday fit.",
       "fbt_heading": "Frequently bought together",
       "related_heading": "You may also like",
+      "styling_using_heading": "Stylings featuring this item",
+      "recently_viewed": "Recently viewed",
       "no_image": "No image available",
       "badge_early_access": "Early access",
       "badge_early_access_card": "Early",

@@ -1,0 +1,31 @@
+{% doc %}
+  "Recently viewed" rail. When `product` is passed (on a PDP) it prints a JSON
+  payload that archives.js pushes into localStorage; every page that includes
+  this snippet renders the stored list (minus `current_handle`) client-side.
+  The section stays hidden until JS finds at least one stored item.
+
+  @param {product} [product] - The product to record as viewed (PDP only).
+  @param {string} [current_handle] - Handle to exclude from the rendered rail.
+
+  @example
+  {% render 'recently-viewed', product: product, current_handle: product.handle %}
+  {% render 'recently-viewed' %}
+{% enddoc %}
+{%- if product -%}
+  <script type="application/json" data-recent-record>
+    {
+      "handle": {{ product.handle | json }},
+      "url": {{ product.url | json }},
+      "title": {{ product.title | json }},
+      "type": {{ product.type | json }},
+      "image": {{ product.featured_image | image_url: width: 400 | json }},
+      "price": {{ product.price | money | strip_html | json }}
+    }
+  </script>
+{%- endif -%}
+<section data-recent-viewed data-current-handle="{{ current_handle }}" hidden style="border-top:1px solid var(--border-default);">
+  <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+    <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-6);">{{ 'products.product.recently_viewed' | t }}</span>
+    <div data-recent-rail style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default);"></div>
+  </div>
+</section>

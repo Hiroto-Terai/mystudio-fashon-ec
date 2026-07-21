@@ -41,9 +41,9 @@
   </div>
 
   <div style="border-top:1px solid var(--border-default);">
-    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); display:flex; align-items:center; justify-content:space-between;">
+    <div class="as-footer-bottom" style="max-width:var(--page-max); margin:0 auto; padding:var(--space-6) var(--page-gutter); display:flex; align-items:center; justify-content:space-between; gap:var(--space-4);">
       <span style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">{{ section.settings.copyright | default: '© 2026 ARCHIVES STUDIO. ALL RIGHTS RESERVED.' }}</span>
-      <div style="display:flex; gap:var(--space-6);">
+      <div class="as-footer-legal" style="display:flex; gap:var(--space-6); flex-wrap:wrap;">
         <a href="{{ routes.root_url }}policies/privacy-policy" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">プライバシー</a>
         <a href="{{ routes.root_url }}policies/terms-of-service" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">利用規約</a>
         <a href="{{ routes.root_url }}pages/tokusho" class="as-clickable" style="font:var(--text-mono); color:var(--text-tertiary); font-size:var(--fs-2xs);">特定商取引法</a>

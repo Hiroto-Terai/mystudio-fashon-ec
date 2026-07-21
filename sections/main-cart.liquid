@@ -105,6 +105,27 @@
   </div>
 </div>
 
+{%- if cart.item_count > 0 -%}
+  <div style="border-bottom:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      <div data-gift-options data-saved-text="{{ 'general.cart.gift_saved' | t }}" style="max-width:560px; display:flex; flex-direction:column; gap:var(--space-5);">
+        <span style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'general.cart.gift_heading' | t }}</span>
+        <label style="display:flex; align-items:center; gap:var(--space-3); cursor:pointer;">
+          <input type="checkbox" data-gift-wrap {% if cart.attributes['ギフトラッピング'] != blank %}checked{% endif %} style="width:16px; height:16px; accent-color:var(--color-ink);">
+          <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ 'general.cart.gift_wrap' | t }}</span>
+        </label>
+        <div style="display:flex; flex-direction:column; gap:var(--space-2);">
+          <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ 'general.cart.gift_message_label' | t }}</span>
+          <textarea data-gift-message rows="3" maxlength="200" placeholder="{{ 'general.cart.gift_message_placeholder' | t }}" class="as-input" style="resize:vertical; padding:var(--space-3); font:var(--text-body-sm);">{{ cart.attributes['ギフトメッセージ'] }}</textarea>
+        </div>
+        <span data-gift-status style="font:var(--text-mono); font-size:10px; color:var(--text-tertiary);" role="status"></span>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- render 'recently-viewed' -%}
+
 {% schema %}
 {
   "name": "Main cart",

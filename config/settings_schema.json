@@ -23,9 +23,9 @@
       {
         "type": "number",
         "id": "free_shipping_threshold",
-        "label": "Free shipping threshold (¥)",
-        "default": 30000,
-        "info": "Amount in yen for the cart drawer free-shipping progress bar."
+        "label": "Free shipping threshold",
+        "default": 300,
+        "info": "Amount in the store's currency (major units, e.g. 300 = $300) for the cart drawer free-shipping progress bar and announcement."
       },
       {
         "type": "text",
