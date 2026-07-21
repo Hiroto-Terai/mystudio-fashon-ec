@@ -8,6 +8,9 @@
     "search": "検索結果"
   },
   "general": {
+    "shipping": {
+      "free_shipping_announcement": "{{ amount }}以上のご注文で送料無料"
+    },
     "search": {
       "search": "検索",
       "placeholder": "アーカイブを検索",
@@ -37,7 +40,12 @@
       "increase": "数量を増やす",
       "coupon_placeholder": "クーポン — WINTER10 を試す",
       "coupon_apply": "適用",
-      "cross_sell_heading": "こちらもおすすめ"
+      "cross_sell_heading": "こちらもおすすめ",
+      "gift_heading": "ギフトオプション",
+      "gift_wrap": "ギフトラッピングを希望する",
+      "gift_message_label": "メッセージカード（任意）",
+      "gift_message_placeholder": "ギフトに添えるメッセージをご記入ください",
+      "gift_saved": "保存しました"
     },
     "nav": {
       "menu": "メニュー",
@@ -105,10 +113,12 @@
       "materials_care": "素材・お手入れ",
       "materials_care_default": "裏返しにして冷水で洗濯してください。タンブラー乾燥は避け、吊り干ししてください。生涯修理プログラム対象です。",
       "shipping_returns": "配送・返品",
-      "shipping_returns_default": "¥30,000以上のご注文で速達配送無料。未着用でタグ付きの商品は30日以内返品可能です。",
+      "shipping_returns_default": "$300以上のご注文で速達配送無料。未着用でタグ付きの商品は30日以内返品可能です。",
       "details_fit_default": "アーカイブ品質の素材を用い、日常使いしやすいリラックスフィットに仕立てました。",
       "fbt_heading": "よく一緒に購入されています",
       "related_heading": "こちらもおすすめ",
+      "styling_using_heading": "このアイテムを使ったスタイリング",
+      "recently_viewed": "最近見た商品",
       "no_image": "画像がありません",
       "badge_early_access": "先行販売",
       "badge_early_access_card": "先行",

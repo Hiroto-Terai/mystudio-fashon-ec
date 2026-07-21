@@ -7,7 +7,7 @@
   and is swapped in from the Section Rendering API response by archives.js.
 {%- endcomment -%}
 {%- liquid
-  assign threshold = settings.free_shipping_threshold | default: 30000
+  assign threshold = settings.free_shipping_threshold | default: 300
   assign threshold_sub = threshold | times: 100
   assign remaining = threshold_sub | minus: cart.total_price
   assign pct = 0

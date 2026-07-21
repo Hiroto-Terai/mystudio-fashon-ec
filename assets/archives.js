@@ -1191,6 +1191,88 @@
     window.setTimeout(open, delaySeconds * 1000);
   }
 
+  /* ---------- Recently viewed (localStorage rail) ----------
+     The current product records itself from a JSON payload the PDP prints in
+     [data-recent-record]; every [data-recent-viewed] section then renders the
+     stored list (minus its own current handle) as a horizontal card rail. */
+  var RECENT_KEY = 'archives:recent';
+  var RECENT_MAX = 12;
+  function readRecent() {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch (e) { return []; }
+  }
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function recentCardHTML(item) {
+    var img = item.image
+      ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">'
+      : '';
+    return '<a href="' + escapeHtml(item.url) + '" class="as-card as-clickable" style="flex:0 0 150px;scroll-snap-align:start;border-right:1px solid var(--border-default);border-bottom:1px solid var(--border-default);display:block;color:inherit;">'
+      + '<div style="aspect-ratio:3/4;overflow:hidden;background:var(--surface-subtle);">' + img + '</div>'
+      + '<div style="padding:var(--space-4);display:flex;flex-direction:column;gap:2px;">'
+      + '<span style="font:var(--text-mono);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--text-tertiary);font-size:10px;">' + escapeHtml(item.type) + '</span>'
+      + '<span style="font-weight:var(--fw-medium);font-size:var(--fs-sm);">' + escapeHtml(item.title) + '</span>'
+      + '<span style="font-size:var(--fs-xs);color:var(--text-secondary);">' + escapeHtml(item.price) + '</span>'
+      + '</div></a>';
+  }
+  function bindRecentlyViewed() {
+    var record = qs('[data-recent-record]');
+    if (record) {
+      try {
+        var item = JSON.parse(record.textContent);
+        if (item && item.handle) {
+          var list = readRecent().filter(function (x) { return x.handle !== item.handle; });
+          list.unshift(item);
+          if (list.length > RECENT_MAX) list = list.slice(0, RECENT_MAX);
+          localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+        }
+      } catch (e) { /* malformed payload — skip recording */ }
+    }
+    qsa('[data-recent-viewed]').forEach(function (section) {
+      var current = section.getAttribute('data-current-handle') || '';
+      var rail = qs('[data-recent-rail]', section);
+      if (!rail) return;
+      var items = readRecent().filter(function (x) { return x.handle !== current; });
+      if (!items.length) { section.hidden = true; return; }
+      rail.innerHTML = items.map(recentCardHTML).join('');
+      section.hidden = false;
+    });
+  }
+
+  /* ---------- Gift options (cart attributes, app-free) ----------
+     Persists a wrap request + message to cart attributes via /cart/update.js so
+     they carry through to the order without any app or added line item. */
+  var GIFT_SAVE_DEBOUNCE_MS = 600;
+  function bindGiftOptions() {
+    var root = qs('[data-gift-options]');
+    if (!root || root.__giftBound) return;
+    root.__giftBound = true;
+    var wrap = qs('[data-gift-wrap]', root);
+    var message = qs('[data-gift-message]', root);
+    var status = qs('[data-gift-status]', root);
+    var timer;
+    function save() {
+      var attrs = {
+        'ギフトラッピング': wrap && wrap.checked ? '希望する' : '',
+        'ギフトメッセージ': message ? message.value : ''
+      };
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ attributes: attrs })
+      }).then(function (res) {
+        if (status) status.textContent = res.ok ? (root.getAttribute('data-saved-text') || '') : '';
+      }).catch(function () { /* keep silent; values re-post on next change */ });
+    }
+    if (wrap) on(wrap, 'change', save);
+    if (message) on(message, 'input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(save, GIFT_SAVE_DEBOUNCE_MS);
+    });
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -1210,6 +1292,8 @@
     bindShare();
     bindCountdown();
     bindNewsletterPopup();
+    bindRecentlyViewed();
+    bindGiftOptions();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }

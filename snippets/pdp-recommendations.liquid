@@ -22,6 +22,7 @@
   assign max_items = max | default: 8
   assign shown = 0
   assign source_products = source_collection.products
+  assign grid_products = source_products | reverse
 -%}
 {%- if source_products.size > 0 -%}
   <section style="border-top:1px solid var(--border-default);">
@@ -45,7 +46,8 @@
       </div>
     {%- else -%}
       <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
-        {%- for rec in source_products limit: 20 -%}
+        {%- comment -%} Reversed so "related" surfaces different items than the FBT row above when both draw from the same collection. {%- endcomment -%}
+        {%- for rec in grid_products limit: 20 -%}
           {%- if rec.id == current_product.id -%}
             {%- continue -%}
           {%- endif -%}

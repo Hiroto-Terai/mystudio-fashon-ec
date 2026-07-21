@@ -1,5 +1,12 @@
 {%- liquid
-  assign text = section.settings.text
+  assign custom = section.settings.text
+  assign threshold = settings.free_shipping_threshold | default: 300
+  assign threshold_money = threshold | times: 100 | money_without_trailing_zeros
+  if custom != blank
+    assign text = custom
+  else
+    assign text = 'general.shipping.free_shipping_announcement' | t: amount: threshold_money
+  endif
 -%}
 {%- if text != blank -%}
   <div class="as-announcement" style="border-bottom:1px solid var(--border-default); text-align:center; padding:11px var(--space-4);">
@@ -15,7 +22,7 @@
       "type": "text",
       "id": "text",
       "label": "Announcement text",
-      "default": "¥30,000以上のご注文で送料無料"
+      "info": "Leave blank to auto-generate a free-shipping message from the threshold (keeps the store currency in sync)."
     }
   ]
 }

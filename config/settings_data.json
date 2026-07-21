@@ -1,11 +1,11 @@
 {
   "current": {
-    "free_shipping_threshold": 30000,
+    "free_shipping_threshold": 300,
     "member_tag": "member"
   },
   "presets": {
     "ARCHIVES Studio": {
-      "free_shipping_threshold": 30000,
+      "free_shipping_threshold": 300,
       "member_tag": "member"
     }
   }

@@ -1,0 +1,53 @@
+{% doc %}
+  Renders a horizontal rail of "styling" metaobjects that reference the current
+  product in their `products` (list.product_reference) field — a cross-link from
+  the PDP into the staff stylings that use this item. Renders nothing when no
+  styling references the product.
+
+  @param {product} product - The product whose stylings to surface.
+
+  @example
+  {% render 'pdp-styling', product: product %}
+{% enddoc %}
+{%- liquid
+  assign styling_match_count = 0
+  for s in metaobjects.styling.values
+    for p in s.products.value
+      if p.id == product.id
+        assign styling_match_count = styling_match_count | plus: 1
+        break
+      endif
+    endfor
+  endfor
+-%}
+{%- if styling_match_count > 0 -%}
+  <section style="border-top:1px solid var(--border-default);">
+    <div style="max-width:var(--page-max); margin:0 auto; padding:var(--section-y) var(--page-gutter);">
+      <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs); display:block; margin-bottom:var(--space-6);">{{ 'products.product.styling_using_heading' | t }}</span>
+      <div style="display:flex; gap:var(--space-6); overflow-x:auto; scroll-snap-type:x mandatory;">
+        {%- for s in metaobjects.styling.values -%}
+          {%- assign is_match = false -%}
+          {%- for p in s.products.value -%}
+            {%- if p.id == product.id -%}
+              {%- assign is_match = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if is_match -%}
+            <a href="{{ s.system.url }}" class="as-card as-clickable" style="flex:0 0 240px; scroll-snap-align:start; display:block; color:inherit;">
+              <div style="aspect-ratio:4/5; overflow:hidden; background:var(--surface-subtle);">
+                {%- if s.image_url.value -%}
+                  <img class="as-img" src="{{ s.image_url.value }}" alt="{{ s.staff_name.value | escape }}" width="480" height="600" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                {%- endif -%}
+              </div>
+              <div style="padding:var(--space-4) 0; display:flex; flex-direction:column; gap:2px;">
+                <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ s.staff_name.value }} — {{ s.staff_role.value }}</span>
+                <span style="font:var(--text-body-sm); color:var(--text-secondary);">{{ s.height.value }} / {{ s.weight.value }}</span>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
