@@ -76,6 +76,8 @@
     "product": {
       "add_to_cart": "カートに追加",
       "quick_add": "クイック追加",
+      "quick_add_cta": "カートに追加",
+      "quick_add_view": "商品ページを見る",
       "sold_out": "売り切れ",
       "back_to_collection": "コレクションに戻る",
       "badge_restock": "再入荷通知受付中",

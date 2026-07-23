@@ -15,8 +15,6 @@
   {% render 'product-card', product: product, rank: forloop.index %}
 {% enddoc %}
 {%- liquid
-  assign card_variant = product.selected_or_first_available_variant
-  assign is_available = card_variant.available
   assign is_early_access = false
   assign early_access_mf = product.metafields.custom.early_access.value
   if early_access_mf or product.tags contains 'early-access'
@@ -51,13 +49,10 @@
     <button type="button" data-wishlist-toggle="{{ product.handle }}" data-wishlist-ns="products" class="as-wish as-iconbtn" aria-label="ウィッシュリストに追加" style="position:absolute; top:var(--space-3); right:var(--space-3); z-index:2; background:var(--color-white); border:1px solid var(--border-default); width:32px; height:32px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--color-ink);">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg>
     </button>
-    <div class="as-quickadd" style="z-index:2;">
-      {%- if is_available -%}
-        <button type="button" data-quick-add data-variant-id="{{ card_variant.id }}" style="width:100%; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add' | t }}</button>
-      {%- else -%}
-        <button type="button" disabled style="width:100%; background:var(--color-n-300); color:var(--color-white); border:none; cursor:not-allowed; padding:15px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.sold_out' | t }}</button>
-      {%- endif -%}
-    </div>
+    {%- comment -%} Quick-add: a + button (bottom-right) opens the variant-picker modal (archives.js bindQuickAddModal). {%- endcomment -%}
+    <button type="button" data-quick-add-open data-handle="{{ product.handle }}" class="as-qa-plus" aria-label="{{ 'products.product.quick_add' | t }}" style="position:absolute; right:var(--space-3); bottom:var(--space-3); z-index:2; background:var(--color-ink); color:var(--color-white); border:none; width:38px; height:38px; border-radius:999px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
   </div>
   <a href="{{ product.url }}" style="padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2);">
     <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;">{{ product.type }}</span>
