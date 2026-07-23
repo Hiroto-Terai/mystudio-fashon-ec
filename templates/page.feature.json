@@ -1,0 +1,63 @@
+{
+  "sections": {
+    "hero": {
+      "type": "lp-hero",
+      "settings": {
+        "overlay": 40,
+        "height": "large",
+        "align": "center",
+        "text_theme": "light",
+        "eyebrow": "FW26 / Feature",
+        "heading": "Winter\nArchive",
+        "body": "寒さに耐える機能と、長く着られる佇まい。今季の主役を特集でご紹介します。",
+        "button_label": "特集を見る",
+        "button2_label": "全アイテム"
+      }
+    },
+    "intro": {
+      "type": "lp-editorial",
+      "settings": {
+        "image_side": "left",
+        "eyebrow": "Story 01",
+        "heading": "素材から、\n佇まいまで",
+        "body": "オーガニックコットンとテクニカルなアウター。一着に込めた意図を、写真と言葉で解きほぐします。長く着るための、削ぎ落とされたデザイン。",
+        "button_label": "アイテムを見る"
+      }
+    },
+    "products": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Feature / FW26",
+        "heading": "特集アイテム",
+        "collection": "fw26-core"
+      }
+    },
+    "detail": {
+      "type": "lp-editorial",
+      "settings": {
+        "image_side": "right",
+        "fallback_image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1400&auto=format&fit=crop",
+        "eyebrow": "Story 02",
+        "heading": "細部に宿る違い",
+        "body": "控えめな金具、丁寧な縫製、計算されたシルエット。近くで見るほど伝わるディテールを、特集ページでじっくりと。",
+        "button_label": "詳細を見る"
+      }
+    },
+    "cta": {
+      "type": "lp-hero",
+      "settings": {
+        "fallback_image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2000&auto=format&fit=crop",
+        "overlay": 50,
+        "height": "small",
+        "align": "center",
+        "text_theme": "light",
+        "eyebrow": "Winter Archive",
+        "heading": "今季の一着を。",
+        "body": "",
+        "button_label": "コレクションへ",
+        "button2_label": ""
+      }
+    }
+  },
+  "order": ["hero", "intro", "products", "detail", "cta"]
+}
