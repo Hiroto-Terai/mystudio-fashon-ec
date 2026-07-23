@@ -1,0 +1,92 @@
+{%- comment -%}
+  Campaign LP hero / CTA band. Full-bleed background image + overlay with an
+  eyebrow / multiline title / subtitle and up to two buttons. Reusable for the
+  top of a 特集 page and again (short height) as a closing CTA band. Editable in
+  the theme editor; ships with demo content so it looks complete out of the box.
+{%- endcomment -%}
+{%- liquid
+  assign height = '62vh'
+  case section.settings.height
+    when 'small'
+      assign height = '44vh'
+    when 'large'
+      assign height = '82vh'
+    when 'full'
+      assign height = '96vh'
+  endcase
+  assign is_dark_text = false
+  if section.settings.text_theme == 'dark'
+    assign is_dark_text = true
+  endif
+  if is_dark_text
+    assign text_color = 'var(--color-ink)'
+    assign btn_fill_bg = 'var(--color-ink)'
+    assign btn_fill_fg = 'var(--color-white)'
+    assign btn_line = 'var(--color-ink)'
+  else
+    assign text_color = 'var(--color-white)'
+    assign btn_fill_bg = 'var(--color-white)'
+    assign btn_fill_fg = 'var(--color-ink)'
+    assign btn_line = 'var(--color-white)'
+  endif
+  assign align = section.settings.align | default: 'center'
+-%}
+<section class="lp-hero" style="position:relative; min-height:{{ height }}; display:flex; align-items:center; border-bottom:1px solid var(--border-default); overflow:hidden; background:var(--surface-subtle);">
+  {%- if section.settings.image -%}
+    <img class="as-img" src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" loading="eager" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+  {%- elsif section.settings.fallback_image != blank -%}
+    <img class="as-img" src="{{ section.settings.fallback_image }}" alt="" width="2000" height="1200" loading="eager" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+  {%- endif -%}
+  <div style="position:absolute; inset:0; background:rgba(17,17,17,{{ section.settings.overlay | default: 30 | divided_by: 100.0 }});"></div>
+
+  <div style="position:relative; z-index:1; max-width:var(--page-max); margin:0 auto; width:100%; padding:var(--section-y) var(--page-gutter); text-align:{{ align }}; color:{{ text_color }};">
+    <div style="display:flex; flex-direction:column; gap:var(--space-6); {% if align == 'center' %}align-items:center;{% else %}align-items:flex-start;{% endif %} max-width:{% if align == 'center' %}760px; margin:0 auto{% else %}640px{% endif %};">
+      {%- if section.settings.eyebrow != blank -%}
+        <span style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-size:var(--fs-xs); opacity:.85;">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 style="font-weight:var(--fw-black); font-size:var(--fs-5xl); line-height:var(--lh-tight); letter-spacing:var(--tracking-tight); text-transform:uppercase;">{{ section.settings.heading | newline_to_br }}</h1>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p style="max-width:520px; font:var(--text-body); line-height:var(--lh-relaxed); opacity:.9;">{{ section.settings.body }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank or section.settings.button2_label != blank -%}
+        <div style="display:flex; flex-wrap:wrap; gap:var(--space-4); margin-top:var(--space-2); {% if align == 'center' %}justify-content:center;{% endif %}">
+          {%- if section.settings.button_label != blank -%}
+            <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" style="display:inline-flex; align-items:center; gap:var(--space-3); background:{{ btn_fill_bg }}; color:{{ btn_fill_fg }}; border:1px solid {{ btn_fill_bg }}; padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">
+              {{ section.settings.button_label }}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.button2_label != blank -%}
+            <a href="{{ section.settings.button2_link | default: routes.all_products_collection_url }}" style="display:inline-flex; align-items:center; gap:var(--space-3); background:none; color:{{ text_color }}; border:1px solid {{ btn_line }}; padding:15px var(--space-8); font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">
+              {{ section.settings.button2_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "LP hero / CTA",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "text", "id": "fallback_image", "label": "Fallback image URL", "default": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2000&auto=format&fit=crop" },
+    { "type": "range", "id": "overlay", "label": "Overlay darkness (%)", "min": 0, "max": 80, "step": 5, "default": 35 },
+    { "type": "select", "id": "height", "label": "Height", "options": [ { "value": "small", "label": "Small (band)" }, { "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" }, { "value": "full", "label": "Full" } ], "default": "large" },
+    { "type": "select", "id": "align", "label": "Text alignment", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ], "default": "center" },
+    { "type": "select", "id": "text_theme", "label": "Text color", "options": [ { "value": "light", "label": "Light (on dark image)" }, { "value": "dark", "label": "Dark (on light image)" } ], "default": "light" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "FW26 / Feature" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "info": "One line per break.", "default": "Winter\nArchive" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "寒さに耐える機能と、長く着られる佇まい。今季の主役を特集でご紹介します。" },
+    { "type": "text", "id": "button_label", "label": "Primary button label", "default": "特集を見る" },
+    { "type": "url", "id": "button_link", "label": "Primary button link" },
+    { "type": "text", "id": "button2_label", "label": "Secondary button label" },
+    { "type": "url", "id": "button2_link", "label": "Secondary button link" }
+  ],
+  "presets": [ { "name": "LP hero / CTA" } ]
+}
+{% endschema %}
