@@ -53,7 +53,8 @@
       "search": "検索",
       "wishlist": "ウィッシュリスト",
       "account": "マイページ",
-      "login": "ログイン"
+      "login": "ログイン",
+      "capabilities": "できること"
     },
     "countdown": {
       "days": "日",
