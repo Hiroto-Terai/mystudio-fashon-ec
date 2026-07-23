@@ -1298,6 +1298,136 @@
     });
   }
 
+  /* ---------- Quick-add modal (variant picker) ----------
+     A card's + button opens one shared modal, hydrated from /products/{h}.js:
+     option pills → matching variant → add to cart. Colour/Size labels reuse
+     the PDP's Japanese display names. */
+  var QA_CLOSE_MS = 300;
+  function qaOptionDisplay(name) {
+    if (name && typeof name === 'object') name = name.name || '';
+    var n = String(name).toLowerCase();
+    if (n.indexOf('color') !== -1 || n.indexOf('colour') !== -1) return 'カラー';
+    if (n.indexOf('size') !== -1) return 'サイズ';
+    return name;
+  }
+  function qaValuesForOption(product, optIndex) {
+    var seen = [];
+    product.variants.forEach(function (v) {
+      var val = v.options[optIndex];
+      if (seen.indexOf(val) === -1) seen.push(val);
+    });
+    return seen;
+  }
+  function bindQuickAddModal() {
+    var modal = qs('[data-quickadd-modal]');
+    if (!modal || modal.__qaBound) return;
+    modal.__qaBound = true;
+    var ADD_LABEL = modal.getAttribute('data-add-label') || 'Add to cart';
+    var SOLDOUT_LABEL = modal.getAttribute('data-soldout-label') || 'Sold out';
+    var els = {
+      image: qs('[data-qa-image]', modal), type: qs('[data-qa-type]', modal),
+      title: qs('[data-qa-title]', modal), price: qs('[data-qa-price]', modal),
+      options: qs('[data-qa-options]', modal), add: qs('[data-qa-add]', modal)
+    };
+    var state = { product: null, selected: [] };
+    var lastTrigger = null;
+
+    function openModal() {
+      modal.hidden = false;
+      requestAnimationFrame(function () { modal.classList.add('is-open'); });
+      document.body.classList.add('as-drawer-open');
+    }
+    function closeModal() {
+      modal.classList.remove('is-open');
+      /* Keep the body scroll-lock if the cart drawer just took over (add-to-cart).
+         The drawer clears [hidden] synchronously on open but adds .is-open a
+         frame later, so test [hidden], not the class. */
+      var cartDrawer = qs('[data-cart-drawer]');
+      if (!(cartDrawer && !cartDrawer.hasAttribute('hidden'))) document.body.classList.remove('as-drawer-open');
+      window.setTimeout(function () { modal.hidden = true; }, QA_CLOSE_MS);
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+    }
+    function currentVariant() {
+      if (!state.product) return null;
+      return state.product.variants.filter(function (v) {
+        return v.options.every(function (o, i) { return o === state.selected[i]; });
+      })[0] || null;
+    }
+    function hasDefaultOnly(p) {
+      return p.variants.length === 1 && (p.variants[0].options || []).join('') === 'Default Title';
+    }
+    function updateVariant() {
+      var v = currentVariant();
+      qsa('[data-qa-opt]', els.options).forEach(function (b) {
+        b.classList.toggle('is-active', state.selected[+b.getAttribute('data-qa-opt')] === b.getAttribute('data-qa-val'));
+      });
+      if (v) {
+        els.price.textContent = formatMoney(v.price);
+        if (v.featured_image && v.featured_image.src) els.image.src = v.featured_image.src;
+        els.add.disabled = !v.available;
+        els.add.textContent = v.available ? ADD_LABEL : SOLDOUT_LABEL;
+        if (v.available) els.add.setAttribute('data-variant-id', v.id);
+      } else {
+        els.price.textContent = formatMoney(state.product.price);
+        els.add.disabled = true;
+        els.add.textContent = ADD_LABEL;
+      }
+    }
+    function render() {
+      var p = state.product;
+      els.type.textContent = p.type || '';
+      els.title.textContent = p.title;
+      els.image.src = p.featured_image || '';
+      els.image.alt = p.title;
+      qsa('[data-qa-link]', modal).forEach(function (a) { a.href = p.url; });
+      if (hasDefaultOnly(p)) {
+        els.options.innerHTML = '';
+      } else {
+        els.options.innerHTML = p.options.map(function (optName, oi) {
+          var pills = qaValuesForOption(p, oi).map(function (val) {
+            var soldout = !p.variants.some(function (v) { return v.options[oi] === val && v.available; });
+            return '<button type="button" class="as-qa-pill' + (soldout ? ' is-soldout' : '') + '" data-qa-opt="' + oi + '" data-qa-val="' + escapeHtml(val) + '">' + escapeHtml(val) + '</button>';
+          }).join('');
+          return '<div class="as-qa-optgroup"><span class="as-qa-optlabel">' + escapeHtml(qaOptionDisplay(optName)) + '</span><div class="as-qa-pills">' + pills + '</div></div>';
+        }).join('');
+      }
+      updateVariant();
+    }
+    function loadProduct(handle, trigger) {
+      lastTrigger = trigger || null;
+      fetch('/products/' + handle + '.js', { headers: { 'Accept': 'application/json' } })
+        .then(function (res) { if (!res.ok) throw new Error('load failed'); return res.json(); })
+        .then(function (p) {
+          state.product = p;
+          var firstAvail = p.variants.filter(function (v) { return v.available; })[0] || p.variants[0];
+          state.selected = (firstAvail.options || []).slice();
+          render();
+          openModal();
+        })
+        .catch(function () { if (lastTrigger) window.location.href = '/products/' + handle; });
+    }
+
+    on(document, 'click', function (e) {
+      var opener = e.target.closest('[data-quick-add-open]');
+      if (opener) { e.preventDefault(); loadProduct(opener.getAttribute('data-handle'), opener); return; }
+      if (e.target.closest('[data-quickadd-close]')) { closeModal(); return; }
+      var pill = e.target.closest('[data-qa-opt]');
+      if (pill && modal.contains(pill)) {
+        state.selected[+pill.getAttribute('data-qa-opt')] = pill.getAttribute('data-qa-val');
+        updateVariant();
+        return;
+      }
+      var addBtn = e.target.closest('[data-qa-add]');
+      if (addBtn && modal.contains(addBtn) && !addBtn.disabled) {
+        var vid = addBtn.getAttribute('data-variant-id');
+        if (vid) addToCart(vid, 1, addBtn).then(closeModal);
+      }
+    });
+    on(document, 'keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -1320,6 +1450,7 @@
     bindRecentlyViewed();
     bindGiftOptions();
     bindRelatedRecommendations();
+    bindQuickAddModal();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }

@@ -76,6 +76,8 @@
     "product": {
       "add_to_cart": "Add to cart",
       "quick_add": "Quick add",
+      "quick_add_cta": "Add to cart",
+      "quick_add_view": "View product page",
       "sold_out": "Sold out",
       "back_to_collection": "Back to collection",
       "badge_restock": "Notify me when back",

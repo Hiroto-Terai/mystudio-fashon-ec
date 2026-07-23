@@ -286,6 +286,27 @@ a.as-card:hover, .as-card a:hover, .as-styletile:hover { opacity: 1 !important; 
 .as-lightbox.is-open { opacity: 1; }
 .as-lightbox-scrim { position: absolute; inset: 0; background: rgba(17,17,17,0.9); cursor: pointer; }
 .as-pdp-media .as-pdp-video, .as-pdp-media iframe, .as-pdp-media video, .as-pdp-media model-viewer { width: 100%; height: 100%; border: 0; object-fit: cover; }
+
+/* --- Quick-add: card + button + variant-picker modal --- */
+.as-qa-plus { transition: transform var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard); }
+.as-qa-plus:hover { transform: scale(1.08); }
+.as-qa-scrim { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center; padding: var(--page-gutter-sm); opacity: 0; transition: opacity var(--dur-base) var(--ease-standard); }
+.as-qa-scrim.is-open { opacity: 1; }
+.as-qa-backdrop { position: absolute; inset: 0; background: var(--surface-scrim); cursor: pointer; }
+.as-qa-panel { position: relative; background: var(--surface-page); border: 1px solid var(--border-default); width: min(700px, 100%); max-height: 88vh; overflow: auto; transform: translateY(14px); transition: transform var(--dur-base) var(--ease-standard); }
+.as-qa-scrim.is-open .as-qa-panel { transform: none; }
+.as-qa-x { position: absolute; top: var(--space-4); right: var(--space-4); z-index: 2; background: var(--color-white); border: 1px solid var(--border-default); width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-ink); }
+.as-qa-body { display: grid; grid-template-columns: 1fr 1fr; }
+.as-qa-media { display: block; aspect-ratio: 3/4; overflow: hidden; background: var(--surface-subtle); }
+.as-qa-media img { width: 100%; height: 100%; object-fit: cover; }
+.as-qa-info { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-4); }
+.as-qa-pills { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.as-qa-pill { border: 1px solid var(--border-default); background: none; padding: 8px 14px; font: var(--text-body-sm); cursor: pointer; color: var(--color-ink); }
+.as-qa-pill.is-active { background: var(--color-ink); color: var(--color-white); border-color: var(--color-ink); }
+.as-qa-pill.is-soldout { color: var(--text-tertiary); text-decoration: line-through; }
+.as-qa-optlabel { display: block; font: var(--text-label); text-transform: uppercase; letter-spacing: var(--tracking-wide); font-size: var(--fs-2xs); color: var(--text-secondary); margin-bottom: var(--space-2); }
+.as-qa-add:disabled { background: var(--color-n-300); cursor: not-allowed; }
+@media (max-width: 560px) { .as-qa-body { grid-template-columns: 1fr; } .as-qa-media { aspect-ratio: 16/10; } }
 .as-lightbox-image { position: relative; max-width: min(90vw, 1200px); max-height: 86vh; width: auto; height: auto; object-fit: contain; background: var(--color-white); }
 .as-lightbox-close { position: absolute; top: var(--space-6); right: var(--space-6); z-index: 2; background: var(--color-white); border-radius: 999px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
 .as-lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; background: var(--color-white); border-radius: 999px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }

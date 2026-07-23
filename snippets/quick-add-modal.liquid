@@ -1,0 +1,35 @@
+{%- comment -%}
+  Quick-add modal (rendered once in theme.liquid). Empty shell; archives.js
+  bindQuickAddModal() fetches /products/{handle}.js when a product card's
+  [data-quick-add-open] + button is clicked, fills in the media / title / price
+  / option pills, and adds the chosen variant to the cart. Labels are passed as
+  data-* so the JS stays locale-agnostic.
+{%- endcomment -%}
+<div
+  data-quickadd-modal
+  hidden
+  class="as-qa-scrim"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'products.product.quick_add' | t }}"
+  data-add-label="{{ 'products.product.quick_add_cta' | t }}"
+  data-soldout-label="{{ 'products.product.sold_out' | t }}"
+>
+  <div data-quickadd-close class="as-qa-backdrop"></div>
+  <div class="as-qa-panel">
+    <button type="button" data-quickadd-close class="as-qa-x" aria-label="{{ 'general.nav.close' | t }}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <div class="as-qa-body">
+      <a data-qa-link class="as-qa-media" href="#"><img data-qa-image alt="" width="480" height="640"></a>
+      <div class="as-qa-info">
+        <span data-qa-type style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wide); color:var(--text-tertiary); font-size:10px;"></span>
+        <h3 data-qa-title style="font-weight:var(--fw-medium); font-size:var(--fs-lg);"></h3>
+        <span data-qa-price style="font-size:var(--fs-md); color:var(--text-secondary);"></span>
+        <div data-qa-options style="display:flex; flex-direction:column; gap:var(--space-4); margin-top:var(--space-2);"></div>
+        <button type="button" data-qa-add class="as-qa-add" disabled style="margin-top:var(--space-2); width:100%; background:var(--color-ink); color:var(--color-white); border:none; cursor:pointer; padding:16px; font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-xs);">{{ 'products.product.quick_add_cta' | t }}</button>
+        <a data-qa-link href="#" class="as-navlink" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-2xs); color:var(--text-secondary); text-align:center;">{{ 'products.product.quick_add_view' | t }}</a>
+      </div>
+    </div>
+  </div>
+</div>
