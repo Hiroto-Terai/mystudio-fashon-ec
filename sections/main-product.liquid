@@ -72,30 +72,44 @@
   <div class="as-pdp" style="max-width:var(--page-max); margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr;">
     {%- comment -%} Gallery (★ each tile opens the full-screen lightbox; data-lightbox-gallery groups them for prev/next) {%- endcomment -%}
     <div data-lightbox-gallery class="as-pdp-gallery" style="border-right:1px solid var(--border-default); display:grid; grid-template-columns:1fr 1fr;">
-      {%- if product.images.size == 0 -%}
+      {%- if product.media.size == 0 -%}
         <div class="as-card" style="aspect-ratio:3/4; grid-column:1/-1; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font:var(--text-mono); font-size:var(--fs-xs); text-transform:uppercase;">{{ 'products.product.no_image' | t }}</div>
       {%- else -%}
-        {%- for image in product.images -%}
-          <div
-            class="as-card as-clickable"
-            data-lightbox-open
-            data-lightbox-src="{{ image | image_url: width: 1600 }}"
-            data-lightbox-alt="{{ image.alt | default: product.title | escape }}"
-            role="button"
-            tabindex="0"
-            aria-label="{{ 'products.product.zoom_image' | t }}"
-            style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.images.size == 1 %}grid-column:1/-1;{% endif %}"
-          >
-            <img
-              class="as-img"
-              src="{{ image | image_url: width: 800 }}"
-              alt="{{ image.alt | default: product.title | escape }}"
-              width="800"
-              height="1067"
-              loading="{% if forloop.index == 1 %}eager{% else %}lazy{% endif %}"
-              style="width:100%; height:100%; object-fit:cover;"
+        {%- for media in product.media -%}
+          {%- if media.media_type == 'image' -%}
+            <div
+              class="as-card as-clickable"
+              data-lightbox-open
+              data-lightbox-src="{{ media.preview_image | image_url: width: 1600 }}"
+              data-lightbox-alt="{{ media.alt | default: product.title | escape }}"
+              role="button"
+              tabindex="0"
+              aria-label="{{ 'products.product.zoom_image' | t }}"
+              style="aspect-ratio:3/4; overflow:hidden; background:var(--surface-subtle); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.media.size == 1 %}grid-column:1/-1;{% endif %}"
             >
-          </div>
+              <img
+                class="as-img"
+                src="{{ media.preview_image | image_url: width: 800 }}"
+                alt="{{ media.alt | default: product.title | escape }}"
+                width="800"
+                height="1067"
+                loading="{% if forloop.index == 1 %}eager{% else %}lazy{% endif %}"
+                style="width:100%; height:100%; object-fit:cover;"
+              >
+            </div>
+          {%- else -%}
+            {%- comment -%} Video / external video / 3D model play inline (no lightbox). {%- endcomment -%}
+            <div class="as-card as-pdp-media" style="aspect-ratio:3/4; overflow:hidden; background:var(--color-ink); border-right:1px solid var(--border-default); border-bottom:1px solid var(--border-default); {% if product.media.size == 1 %}grid-column:1/-1;{% endif %} display:flex; align-items:center; justify-content:center;">
+              {%- case media.media_type -%}
+                {%- when 'external_video' -%}
+                  {{ media | external_video_tag: loading: 'lazy', class: 'as-pdp-video' }}
+                {%- when 'video' -%}
+                  {{ media | video_tag: controls: true, preload: 'metadata', image_size: '800x', class: 'as-pdp-video' }}
+                {%- when 'model' -%}
+                  {{ media | model_viewer_tag: class: 'as-pdp-video' }}
+              {%- endcase -%}
+            </div>
+          {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
     </div>

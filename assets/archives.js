@@ -1273,6 +1273,31 @@
     });
   }
 
+  /* ---------- PDP: real related products (Recommendations API) ----------
+     Swaps the server-rendered collection fallback for algorithmic
+     recommendations when the API returns any, then re-binds card handlers. */
+  function bindRelatedRecommendations() {
+    qsa('[data-related-grid][data-recommendations-url]').forEach(function (grid) {
+      if (grid.__recBound) return;
+      grid.__recBound = true;
+      var url = grid.getAttribute('data-recommendations-url');
+      fetch(url)
+        .then(function (res) { return res.ok ? res.text() : null; })
+        .then(function (html) {
+          if (!html) return;
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var fresh = doc.querySelector('[data-related-grid]');
+          if (fresh && fresh.children.length) {
+            grid.innerHTML = fresh.innerHTML;
+            bindWishlistToggles();
+            bindQuickAdd();
+            syncWishlistBadges();
+          }
+        })
+        .catch(function () { /* keep the server-rendered fallback */ });
+    });
+  }
+
   /* ---------- init ---------- */
   function init() {
     bindHeader();
@@ -1294,6 +1319,7 @@
     bindNewsletterPopup();
     bindRecentlyViewed();
     bindGiftOptions();
+    bindRelatedRecommendations();
     syncWishlistBadges();
     document.addEventListener('archives:wishlist:change', syncWishlistBadges);
   }

@@ -1,0 +1,18 @@
+{%- comment -%}
+  Recommendations render target. Fetched by archives.js via the Product
+  Recommendations API:
+    /recommendations/products?section_id=related-products&product_id=<id>&intent=related
+  When requested that way, `recommendations.products` is populated and this
+  section returns just the product-card grid, which the PDP swaps in over its
+  server-rendered (collection-based) fallback. Renders nothing otherwise.
+{%- endcomment -%}
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div class="as-grid-4" data-related-grid style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+    {%- for product in recommendations.products -%}
+      {%- render 'product-card', product: product -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+{% schema %}
+{ "name": "Related products" }
+{% endschema %}
