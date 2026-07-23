@@ -1,0 +1,256 @@
+{%- comment -%}
+  "できること" — apparel-EC capability catalogue. Curated reference page: each
+  feature is tagged by how it can be delivered (このテーマで実装済み / 実装可 /
+  アプリで可 / 設定のみ / 実装のみ) and, where an app is the route, lists concrete
+  apps with an icon + one-line 特徴. Hardcoded content by design (like the FAQ /
+  特商法 pages). Linked from header drawer + footer.
+{%- endcomment -%}
+<style>
+  .cap-wrap { max-width: var(--page-max); margin: 0 auto; padding: var(--section-y) var(--page-gutter); }
+  .cap-hero { border-bottom: 1px solid var(--border-default); padding-bottom: var(--space-8); margin-bottom: var(--space-8); }
+  .cap-hero h1 { font-weight: var(--fw-black); text-transform: uppercase; letter-spacing: var(--tracking-tight); font-size: var(--fs-4xl); margin: var(--space-4) 0; }
+  .cap-hero p { color: var(--text-secondary); max-width: 60ch; line-height: var(--lh-relaxed); }
+  .cap-legend { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); margin-top: var(--space-6); }
+  .cap-legend span { font: var(--text-mono); font-size: 11px; letter-spacing: .04em; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 7px; }
+  .cap-dot { width: 9px; height: 9px; border-radius: 999px; display: inline-block; }
+  .d-done { background: #4a5d3a; } .d-impl { background: #2f6f6a; } .d-app { background: #8a6b2e; } .d-config { background: #6b6357; } .d-code { background: var(--color-ink); }
+  .cap-cat { margin-top: var(--space-12); }
+  .cap-cat > .cap-cat-h { display: flex; align-items: baseline; gap: var(--space-3); }
+  .cap-cat-h .idx { font: var(--text-mono); font-size: 11px; color: var(--text-tertiary); }
+  .cap-cat-h h2 { font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: var(--tracking-tight); font-size: var(--fs-xl); }
+  .cap-feature { border-top: 1px solid var(--border-default); padding: var(--space-6) 0; }
+  .cap-feature-head { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .cap-name { font-weight: var(--fw-semibold); font-size: var(--fs-base); }
+  .cap-chip { font: var(--text-mono); font-size: 10px; letter-spacing: .05em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; border-radius: 2px; white-space: nowrap; }
+  .c-done { color: #4a5d3a; border-color: #4a5d3a55; background: #4a5d3a12; }
+  .c-impl { color: #2f6f6a; border-color: #2f6f6a55; background: #2f6f6a12; }
+  .c-app { color: #8a6b2e; border-color: #8a6b2e55; background: #8a6b2e12; }
+  .c-config { color: #6b6357; border-color: #6b635755; background: #6b635712; }
+  .c-code { color: var(--color-ink); border-color: var(--border-strong); background: var(--surface-subtle); }
+  .cap-note { color: var(--text-secondary); font-size: 13.5px; line-height: var(--lh-relaxed); margin: var(--space-3) 0 0; }
+  .cap-apps { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); margin-top: var(--space-4); }
+  .cap-app-card { display: flex; gap: var(--space-3); border: 1px solid var(--border-default); padding: var(--space-4); align-items: flex-start; }
+  .cap-ic { font-size: 20px; line-height: 1.1; flex: 0 0 auto; }
+  .cap-app-name { font-weight: var(--fw-semibold); font-size: 13px; }
+  .cap-tag { font: var(--text-mono); font-size: 9px; letter-spacing: .04em; color: var(--text-tertiary); border: 1px solid var(--border-default); border-radius: 2px; padding: 1px 5px; margin-left: 6px; text-transform: uppercase; }
+  .cap-app-feat { display: block; color: var(--text-secondary); font-size: 12.5px; line-height: 1.5; margin-top: 3px; }
+  @media (max-width: 640px) { .cap-apps { grid-template-columns: 1fr; } }
+</style>
+
+<div class="cap-wrap">
+  <div class="cap-hero">
+    <span class="as-eyebrow" style="font:var(--text-mono); text-transform:uppercase; letter-spacing:var(--tracking-wider); color:var(--text-secondary); font-size:var(--fs-xs);">Capabilities</span>
+    <h1>{{ section.settings.heading | default: 'できること' }}</h1>
+    <p>{{ section.settings.intro | default: 'アパレルECで需要の高い機能を、実現手段ごとに整理しました。各機能に「このテーマで対応済み／テーマで実装可／アプリで可／管理画面設定／実装のみ」のタグを付け、アプリが必要なものは代表的なアプリと特徴を添えています。' }}</p>
+    <div class="cap-legend">
+      <span><i class="cap-dot d-done"></i>このテーマで対応済み</span>
+      <span><i class="cap-dot d-impl"></i>テーマで実装可</span>
+      <span><i class="cap-dot d-app"></i>アプリで可</span>
+      <span><i class="cap-dot d-config"></i>管理画面の設定</span>
+      <span><i class="cap-dot d-code"></i>実装のみ</span>
+    </div>
+  </div>
+
+  {%- comment -%} ============ 01 接客・購入体験 ============ {%- endcomment -%}
+  <div class="cap-cat">
+    <div class="cap-cat-h"><span class="idx">01</span><h2>接客・購入体験</h2></div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">バリエーション選択クイック追加</span><span class="cap-chip c-done">対応済み</span></div>
+      <p class="cap-note">商品カードの「+」からモーダルでカラー・サイズを選び、遷移せずカートへ。テーマで実装済み。</p>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">カートドロワー・送料無料バー・クロスセル</span><span class="cap-chip c-done">対応済み</span></div>
+      <p class="cap-note">Ajaxカート、しきい値までの送料無料プログレス、カート内おすすめを実装済み。</p>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">ウィッシュリスト</span><span class="cap-chip c-done">対応済み</span><span class="cap-chip c-app">会員横断はアプリ</span></div>
+      <p class="cap-note">localStorageでのお気に入りは実装済み。会員アカウント横断・端末間同期・在庫/値下げ通知まで求める場合はアプリ。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">💗</span><div><span class="cap-app-name">Wishlist Plus</span><span class="cap-app-feat">会員横断のお気に入り・値下げ/再入荷通知。導入実績が多い定番。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🧩</span><div><span class="cap-app-name">Growave</span><span class="cap-app-feat">ウィッシュリスト＋レビュー＋ポイントをまとめて提供。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">最近見た商品</span><span class="cap-chip c-done">対応済み</span></div>
+      <p class="cap-note">閲覧履歴をlocalStorageに記録し、商品ページ・カートに表示。テーマで実装済み。</p>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">レコメンド（関連・補完・パーソナライズ）</span><span class="cap-chip c-done">関連は対応済み</span><span class="cap-chip c-config">Shopify無料</span><span class="cap-chip c-app">高度化はアプリ</span></div>
+      <p class="cap-note">関連商品はShopify Product Recommendations APIで実装済み。補完商品の手動設定や高度なパーソナライズはアプリ/管理画面。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🔎</span><div><span class="cap-app-name">Shopify Search &amp; Discovery<span class="cap-tag">公式・無料</span></span><span class="cap-app-feat">関連/補完商品の設定、フィルタ、ブースト。まず入れておきたい公式アプリ。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🤖</span><div><span class="cap-app-name">Rebuy / LimeSpot</span><span class="cap-app-feat">AIパーソナライズ、カート/チェックアウトのアップセル最適化。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ============ 02 商品理解・サイズ・メディア ============ {%- endcomment -%}
+  <div class="cap-cat">
+    <div class="cap-cat-h"><span class="idx">02</span><h2>商品理解・サイズ・メディア</h2></div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">サイズチャート・比較表</span><span class="cap-chip c-done">対応済み</span><span class="cap-chip c-app">採寸レコメンドはアプリ</span></div>
+      <p class="cap-note">カテゴリ別サイズ表とモーダルは実装済み。身長体重からの推奨サイズ提案はアプリ。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">📏</span><div><span class="cap-app-name">Kiwi Sizing</span><span class="cap-app-feat">サイズチャート＋サイズレコメンダー。アパレル定番。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">レビュー・写真UGC・Q&amp;A（身長体重/サイズ感）</span><span class="cap-chip c-app">アプリで可</span><span class="cap-chip c-impl">表示のみ実装可</span></div>
+      <p class="cap-note">星の静的表示はテーマで可。投稿・写真・購入者限定・サイズ感属性・自動依頼メールはアプリが必要。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">⭐</span><div><span class="cap-app-name">Judge.me<span class="cap-tag">無料枠</span></span><span class="cap-app-feat">写真・Q&amp;A・自動レビュー依頼。コスパ良く最も普及。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">📸</span><div><span class="cap-app-name">Loox</span><span class="cap-app-feat">写真/動画レビュー特化。ビジュアル重視のブランド向け。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🗣️</span><div><span class="cap-app-name">Yotpo / Okendo</span><span class="cap-app-feat">サイズ感・属性つきレビュー、UGC活用、CRM連携が強力。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">コーデ・スタッフスタイリング</span><span class="cap-chip c-done">対応済み</span><span class="cap-chip c-app">SNS UGCはアプリ</span></div>
+      <p class="cap-note">metaobjectベースのスタイリング（着用商品リンク付き）と商品ページ相互リンクは実装済み。Instagram等のUGC自動取込はアプリ。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">📷</span><div><span class="cap-app-name">Instafeed / Foursixty</span><span class="cap-app-feat">Instagram投稿をショッパブルに埋め込み。UGC活用。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">商品動画・3Dモデル</span><span class="cap-chip c-done">対応済み</span></div>
+      <p class="cap-note">ギャラリーは動画・external video・3Dモデルに対応済み（商品にメディアを追加すれば自動表示）。360°スピンのみ別途素材が必要。</p>
+    </div>
+  </div>
+
+  {%- comment -%} ============ 03 販促・CRM・LTV ============ {%- endcomment -%}
+  <div class="cap-cat">
+    <div class="cap-cat-h"><span class="idx">03</span><h2>販促・CRM・LTV</h2></div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">クーポン・会員自動割引・先行販売</span><span class="cap-chip c-done">対応済み</span></div>
+      <p class="cap-note">割引コード適用、会員セグメントへの自動割引、先行販売バッジ/コレクションを実装済み（コードの発行は管理画面）。</p>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">ポイント・会員ランク（ロイヤルティ）</span><span class="cap-chip c-impl">表示は実装可</span><span class="cap-chip c-app">加算はアプリ</span></div>
+      <p class="cap-note">ポイント残高・ランクの表示はテーマ（顧客metafield）で実装済み。付与・失効・交換などの運用はアプリ/Flow。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🎖️</span><div><span class="cap-app-name">Smile.io<span class="cap-tag">無料枠</span></span><span class="cap-app-feat">ポイント・紹介・VIPランク。手軽に始められる定番。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🏆</span><div><span class="cap-app-name">LoyaltyLion / Rivo</span><span class="cap-app-feat">高度なロイヤルティ設計・CRM連携。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">サブスク・定期便</span><span class="cap-chip c-app">アプリで可</span><span class="cap-chip c-code">実装のみ不可</span></div>
+      <p class="cap-note">継続課金は決済契約が絡むためテーマ単体では不可。公式/専用アプリで実現。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🔁</span><div><span class="cap-app-name">Shopify Subscriptions<span class="cap-tag">公式・無料</span></span><span class="cap-app-feat">シンプルな定期購入。まず試すなら公式。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">📦</span><div><span class="cap-app-name">Recharge / Appstle</span><span class="cap-app-feat">柔軟なサブスク設計、顧客ポータル、解約防止。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">バンドル・セット割・まとめ買い</span><span class="cap-chip c-config">Shopify無料</span><span class="cap-chip c-app">アプリで可</span></div>
+      <p class="cap-note">数量に応じた価格計算はShopify Functions/専用アプリ。カード表示はテーマ側で対応。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🎁</span><div><span class="cap-app-name">Shopify Bundles<span class="cap-tag">公式・無料</span></span><span class="cap-app-feat">固定バンドルをFunctionsで。公式で追加コスト少。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🧷</span><div><span class="cap-app-name">Fast Bundle / Bundler</span><span class="cap-app-feat">段階数量割引、ミックス&amp;マッチ、セット割。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">ポップアップ・メルマガ・再入荷/カゴ落ち</span><span class="cap-chip c-done">画面は対応済み</span><span class="cap-chip c-app">配信はアプリ</span></div>
+      <p class="cap-note">初回ポップアップ、ニュースレター登録、再入荷通知フォームはテーマで実装済み。メール自動配信・シナリオはアプリ。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">✉️</span><div><span class="cap-app-name">Shopify Email<span class="cap-tag">公式・無料</span></span><span class="cap-app-feat">基本のメール配信・自動化。低コストで開始。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">📨</span><div><span class="cap-app-name">Klaviyo / Back in Stock</span><span class="cap-app-feat">高度なシナリオ、カゴ落ち、再入荷自動通知。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">ギフトオプション・ラッピング</span><span class="cap-chip c-done">対応済み</span><span class="cap-chip c-app">有料/のしはアプリ</span></div>
+      <p class="cap-note">ラッピング希望とメッセージカードはカート属性で注文に連携済み。有料ラッピング・のし・資材同梱はアプリまたは商品化。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🎀</span><div><span class="cap-app-name">Wrapin / Gift Wrap Plus</span><span class="cap-app-feat">有料ラッピング商品、メッセージ、のし対応。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">アフィリエイト・友達紹介</span><span class="cap-chip c-app">アプリで可</span><span class="cap-chip c-code">実装のみ不可</span></div>
+      <p class="cap-note">報酬計算・トラッキングが必要なためアプリで実現。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🤝</span><div><span class="cap-app-name">UpPromote / ReferralCandy</span><span class="cap-app-feat">アフィリエイト・紹介プログラムを一括管理。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ============ 04 検索・国際化・基盤 ============ {%- endcomment -%}
+  <div class="cap-cat">
+    <div class="cap-cat-h"><span class="idx">04</span><h2>検索・国際化・計測・基盤</h2></div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">予測検索・絞り込み・並び替え</span><span class="cap-chip c-done">対応済み</span><span class="cap-chip c-config">同義語はShopify</span></div>
+      <p class="cap-note">予測検索・ファセット絞り込み・並び替えは実装済み。同義語辞書やブースト調整はShopify Search &amp; Discovery（公式無料・管理画面）。</p>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">多言語・多通貨</span><span class="cap-chip c-config">設定＋公式アプリ</span></div>
+      <p class="cap-note">Shopify Marketsで通貨/地域を設定、翻訳は公式のTranslate &amp; Adaptで。テーマはロケール対応済み。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">🌐</span><div><span class="cap-app-name">Shopify Markets + Translate &amp; Adapt<span class="cap-tag">公式・無料</span></span><span class="cap-app-feat">多通貨・多言語・地域別。まず公式で。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🗺️</span><div><span class="cap-app-name">Langify / Weglot</span><span class="cap-app-feat">より柔軟な翻訳管理・自動翻訳。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">計測・分析（GA4/GTM/Pixels/ヒートマップ）</span><span class="cap-chip c-done">タグ枠は対応済み</span><span class="cap-chip c-config">Pixelsは管理画面</span></div>
+      <p class="cap-note">GA4/GTM/任意タグの注入欄と計測ガイドはテーマで用意済み（実IDは管理画面）。広告Pixelは Shopify Custom Pixels、行動分析はアプリ/タグ。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">📊</span><div><span class="cap-app-name">Microsoft Clarity<span class="cap-tag">無料</span></span><span class="cap-app-feat">ヒートマップ・セッション録画を無料で。head枠に設置可。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🐆</span><div><span class="cap-app-name">Lucky Orange</span><span class="cap-app-feat">ヒートマップ・録画・ファネル分析。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">決済（クレカ/コンビニ/PayPay/後払い）</span><span class="cap-chip c-config">設定のみ</span></div>
+      <p class="cap-note">決済手段は決済プロバイダの設定で有効化。テーマ側の実装は不要。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">💳</span><div><span class="cap-app-name">Shopify Payments</span><span class="cap-app-feat">クレカ・Apple/Google Pay・Shop Pay。基本の決済。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🏪</span><div><span class="cap-app-name">KOMOJU / Paidy</span><span class="cap-app-feat">コンビニ・PayPay・後払いなど日本向け決済。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">予約・受注生産・入荷お知らせ</span><span class="cap-chip c-impl">先行表示は実装可</span><span class="cap-chip c-app">予約販売はアプリ</span></div>
+      <p class="cap-note">先行販売バッジや在庫切れ通知フォームはテーマで対応。予約注文/バックオーダー運用はアプリ（または標準の「在庫切れでも販売を継続」）。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">⏳</span><div><span class="cap-app-name">Pre-order Now / Preorder</span><span class="cap-app-feat">予約販売・入荷待ち・部分課金。</span></div></div>
+      </div>
+    </div>
+
+    <div class="cap-feature">
+      <div class="cap-feature-head"><span class="cap-name">PWA・アプリ化 / A/Bテスト</span><span class="cap-chip c-app">アプリで可</span></div>
+      <p class="cap-note">PWA（ホーム追加・オフライン）や本格的なA/Bテストは専用アプリ／外部ツール（GTM等）で実現。</p>
+      <div class="cap-apps">
+        <div class="cap-app-card"><span class="cap-ic">📱</span><div><span class="cap-app-name">PWA系アプリ（Progressier 等）</span><span class="cap-app-feat">ホーム画面追加・プッシュ通知・高速化。</span></div></div>
+        <div class="cap-app-card"><span class="cap-ic">🧪</span><div><span class="cap-app-name">A/Bテスト（Intelligems 等）</span><span class="cap-app-feat">価格・LP・要素のA/Bテストと計測。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top:var(--space-12); color:var(--text-tertiary); font:var(--text-mono); font-size:11px; letter-spacing:.04em;">※ アプリ名・料金体系は選定の目安です。導入前に最新の対応状況・プランをご確認ください。</p>
+</div>
+
+{% schema %}
+{
+  "name": "Capabilities",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "できること" },
+    { "type": "textarea", "id": "intro", "label": "Intro" }
+  ],
+  "presets": [{ "name": "Capabilities" }]
+}
+{% endschema %}

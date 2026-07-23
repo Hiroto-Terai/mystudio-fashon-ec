@@ -53,7 +53,8 @@
       "search": "Search",
       "wishlist": "Wishlist",
       "account": "Account",
-      "login": "Log in"
+      "login": "Log in",
+      "capabilities": "Capabilities"
     },
     "countdown": {
       "days": "Days",

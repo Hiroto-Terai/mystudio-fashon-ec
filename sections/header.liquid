@@ -94,6 +94,9 @@
             </div>
         {%- endcase -%}
       {%- endfor -%}
+      <div style="border-bottom:1px solid var(--border-default); padding:var(--space-5) 0;">
+        <a href="{{ routes.root_url }}pages/{{ section.settings.capabilities_handle | default: 'capabilities' }}" class="as-clickable" style="font:var(--text-label); text-transform:uppercase; letter-spacing:var(--tracking-wider); font-size:var(--fs-sm); color:var(--color-ink);">{{ 'general.nav.capabilities' | t }}</a>
+      </div>
     </nav>
 
     <div style="border-top:1px solid var(--border-default); padding:var(--space-6) var(--page-gutter); display:flex; flex-direction:column; gap:var(--space-4);">
