@@ -45,8 +45,8 @@
         {%- endfor -%}
       </div>
     {%- else -%}
-      <div class="as-grid-4" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
-        {%- comment -%} Reversed so "related" surfaces different items than the FBT row above when both draw from the same collection. {%- endcomment -%}
+      <div class="as-grid-4" data-related-grid data-recommendations-url="{{ routes.product_recommendations_url }}?section_id=related-products&product_id={{ current_product.id }}&intent=related&limit={{ max_items }}" style="max-width:var(--page-max); margin:0 auto; border-top:1px solid var(--border-default); border-left:1px solid var(--border-default); display:grid; grid-template-columns:repeat(4,1fr);">
+        {%- comment -%} Server-rendered collection fallback; archives.js swaps in real API recommendations when available. Reversed so it differs from the FBT row above. {%- endcomment -%}
         {%- for rec in grid_products limit: 20 -%}
           {%- if rec.id == current_product.id -%}
             {%- continue -%}
