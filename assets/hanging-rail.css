@@ -1,0 +1,348 @@
+.hanging-rail {
+  --hr-rail: #8a8f94;
+  --hr-rail-shadow: rgb(40 36 30 / 0.18);
+  --hr-ink: #1f1d1a;
+  --hr-muted: #6c675f;
+  --hr-tag: #fbfaf7;
+  --hr-tag-line: #d8d3ca;
+  --hr-wood: #9b784d;
+  --hr-wood-light: #c9a97c;
+  --hr-garment-width: clamp(132px, 16vw, 196px);
+  --hr-gap: clamp(4px, 1vw, 14px);
+  color: var(--hr-ink);
+  padding-block: clamp(40px, 7vw, 96px);
+  overflow: hidden;
+}
+
+.hanging-rail__head {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.hanging-rail__heading {
+  margin: 0;
+  font-size: clamp(26px, 3.4vw, 44px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  word-break: auto-phrase;
+}
+
+.hanging-rail__hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--hr-muted);
+}
+
+.hanging-rail__stage {
+  position: relative;
+  height: var(--hr-stage-height, 420px);
+  margin-top: clamp(20px, 3vw, 36px);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hanging-rail__stage:active { cursor: grabbing; }
+
+/* The rail is drawn by script as a shallow arc across the full width. */
+.hanging-rail__rail {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 5px var(--hr-rail-shadow));
+}
+
+.hanging-rail__rail path {
+  fill: none;
+  stroke: var(--hr-rail);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.hanging-rail__track {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The item's top edge sits on the rail, so rotating it swings the garment from the hook. */
+.hanging-rail__item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--hr-garment-width);
+  transform-origin: 50% 0;
+  pointer-events: none;
+}
+
+/* Narrow hit area: it matches what is visible while the garment hangs side-on. */
+.hanging-rail__piece {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  width: calc(var(--hr-garment-width) * 0.36);
+  margin-inline: auto;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.hanging-rail__hook {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 24px;
+  height: 36px;
+  margin-left: -12px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hanging-rail__hook path {
+  fill: none;
+  stroke: #34312c;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+}
+
+.hanging-rail__piece:focus-visible .hanging-rail__garment {
+  outline: 2px solid var(--hr-ink);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+.hanging-rail__piece-wrap {
+  position: relative;
+  display: block;
+  margin-top: 26px;
+}
+
+.hanging-rail__body {
+  position: relative;
+  display: block;
+  width: var(--hr-garment-width);
+  margin-left: calc((100% - var(--hr-garment-width)) / 2);
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.hanging-rail__hanger {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 200 / 44;
+  overflow: visible;
+}
+
+/* The hanger's arms live inside the garment, so only its neck shows above the collar. */
+.hanging-rail__hanger path { display: none; }
+.hanging-rail__hanger rect { fill: var(--hr-wood); }
+
+.hanging-rail__tag {
+  position: absolute;
+  top: 24%;
+  right: 12%;
+  padding: 2px 6px 3px;
+  font-size: 11px;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+  background: var(--hr-tag);
+  border: 1px solid var(--hr-tag-line);
+  border-radius: 2px;
+  transform: rotate(6deg);
+  white-space: nowrap;
+}
+
+.hanging-rail__tag::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 40%;
+  width: 1px;
+  height: 9px;
+  background: var(--hr-tag-line);
+}
+
+.hanging-rail__garment {
+  display: block;
+  width: 100%;
+  height: auto; /* the image's height attribute would otherwise win over aspect-ratio */
+  margin-top: calc(var(--hr-garment-width) * -0.22 + 7px); /* the collar covers the hanger's neck, so the hook seems to rise from it */
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  object-position: 50% 0;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Floats away from the garment; script keeps it on the ground while the garment bobs. */
+.hanging-rail__shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  width: calc(var(--hr-garment-width) * 0.75);
+  height: 16px;
+  margin-left: calc(var(--hr-garment-width) * -0.375);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(40 36 30 / 0.2), rgb(40 36 30 / 0));
+  pointer-events: none;
+}
+
+.hanging-rail[data-style="hanger"] .hanging-rail__shadow { display: none; }
+
+/* Floating look: hangers fade back so the garments seem to hang in the air. */
+.hanging-rail[data-style="float"] .hanging-rail__hook,
+.hanging-rail[data-style="float"] .hanging-rail__hanger { opacity: 0; }
+.hanging-rail[data-style="float"] .hanging-rail__rail { opacity: 0.18; filter: none; }
+
+.hanging-rail__caption {
+  min-height: 3.2em;
+  max-width: 1200px;
+  margin: 4px auto 0;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 24px;
+  font-size: 14px;
+}
+
+.hanging-rail__caption-name { margin: 0; font-weight: 500; }
+.hanging-rail__caption-price { margin: 0; color: var(--hr-muted); font-variant-numeric: tabular-nums; }
+
+/* Quick view */
+.hanging-rail__dialog {
+  width: min(920px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: var(--hr-ink);
+  background: var(--hr-tag);
+  box-shadow: 0 30px 80px -20px rgb(20 18 15 / 0.45);
+  opacity: 0;
+  transform: translateY(28px) scale(0.965);
+  transition:
+    opacity 560ms cubic-bezier(0.22, 0.8, 0.2, 1),
+    transform 700ms cubic-bezier(0.22, 0.8, 0.2, 1),
+    overlay 560ms allow-discrete,
+    display 560ms allow-discrete;
+}
+
+.hanging-rail__dialog[open] { opacity: 1; transform: none; }
+
+.hanging-rail__dialog::backdrop {
+  background: rgb(28 25 21 / 0);
+  transition: background 560ms ease, overlay 560ms allow-discrete, display 560ms allow-discrete;
+}
+
+.hanging-rail__dialog[open]::backdrop { background: rgb(28 25 21 / 0.38); }
+
+@starting-style {
+  .hanging-rail__dialog[open] { opacity: 0; transform: translateY(28px) scale(0.965); }
+  .hanging-rail__dialog[open]::backdrop { background: rgb(28 25 21 / 0); }
+}
+
+.hanging-rail__qv {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+
+.hanging-rail__qv-media {
+  background: color-mix(in oklab, var(--hr-tag), #8a7f70 10%);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  min-height: 320px;
+}
+
+.hanging-rail__qv-media img { width: 100%; max-height: 64dvh; object-fit: contain; }
+
+.hanging-rail__qv-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 28px 32px;
+  min-width: 0;
+}
+
+.hanging-rail__qv-close {
+  align-self: flex-end;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--hr-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.hanging-rail__qv-close:hover { color: var(--hr-ink); }
+.hanging-rail__qv-close:focus-visible { outline: 2px solid var(--hr-ink); outline-offset: 2px; }
+
+.hanging-rail__qv-title { margin: 0; font-size: 22px; font-weight: 500; line-height: 1.4; }
+.hanging-rail__qv-price { margin: -8px 0 0; font-size: 16px; font-variant-numeric: tabular-nums; }
+
+.hanging-rail__qv-option { border: 0; margin: 0; padding: 0; }
+.hanging-rail__qv-option legend { padding: 0; margin-bottom: 8px; font-size: 13px; color: var(--hr-muted); }
+.hanging-rail__qv-values { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.hanging-rail__qv-value input { position: absolute; opacity: 0; pointer-events: none; }
+.hanging-rail__qv-value span {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 12px;
+  font-size: 14px;
+  border: 1px solid var(--hr-tag-line);
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+.hanging-rail__qv-value input:checked + span { background: var(--hr-ink); color: var(--hr-tag); border-color: var(--hr-ink); }
+.hanging-rail__qv-value input:focus-visible + span { outline: 2px solid var(--hr-ink); outline-offset: 2px; }
+.hanging-rail__qv-value input:disabled + span { color: var(--hr-tag-line); text-decoration: line-through; cursor: not-allowed; }
+
+.hanging-rail__qv-add {
+  min-height: 50px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--hr-tag);
+  background: var(--hr-ink);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hanging-rail__qv-add:hover { background: color-mix(in oklab, var(--hr-ink), #fff 14%); }
+.hanging-rail__qv-add:focus-visible { outline: 2px solid var(--hr-ink); outline-offset: 3px; }
+.hanging-rail__qv-add:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.hanging-rail__qv-status { min-height: 1.4em; margin: -6px 0 0; font-size: 13px; color: var(--hr-muted); }
+.hanging-rail__qv-link { font-size: 13px; color: var(--hr-ink); }
+
+@media (max-width: 680px) {
+  .hanging-rail__qv { grid-template-columns: 1fr; }
+  .hanging-rail__qv-media { min-height: 240px; }
+  .hanging-rail__qv-media img { max-height: 40dvh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hanging-rail__dialog,
+  .hanging-rail__dialog::backdrop { transition: none; }
+}

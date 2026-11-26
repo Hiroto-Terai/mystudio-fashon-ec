@@ -317,6 +317,7 @@
   };
   window.ArchivesCart = window.ArchivesCart || {};
   window.ArchivesCart.drawer = CartDrawer;
+  window.ArchivesCart.add = addToCart;
 
   function bindCartDrawer() {
     /* Delegated so open/close survive Section Rendering swaps of the drawer contents */
