@@ -334,6 +334,14 @@
         "pillar-2",
         "pillar-3"
       ]
+    },
+    "hanging-rail": {
+      "type": "hanging-rail",
+      "settings": {
+        "collection": "fw26-core",
+        "heading": "今週ラックに並んだもの",
+        "products_to_show": 16
+      }
     }
   },
   "order": [
@@ -343,6 +351,7 @@
     "featured-collection",
     "early-access",
     "ranking",
+    "hanging-rail",
     "staff-styling",
     "brand-intro",
     "styling-hints",

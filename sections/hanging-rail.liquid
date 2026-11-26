@@ -1,0 +1,186 @@
+{%- comment -%}
+  Hanging rail: products hang on a clothing rail, swing when the rail moves,
+  and open a quick view (variant + add to cart) on click.
+  Works best with transparent cut-out product images. The last image whose file name contains "cutout" is preferred over the featured image.
+{%- endcomment -%}
+
+{{ 'hanging-rail.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hanging-rail.js' | asset_url }}" defer></script>
+
+{%- assign products_source = section.settings.collection.products -%}
+
+<section
+  class="hanging-rail"
+  data-hanging-rail
+  data-style="{{ section.settings.style }}"
+  data-sway="{{ section.settings.sway_strength }}"
+  data-auto-rotate="{{ section.settings.auto_rotate }}"
+  data-go-to-cart="{{ section.settings.go_to_cart }}"
+  data-add-label="{{ 'products.product.add_to_cart' | t | escape }}"
+  data-sold-out-label="{{ 'products.product.sold_out' | t | escape }}"
+  data-adding-label="{{ section.settings.adding_label | escape }}"
+  data-added-label="{{ section.settings.added_label | escape }}"
+  data-error-label="{{ section.settings.error_label | escape }}"
+  style="--hr-rail: {{ section.settings.rail_color }}; background: {{ section.settings.background }};"
+>
+  <div class="hanging-rail__head">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="hanging-rail__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.hint != blank -%}
+      <p class="hanging-rail__hint">{{ section.settings.hint | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="hanging-rail__stage" data-hr-stage>
+    <ul class="hanging-rail__track" data-hr-track>
+      {%- for product in products_source limit: section.settings.products_to_show -%}
+        {%- assign rail_image = product.featured_image -%}
+        {%- for image in product.images -%}
+          {%- if image.src contains 'cutout' -%}{%- assign rail_image = image -%}{%- endif -%}
+        {%- endfor -%}
+        <li class="hanging-rail__item">
+          <button
+            type="button"
+            class="hanging-rail__piece"
+            data-hr-piece
+            data-hr-index="{{ forloop.index0 }}"
+            aria-haspopup="dialog"
+            aria-label="{{ product.title | escape }} {{ product.price | money | strip_html }}"
+          >
+            <svg class="hanging-rail__hook" viewBox="0 0 24 36" aria-hidden="true" focusable="false"><path d="M12 36 V4 C12 -1.5 19.5 -1.5 19.5 4.5 V7"/></svg>
+            <span class="hanging-rail__piece-wrap"><span class="hanging-rail__body">
+              <svg class="hanging-rail__hanger" viewBox="0 0 200 44" aria-hidden="true" focusable="false">
+                  <path d="M100 6 C76 8 40 20 12 38 M100 6 C124 8 160 20 188 38"/>
+                  <path class="hanging-rail__hanger-light" d="M100 4.4 C76 6.4 40 18.4 12 36.4 M100 4.4 C124 6.4 160 18.4 188 36.4"/>
+                  <rect x="96.5" y="0" width="7" height="11" rx="3.2"/>
+                </svg>
+              {%- if section.settings.show_tags -%}
+                <span class="hanging-rail__tag" aria-hidden="true">{{ product.price | money_without_trailing_zeros }}</span>
+              {%- endif -%}
+              {%- if rail_image -%}
+                {{
+                  rail_image
+                  | image_url: width: 400
+                  | image_tag:
+                    class: 'hanging-rail__garment',
+                    loading: 'lazy',
+                    widths: '200, 300, 400',
+                    sizes: '(min-width: 1200px) 196px, 33vw',
+                    alt: '',
+                    draggable: 'false'
+                }}
+              {%- else -%}
+                {{ 'product-apparel-1' | placeholder_svg_tag: 'hanging-rail__garment' }}
+              {%- endif -%}
+            </span><span class="hanging-rail__shadow" aria-hidden="true"></span></span>
+          </button>
+        </li>
+      {%- else -%}
+        {%- for i in (1..6) -%}
+          <li class="hanging-rail__item">
+            <span class="hanging-rail__piece">
+              <svg class="hanging-rail__hook" viewBox="0 0 24 36" aria-hidden="true" focusable="false"><path d="M12 36 V4 C12 -1.5 19.5 -1.5 19.5 4.5 V7"/></svg>
+              <span class="hanging-rail__piece-wrap"><span class="hanging-rail__body">
+                <svg class="hanging-rail__hanger" viewBox="0 0 200 44" aria-hidden="true" focusable="false">
+                  <path d="M100 6 C76 8 40 20 12 38 M100 6 C124 8 160 20 188 38"/>
+                  <path class="hanging-rail__hanger-light" d="M100 4.4 C76 6.4 40 18.4 12 36.4 M100 4.4 C124 6.4 160 18.4 188 36.4"/>
+                  <rect x="96.5" y="0" width="7" height="11" rx="3.2"/>
+                </svg>
+                {%- capture placeholder -%}product-apparel-{{ i | modulo: 4 | plus: 1 }}{%- endcapture -%}
+                {{ placeholder | placeholder_svg_tag: 'hanging-rail__garment' }}
+              </span><span class="hanging-rail__shadow" aria-hidden="true"></span></span>
+            </span>
+          </li>
+        {%- endfor -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <div class="hanging-rail__caption" aria-live="polite">
+    <p class="hanging-rail__caption-name" data-hr-caption-name></p>
+    <p class="hanging-rail__caption-price" data-hr-caption-price></p>
+  </div>
+
+  <script type="application/json" data-hr-products>
+    [
+      {%- for product in products_source limit: section.settings.products_to_show -%}
+        {%- assign rail_image = product.featured_image -%}
+        {%- for image in product.images -%}
+          {%- if image.src contains 'cutout' -%}{%- assign rail_image = image -%}{%- endif -%}
+        {%- endfor -%}
+        {
+          "title": {{ product.title | json }},
+          "url": {{ product.url | json }},
+          "price": {{ product.price | money | strip_html | json }},
+          "image": {{ rail_image | image_url: width: 1200 | json }},
+          "options": {{ product.options | json }},
+          "variants": [
+            {%- for variant in product.variants -%}
+              {
+                "id": {{ variant.id }},
+                "options": {{ variant.options | json }},
+                "available": {{ variant.available }},
+                "price": {{ variant.price | money | strip_html | json }}
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+
+  <dialog class="hanging-rail__dialog" data-hr-dialog aria-labelledby="HangingRailTitle-{{ section.id }}">
+    <div class="hanging-rail__qv">
+      <div class="hanging-rail__qv-media">
+        <img data-hr-qv-image alt="" width="600" height="800">
+      </div>
+      <div class="hanging-rail__qv-body">
+        <button type="button" class="hanging-rail__qv-close" data-hr-close>{{ section.settings.close_label | escape }}</button>
+        <h3 class="hanging-rail__qv-title" id="HangingRailTitle-{{ section.id }}" data-hr-qv-title></h3>
+        <p class="hanging-rail__qv-price" data-hr-qv-price></p>
+        <div data-hr-qv-options></div>
+        <button type="button" class="hanging-rail__qv-add" data-hr-add></button>
+        <p class="hanging-rail__qv-status" data-hr-status role="status"></p>
+        <a class="hanging-rail__qv-link" data-hr-qv-link href="#">{{ section.settings.product_link_label | escape }}</a>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+{% schema %}
+{
+  "name": "Hanging rail",
+  "tag": "div",
+  "class": "section-hanging-rail",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "今週ラックに並んだもの" },
+    { "type": "text", "id": "hint", "label": "Hint", "default": "ドラッグで回せます。服を押すと正面を向きます。" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Look",
+      "options": [
+        { "value": "hanger", "label": "On hangers" },
+        { "value": "float", "label": "Floating (no hangers)" }
+      ],
+      "default": "hanger"
+    },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 4, "max": 24, "step": 1, "default": 12 },
+    { "type": "checkbox", "id": "show_tags", "label": "Show price tags", "default": true },
+    { "type": "range", "id": "sway_strength", "label": "Sway strength", "min": 0, "max": 10, "step": 1, "default": 5 },
+    { "type": "checkbox", "id": "auto_rotate", "label": "Rotate slowly on its own", "default": true },
+    { "type": "color", "id": "rail_color", "label": "Rail color", "default": "#8a8f94" },
+    { "type": "color_background", "id": "background", "label": "Background" },
+    { "type": "checkbox", "id": "go_to_cart", "label": "Go to cart after adding", "default": false },
+    { "type": "header", "content": "Labels" },
+    { "type": "text", "id": "close_label", "label": "Close", "default": "閉じる" },
+    { "type": "text", "id": "adding_label", "label": "Adding", "default": "カートに追加しています" },
+    { "type": "text", "id": "added_label", "label": "Added", "default": "カートに追加しました" },
+    { "type": "text", "id": "error_label", "label": "Error", "default": "追加できませんでした。" },
+    { "type": "text", "id": "product_link_label", "label": "Product page link", "default": "商品ページを見る" }
+  ],
+  "presets": [{ "name": "Hanging rail" }]
+}
+{% endschema %}
